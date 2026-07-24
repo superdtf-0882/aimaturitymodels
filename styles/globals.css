@@ -6,22 +6,26 @@
    not redefine them. */
 
 :root {
+  /* Dark palette forced for every visitor, by David's own choice --
+     no longer following prefers-color-scheme, no light variant kept. */
+  color-scheme: dark;
+
   /* C-007 palette */
   --blue: #185fa5;
-  --blue-soft: #e6f1fb;
+  --blue-soft: #1b2c3c;
   --orange: #926318;
-  --orange-soft: #fdf6ec;
+  --orange-soft: #2a2115;
 
   /* VP-004 (PDT-001) -- this domain's own portfolio identity */
   --vp004-fill: #fdf6ec;
   --vp004-border: #926318;
 
-  --ink: #16232e;
-  --ink-soft: #3d4d5c;
-  --muted: #64748b;
-  --paper: #f6f8fa;
-  --paper-raised: #ffffff;
-  --line: #dde4ea;
+  --ink: #e7edf3;
+  --ink-soft: #b7c4d1;
+  --muted: #8b9aa8;
+  --paper: #121a22;
+  --paper-raised: #182430;
+  --line: #2a3844;
 
   /* System 3 maturity colors -- fixed, never reassigned */
   --lvl-a-fill: #fcebeb; --lvl-a-border: #a32d2d;
@@ -33,14 +37,6 @@
   --serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
   --sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ink: #e7edf3; --ink-soft: #b7c4d1; --muted: #8b9aa8;
-    --paper: #121a22; --paper-raised: #182430; --line: #2a3844;
-    --blue-soft: #1b2c3c; --orange-soft: #2a2115;
-  }
 }
 
 * { box-sizing: border-box; }
