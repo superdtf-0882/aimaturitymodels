@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import Layout from "../components/Layout";
 
@@ -44,28 +44,27 @@ const R = 30; // percent radius -- kept well under 50 minus the node's own
 // size down to the 640px breakpoint where this layout takes over.
 const BASE_ANGLES = NODES.map((_, i) => -90 + i * (360 / NODES.length));
 
-// Below this many degrees of pointer movement, a drag counts as a plain
-// click instead -- so tapping a node still navigates, and only an actual
-// drag spins the wheel and suppresses the click.
-const DRAG_THRESHOLD_DEG = 2;
+// Rotation tracks total horizontal drag distance directly (degrees per
+// pixel), not the true geometric angle from the wheel's center. The
+// angle-from-center approach saturates on a small-radius wheel: a normal
+// straight-line drag quickly overshoots the circle, and the angle stops
+// increasing well before the pointer has traveled far -- capping the
+// spin at 10-20 degrees regardless of how far you actually dragged.
+// Distance-based rotation has no such ceiling and needs no layout
+// measurement at drag time.
+const DRAG_SENSITIVITY = 0.6; // degrees of rotation per pixel of horizontal drag
+const CLICK_MOVE_THRESHOLD_PX = 5; // below this, a drag counts as a plain click
 
 export default function Hub() {
   const [rotation, setRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const circleRef = useRef(null);
-  const dragState = useRef({ active: false, startAngle: 0, startRotation: 0, moved: false });
-
-  function angleFromEvent(e) {
-    const rect = circleRef.current.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    return (Math.atan2(e.clientY - cy, e.clientX - cx) * 180) / Math.PI;
-  }
+  const dragState = useRef({ active: false, startX: 0, startY: 0, startRotation: 0, moved: false });
 
   function handlePointerDown(e) {
     dragState.current.active = true;
     dragState.current.moved = false;
-    dragState.current.startAngle = angleFromEvent(e);
+    dragState.current.startX = e.clientX;
+    dragState.current.startY = e.clientY;
     dragState.current.startRotation = rotation;
     setIsDragging(true);
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -73,11 +72,10 @@ export default function Hub() {
 
   function handlePointerMove(e) {
     if (!dragState.current.active) return;
-    let delta = angleFromEvent(e) - dragState.current.startAngle;
-    if (delta > 180) delta -= 360;
-    if (delta < -180) delta += 360;
-    if (Math.abs(delta) > DRAG_THRESHOLD_DEG) dragState.current.moved = true;
-    setRotation(dragState.current.startRotation + delta);
+    const dx = e.clientX - dragState.current.startX;
+    const dy = e.clientY - dragState.current.startY;
+    if (Math.hypot(dx, dy) > CLICK_MOVE_THRESHOLD_PX) dragState.current.moved = true;
+    setRotation(dragState.current.startRotation + dx * DRAG_SENSITIVITY);
   }
 
   function endDrag() {
@@ -107,7 +105,6 @@ export default function Hub() {
 
       <div
         className={`hub-circle${isDragging ? " dragging" : ""}`}
-        ref={circleRef}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={endDrag}
