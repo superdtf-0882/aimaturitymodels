@@ -218,6 +218,54 @@ table.wmv td.cell { max-width: 200px; }
   .hub-desc { font-size: 12px; line-height: 1.3; }
 }
 
+/* Stratum model (issue #10): a click-to-expand list, S0 at top through
+   S7 at bottom, with a connecting line down the left threading through
+   each code badge -- a static border rather than a hand-drawn connector,
+   so it never has to be recomputed when a row expands/collapses and
+   changes the list's overall height. */
+.stratum-kicker {
+  font-family: var(--mono); font-size: 11.5px; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--orange); margin: 0 0 10px;
+}
+.stratum-list { position: relative; margin: 28px 0 20px; }
+.stratum-list::before {
+  content: ""; position: absolute; left: 19px; top: 19px; bottom: 19px;
+  width: 1px; background: var(--line);
+}
+.stratum-row { position: relative; margin-bottom: 2px; }
+.stratum-header {
+  position: relative; z-index: 1; display: flex; align-items: center; gap: 14px;
+  width: 100%; background: none; border: none; padding: 9px 4px; margin: 0;
+  cursor: pointer; text-align: left; font-family: var(--sans); color: inherit;
+}
+.stratum-header:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; border-radius: 6px; }
+.stratum-code {
+  flex: none; width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 13px; font-weight: 600;
+  border: 1.5px solid var(--line); background: var(--paper); color: var(--muted);
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+.stratum-header:hover .stratum-code,
+.stratum-header:focus-visible .stratum-code,
+.stratum-row.linked .stratum-code {
+  border-color: var(--orange); color: var(--orange); background: var(--orange-soft);
+}
+.stratum-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.stratum-name { font-family: var(--serif); font-style: italic; font-size: 17px; }
+.stratum-row.linked .stratum-name { color: var(--orange); }
+.stratum-gloss { font-size: 13.5px; color: var(--ink-soft); }
+.stratum-toggle { flex: none; width: 20px; text-align: center; font-family: var(--mono); font-size: 16px; color: var(--muted); }
+.stratum-detail {
+  margin: 0 0 10px 52px; padding: 2px 0 4px; font-size: 14.5px; color: var(--ink-soft); max-width: 60ch;
+}
+.stratum-loop-note {
+  margin: 2px 0 14px 52px; padding: 8px 12px; max-width: 56ch;
+  font-size: 12.5px; color: var(--muted); font-style: italic;
+  border-left: 2px solid var(--orange); background: var(--orange-soft); border-radius: 0 6px 6px 0;
+}
+.stratum-principle { text-align: center; font-family: var(--serif); font-size: 17px; margin: 8px 0 6px; }
+
 .attribution {
   position: fixed; right: 14px; bottom: 12px; font-size: 11px; color: var(--muted);
   background: var(--paper); padding: 3px 8px; border-radius: 5px; text-decoration: none;
