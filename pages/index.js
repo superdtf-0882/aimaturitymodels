@@ -9,31 +9,31 @@ const NODES = [
     href: "/models",
     kicker: "The family",
     title: "AI-Native Maturity Models",
-    desc: "SDLC, PDLC, Prioritization — live models, plus what's coming.",
+    desc: "SDLC, PDLC, Prioritization — and what's coming.",
   },
   {
     href: "/assessments",
     kicker: "Assess yourself",
     title: "Maturity Model Assessments",
-    desc: "Score your own organization against each model in the family.",
+    desc: "Score yourself against each model in the family.",
   },
   {
     href: "/eaokf",
     kicker: "The foundation",
     title: "Enterprise Architecture OKF",
-    desc: "The governed schema every model in this family is written in.",
+    desc: "The schema this family is written in.",
   },
   {
     href: "/strata",
     kicker: "Why it connects",
     title: "Strata",
-    desc: "The structure explaining why these models fit together at all.",
+    desc: "Why these models fit together at all.",
   },
   {
     href: "/vellum",
     kicker: "The tooling",
     title: "Vellum & Seminum",
-    desc: "Making a governance corpus visible, and portable to a new one.",
+    desc: "Making a corpus visible, and portable.",
   },
 ];
 
@@ -70,7 +70,7 @@ export default function Hub() {
             key={node.href}
             href={node.href}
             className="hub-node"
-            style={{ left: `${points[i].x}%`, top: `${points[i].y}%`, transform: "translate(-50%, -50%)" }}
+            style={{ left: `${points[i].x}%`, top: `${points[i].y}%` }}
           >
             <div className="hub-kicker">{node.kicker}</div>
             <div className="hub-title">{node.title}</div>

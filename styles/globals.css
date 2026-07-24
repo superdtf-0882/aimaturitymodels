@@ -145,16 +145,18 @@ table.wmv td.cell { max-width: 200px; }
 .provenance { margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); font-style: italic; }
 
 /* Circular hub (issue #9): five entry points, no fixed starting point.
-   Mobile-first stack; the circular arrangement only applies once there's
-   room for it. Both rules below need !important so the min-width block
-   (declared second) reliably wins over the base block at the same
-   specificity -- position/transform are the only properties in play. */
+   Mobile-first stack; the circular/oval arrangement only applies once
+   there's room for it. Centering at the desktop breakpoint is done with
+   negative margins sized to exactly half the node's own fixed
+   width/height, not a transform -- a same-specificity !important
+   transform declared inside the media query did not reliably beat the
+   base rule's transform:none in testing, so margins avoid that fight
+   entirely (nothing in the base rule sets margin-left/margin-top). */
 .hub-intro { margin-bottom: 4px; }
 .hub-circle { position: relative; width: 100%; max-width: 560px; margin: 28px auto 12px; }
 .hub-ring { display: none; }
 .hub-node {
   position: static !important;
-  transform: none !important;
   display: block;
   width: 100%;
   margin-bottom: 10px;
@@ -164,9 +166,10 @@ table.wmv td.cell { max-width: 200px; }
   background: var(--paper-raised);
   text-decoration: none;
   color: inherit;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 }
-.hub-node:hover { border-color: var(--blue); }
+.hub-node:hover, .hub-node:focus-visible { border-color: var(--orange); background: var(--orange-soft); }
+.hub-node:active { background: color-mix(in srgb, var(--orange-soft) 60%, var(--paper-raised)); }
 .hub-kicker {
   font-family: var(--mono); font-size: 10.5px; text-transform: uppercase;
   letter-spacing: 0.06em; color: var(--muted); margin-bottom: 5px;
@@ -180,13 +183,37 @@ table.wmv td.cell { max-width: 200px; }
     display: block; position: absolute; inset: 0;
     width: 100%; height: 100%; pointer-events: none;
   }
+  /* Oval rather than a true circle -- gives titles like "Maturity Model
+     Assessments" enough horizontal room to wrap to two lines without
+     text crowding the curve. border-radius:50% on an unequal width/height
+     box draws a true ellipse matching that box's own aspect ratio. */
   .hub-node {
     position: absolute !important;
-    transform: translate(-50%, -50%) !important;
-    width: 158px;
-    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 170px;
+    margin: -85px 0 0 -100px; /* -height/2, -width/2 -- centers on its left/top anchor point */
+    padding: 18px 26px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
     text-align: center;
+    outline: none;
   }
+  .hub-node:hover, .hub-node:focus-visible {
+    border-color: var(--orange);
+    background: var(--orange-soft);
+    box-shadow: 0 0 0 7px color-mix(in srgb, var(--orange) 16%, transparent);
+  }
+  .hub-node:active {
+    background: color-mix(in srgb, var(--orange-soft) 60%, var(--paper-raised));
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--orange) 22%, transparent);
+  }
+  .hub-kicker { font-size: 10px; margin-bottom: 4px; }
+  .hub-title { font-size: 15.5px; line-height: 1.2; margin-bottom: 3px; }
+  .hub-desc { font-size: 12px; line-height: 1.3; }
 }
 
 .attribution {
