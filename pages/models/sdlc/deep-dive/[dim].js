@@ -22,6 +22,7 @@ export default function DeepDive({ id, title, flag, html }) {
     <Layout title={`SDLC — ${title}`} crumb={
       <>
         <Link href="/">davidfacer.com</Link> / aimaturitymodels.com /{" "}
+        <Link href="/models">AI-Native Maturity Models</Link> /{" "}
         <Link href="/models/sdlc/whole-model-view">AI-Native SDLC</Link> / {id}
       </>
     }>

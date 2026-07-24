@@ -12,6 +12,7 @@ export default function Narrative({ html }) {
     <Layout title="SDLC — Feedback Loop Velocity" crumb={
       <>
         <Link href="/">davidfacer.com</Link> / aimaturitymodels.com /{" "}
+        <Link href="/models">AI-Native Maturity Models</Link> /{" "}
         <Link href="/models/sdlc/whole-model-view">AI-Native SDLC</Link> / Narrative
       </>
     }>

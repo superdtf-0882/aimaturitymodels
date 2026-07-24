@@ -1,112 +1,82 @@
 import Link from "next/link";
 import Layout from "../components/Layout";
 
-export default function FamilyMap() {
+// Circular hub (issue #9): five entry points arranged so no one of them
+// reads as the "start" -- order follows the sequence as specified, placed
+// clockwise from the top.
+const NODES = [
+  {
+    href: "/models",
+    kicker: "The family",
+    title: "AI-Native Maturity Models",
+    desc: "SDLC, PDLC, Prioritization — live models, plus what's coming.",
+  },
+  {
+    href: "/assessments",
+    kicker: "Assess yourself",
+    title: "Maturity Model Assessments",
+    desc: "Score your own organization against each model in the family.",
+  },
+  {
+    href: "/eaokf",
+    kicker: "The foundation",
+    title: "Enterprise Architecture OKF",
+    desc: "The governed schema every model in this family is written in.",
+  },
+  {
+    href: "/strata",
+    kicker: "Why it connects",
+    title: "Strata",
+    desc: "The structure explaining why these models fit together at all.",
+  },
+  {
+    href: "/vellum",
+    kicker: "The tooling",
+    title: "Vellum & Seminum",
+    desc: "Making a governance corpus visible, and portable to a new one.",
+  },
+];
+
+const R = 30; // percent radius -- kept well under 50 minus the node's own
+// half-width-as-percent-of-container, so a card can never push past the
+// circle's own box (and, in turn, never widen the page) at any container
+// size down to the 640px breakpoint where this layout takes over.
+const points = NODES.map((_, i) => {
+  const angle = ((-90 + i * (360 / NODES.length)) * Math.PI) / 180;
+  return {
+    x: 50 + R * Math.cos(angle),
+    y: 50 + R * Math.sin(angle),
+  };
+});
+const ringPath =
+  points.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ") + " Z";
+
+export default function Hub() {
   return (
-    <Layout title="Family Map">
+    <Layout title="Home">
       <h1>AI-Native Maturity Models</h1>
-      <p className="dek">
-        Capability models for understanding how AI-nativity changes software
-        delivery, product management, and the enterprise itself. These models
-        don&rsquo;t ask how much AI an organization uses &mdash; they ask what
-        its operating systems are actually capable of doing, and what
-        realistically adjacent capability comes next.
+      <p className="dek hub-intro">
+        Five ways in — it doesn&rsquo;t matter which one a visitor
+        starts from. Each leads somewhere different; together they&rsquo;re
+        one system.
       </p>
 
-      <h2>The Family</h2>
-      <div className="model-list">
-        <Link href="/models/sdlc/whole-model-view" className="model-row">
-          <div>
-            <div className="model-name">AI-Native SDLC Maturity Model</div>
-            <div className="model-desc">
-              How specification becomes generated code, governed delivery, and
-              production evidence.
-            </div>
-          </div>
-          <span className="pill live">Live</span>
-        </Link>
-        <div className="model-row">
-          <div>
-            <div className="model-name">AI-Native PDLC Maturity Model</div>
-            <div className="model-desc">
-              How market intelligence becomes product definition, prioritized
-              investment, and closed-loop calibration.
-            </div>
-          </div>
-          <span className="pill live">Live</span>
-        </div>
-        <div className="model-row">
-          <div>
-            <div className="model-name">Product Prioritization Maturity Model</div>
-            <div className="model-desc">
-              How organizations move from personal advocacy to coherent,
-              governed portfolio decisions.
-            </div>
-          </div>
-          <span className="pill live">Live</span>
-        </div>
-        <div className="model-row">
-          <div>
-            <div className="model-name">Product Marketing Lifecycle Maturity Model</div>
-            <div className="model-desc">
-              How positioning, messaging, and go-to-market discipline mature
-              alongside the product itself.
-            </div>
-          </div>
-          <span className="pill coming">Coming</span>
-        </div>
-        <div className="model-row">
-          <div>
-            <div className="model-name">AI-Native EA Maturity Model</div>
-            <div className="model-desc">
-              How enterprise architecture itself adapts to a practice where
-              governed cognition isn&rsquo;t exclusively human.
-            </div>
-          </div>
-          <span className="pill coming">Coming</span>
-        </div>
-      </div>
-      <p className="footnote">
-        Each model stands alone &mdash; you don&rsquo;t need the others to use
-        one. But they share a foundation, and where they connect is
-        intentional, not incidental.
-      </p>
-
-      <hr className="section-divider" />
-      <h2>Built on EA OKF</h2>
-      <p>
-        Every model in this family is expressed the same way underneath: as
-        structured, machine-readable governance &mdash; a schema open enough
-        that an AI system can read it directly, and precise enough that a
-        human still recognizes exactly what it&rsquo;s looking at. This
-        isn&rsquo;t a separate product. It&rsquo;s the layer everything else
-        is written in.
-      </p>
-
-      <hr className="section-divider" />
-      <h2>Strata</h2>
-      <p>
-        Why do these models relate to each other at all &mdash; why does
-        market intelligence feed both delivery and product decisions, why
-        does feedback velocity close a loop back to where an organization
-        started? <Link href="/strata">Strata is the answer</Link>: the
-        underlying structure showing how intent, governance, execution, and
-        observation connect across every model in this family.
-      </p>
-
-      <hr className="section-divider" />
-      <h2>A living system</h2>
-      <p>
-        These models don&rsquo;t describe a state of perfection. They
-        describe a system of becoming &mdash; capable, measurable, and
-        adaptively aligned with intent.
-      </p>
-
-      <div className="layer-note" style={{ marginTop: 28 }}>
-        <strong>Tooling note.</strong> A lightweight internal tool for corpus
-        visibility and a portable seed package for standing up a practice
-        from scratch both already exist. You won&rsquo;t need to build
-        either yourself.
+      <div className="hub-circle">
+        <svg className="hub-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d={ringPath} fill="none" stroke="var(--line)" strokeWidth="0.4" strokeDasharray="1.6 2" />
+        </svg>
+        {NODES.map((node, i) => (
+          <Link
+            key={node.href}
+            href={node.href}
+            className="hub-node"
+            style={{ left: `${points[i].x}%`, top: `${points[i].y}%`, transform: "translate(-50%, -50%)" }}
+          >
+            <div className="hub-kicker">{node.kicker}</div>
+            <div className="hub-title">{node.title}</div>
+            <div className="hub-desc">{node.desc}</div>
+          </Link>
+        ))}
       </div>
     </Layout>
   );

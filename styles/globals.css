@@ -144,6 +144,51 @@ table.wmv td.cell { max-width: 200px; }
 .dd-body h2 { font-size: 19px; }
 .provenance { margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); font-style: italic; }
 
+/* Circular hub (issue #9): five entry points, no fixed starting point.
+   Mobile-first stack; the circular arrangement only applies once there's
+   room for it. Both rules below need !important so the min-width block
+   (declared second) reliably wins over the base block at the same
+   specificity -- position/transform are the only properties in play. */
+.hub-intro { margin-bottom: 4px; }
+.hub-circle { position: relative; width: 100%; max-width: 560px; margin: 28px auto 12px; }
+.hub-ring { display: none; }
+.hub-node {
+  position: static !important;
+  transform: none !important;
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper-raised);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease;
+}
+.hub-node:hover { border-color: var(--blue); }
+.hub-kicker {
+  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--muted); margin-bottom: 5px;
+}
+.hub-title { font-family: var(--serif); font-size: 18px; margin-bottom: 4px; }
+.hub-desc { font-size: 13.5px; color: var(--ink-soft); }
+
+@media (min-width: 640px) {
+  .hub-circle { aspect-ratio: 1; }
+  .hub-ring {
+    display: block; position: absolute; inset: 0;
+    width: 100%; height: 100%; pointer-events: none;
+  }
+  .hub-node {
+    position: absolute !important;
+    transform: translate(-50%, -50%) !important;
+    width: 158px;
+    margin-bottom: 0;
+    text-align: center;
+  }
+}
+
 .attribution {
   position: fixed; right: 14px; bottom: 12px; font-size: 11px; color: var(--muted);
   background: var(--paper); padding: 3px 8px; border-radius: 5px; text-decoration: none;

@@ -6,8 +6,8 @@ export default function NotFound() {
     <Layout title="Page not found">
       <h1>Page not found</h1>
       <p className="dek">
-        That page doesn&rsquo;t exist here. Start from the{" "}
-        <Link href="/">Family Map</Link>.
+        That page doesn&rsquo;t exist here. Start from{" "}
+        <Link href="/">Home</Link>.
       </p>
     </Layout>
   );
