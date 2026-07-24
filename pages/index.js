@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
@@ -56,6 +56,14 @@ const BASE_ANGLES = NODES.map((_, i) => -90 + i * (360 / NODES.length));
 const DRAG_SENSITIVITY = 0.6; // degrees of rotation per pixel of horizontal drag
 const CLICK_MOVE_THRESHOLD_PX = 5; // below this, a drag counts as a plain click
 
+// Arrival spin: a random flick on first landing, once per browser tab
+// session. sessionStorage (not a cookie -- never sent to a server, gone
+// when the tab closes) is enough to remember "already spun this visit"
+// without needing any consent banner.
+const SPIN_SESSION_KEY = "aimm-hub-spun";
+const SPIN_DURATION_MS = 500;
+const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
 export default function Hub() {
   const router = useRouter();
   const [rotation, setRotation] = useState(0);
@@ -68,6 +76,27 @@ export default function Hub() {
     moved: false,
     targetHref: null,
   });
+
+  useEffect(() => {
+    if (window.sessionStorage.getItem(SPIN_SESSION_KEY)) return;
+    window.sessionStorage.setItem(SPIN_SESSION_KEY, "1");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const direction = Math.random() < 0.5 ? -1 : 1;
+    const target = direction * (240 + Math.random() * 300); // 240-540 degrees
+    const start = performance.now();
+    let frameId;
+
+    function tick(now) {
+      if (dragState.current.active) return; // user grabbed the wheel -- yield to them
+      const t = Math.min((now - start) / SPIN_DURATION_MS, 1);
+      setRotation(target * easeOutCubic(t));
+      if (t < 1) frameId = requestAnimationFrame(tick);
+    }
+    frameId = requestAnimationFrame(tick);
+
+    return () => cancelAnimationFrame(frameId);
+  }, []);
 
   function handlePointerDown(e) {
     dragState.current.active = true;
