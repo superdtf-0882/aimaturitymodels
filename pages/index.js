@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 
 // Circular hub (issue #9): five entry points arranged so no one of them
@@ -56,9 +57,17 @@ const DRAG_SENSITIVITY = 0.6; // degrees of rotation per pixel of horizontal dra
 const CLICK_MOVE_THRESHOLD_PX = 5; // below this, a drag counts as a plain click
 
 export default function Hub() {
+  const router = useRouter();
   const [rotation, setRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const dragState = useRef({ active: false, startX: 0, startY: 0, startRotation: 0, moved: false });
+  const dragState = useRef({
+    active: false,
+    startX: 0,
+    startY: 0,
+    startRotation: 0,
+    moved: false,
+    targetHref: null,
+  });
 
   function handlePointerDown(e) {
     dragState.current.active = true;
@@ -66,6 +75,8 @@ export default function Hub() {
     dragState.current.startX = e.clientX;
     dragState.current.startY = e.clientY;
     dragState.current.startRotation = rotation;
+    const nodeEl = e.target.closest && e.target.closest(".hub-node");
+    dragState.current.targetHref = nodeEl ? nodeEl.getAttribute("href") : null;
     setIsDragging(true);
     e.currentTarget.setPointerCapture(e.pointerId);
   }
@@ -78,11 +89,32 @@ export default function Hub() {
     setRotation(dragState.current.startRotation + dx * DRAG_SENSITIVITY);
   }
 
-  function endDrag() {
+  // Pointer capture (needed to keep tracking the drag even once the
+  // pointer leaves the wheel) retargets the resulting pointerup -- and
+  // the native "click" synthesized from it -- to the capturing element
+  // (.hub-circle) instead of whichever node was actually pressed. That
+  // means Link's own click-driven navigation never fires for a mouse or
+  // touch interaction here, dragged or not, so navigation is triggered
+  // explicitly instead of relying on the (unreachable) native click.
+  function handlePointerUp() {
+    if (dragState.current.active && !dragState.current.moved && dragState.current.targetHref) {
+      router.push(dragState.current.targetHref);
+    }
     dragState.current.active = false;
+    dragState.current.moved = false;
     setIsDragging(false);
   }
 
+  function handlePointerCancel() {
+    dragState.current.active = false;
+    dragState.current.moved = false;
+    setIsDragging(false);
+  }
+
+  // Fallback for keyboard activation (Enter/Space on a focused link) --
+  // that path never goes through pointerdown/pointerup, so it isn't
+  // affected by the capture-retargeting issue above and still fires a
+  // normal click straight on the anchor.
   function handleNodeClick(e) {
     if (dragState.current.moved) e.preventDefault();
   }
@@ -107,8 +139,8 @@ export default function Hub() {
         className={`hub-circle${isDragging ? " dragging" : ""}`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
       >
         <svg className="hub-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
           <path d={ringPath} fill="none" stroke="var(--line)" strokeWidth="0.4" strokeDasharray="1.6 2" />
