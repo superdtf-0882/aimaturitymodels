@@ -118,7 +118,9 @@ export default function Hub() {
             key={node.href}
             href={node.href}
             className="hub-node"
+            draggable={false}
             onClick={handleNodeClick}
+            onDragStart={(e) => e.preventDefault()}
             style={{ left: `${points[i].x}%`, top: `${points[i].y}%` }}
           >
             <div className="hub-kicker">{node.kicker}</div>

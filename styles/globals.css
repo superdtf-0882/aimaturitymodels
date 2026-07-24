@@ -163,6 +163,11 @@ table.wmv td.cell { max-width: 200px; }
   text-decoration: none;
   color: inherit;
   transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  -webkit-user-drag: none; /* belt-and-suspenders alongside draggable={false} --
+    some browsers still start a native link drag-and-drop from a mousedown
+    on an <a>, which hijacks the gesture away from our own pointermove
+    handler after a few pixels -- this is what was actually capping the
+    wheel's rotation, not the rotation math itself. */
 }
 .hub-node:hover, .hub-node:focus-visible { border-color: var(--orange); background: var(--orange-soft); }
 .hub-node:active { background: color-mix(in srgb, var(--orange-soft) 60%, var(--paper-raised)); }
