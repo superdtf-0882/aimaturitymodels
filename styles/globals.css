@@ -181,11 +181,27 @@ table.wmv td.cell { max-width: 200px; }
 
 /* Foundation nodes (EA OKF, Strata, Vellum & Seminum) read as visually
    secondary to the two actual product nodes (Models, Assessments) --
-   smaller, quieter, structurally subordinate rather than co-equal.
+   quieter, structurally subordinate rather than co-equal. DS-011
+   (catalog_design_system.md): the subordination signal is opacity +
+   a lighter border + slightly smaller type, NOT a different node
+   footprint -- an earlier version of this pattern varied hub-node
+   size/spacing, which is poor radial-layout practice (uneven visual
+   weight, asymmetric spacing around the wheel); every node keeps the
+   same size and position math regardless of primary/secondary.
    Applies at every width, not just the circular layout, so the
-   stacked mobile list carries the same hierarchy. */
-.hub-node--secondary .hub-title { font-size: 15.5px; color: var(--ink-soft); }
-.hub-node--secondary .hub-desc { font-size: 12px; }
+   stacked mobile list carries the same hierarchy. Hover/focus restores
+   full opacity -- the interaction itself never reads as degraded, only
+   the resting state is quieter. */
+.hub-node--secondary {
+  opacity: 0.72;
+  border-color: var(--line);
+  transition: opacity 0.15s ease, border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+.hub-node--secondary:hover, .hub-node--secondary:focus-visible, .hub-node--secondary:active {
+  opacity: 1;
+}
+.hub-node--secondary .hub-title { font-size: 16.5px; color: var(--ink-soft); }
+.hub-node--secondary .hub-desc { font-size: 12.5px; }
 
 @media (min-width: 640px) {
   .hub-circle { aspect-ratio: 1; cursor: grab; touch-action: none; user-select: none; }
@@ -226,18 +242,15 @@ table.wmv td.cell { max-width: 200px; }
   .hub-title { font-size: 15.5px; line-height: 1.2; margin-bottom: 3px; }
   .hub-desc { font-size: 12px; line-height: 1.3; }
 
-  /* Smaller oval for the three foundation nodes -- half-width/height
-     shrink together with the centering margin, so it's still centered
-     on its own anchor point, not just visually smaller in place. */
-  .hub-node--secondary {
-    width: 156px;
-    height: 128px;
-    margin: -64px 0 0 -78px;
-    padding: 14px 18px;
-  }
-  .hub-node--secondary .hub-kicker { font-size: 9px; }
-  .hub-node--secondary .hub-title { font-size: 13px; }
-  .hub-node--secondary .hub-desc { font-size: 10.5px; }
+  /* Foundation nodes keep the exact same oval geometry as the product
+     nodes -- every node on the wheel is the same size and sits on the
+     same radius, evenly spaced. Retracted an earlier version that
+     shrank these three ovals: uneven node size on a radial layout
+     reads as poor spacing/weight distribution, not hierarchy. The
+     opacity/border rule above (outside this media query, so it also
+     applies to the mobile stacked list) carries the subordination
+     signal instead. */
+  .hub-node--secondary .hub-kicker { font-size: 9.5px; }
 }
 
 /* Stratum model (issue #10): a click-to-expand list, S0 at top through
