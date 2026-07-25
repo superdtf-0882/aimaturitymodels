@@ -7,6 +7,17 @@ export async function getStaticProps() {
   return { props: { data } };
 }
 
+// Family-wide axis vocabulary, locked 2026-07-24 (briefs/2026-07-24-
+// level-vocabulary/ in the private governance corpus) -- applied here
+// as column headers and the legend below.
+const LEVEL_NAMES = {
+  A: "Nascent",
+  B: "Modeled",
+  C: "Continuous",
+  D: "Integral",
+  E: "Telemetric",
+};
+
 export default function WholeModelView({ data }) {
   const levels = ["A", "B", "C", "D", "E"];
   return (
@@ -28,7 +39,11 @@ export default function WholeModelView({ data }) {
           <thead>
             <tr>
               <th>Dimension</th>
-              {levels.map((l) => <th key={l}>{l}</th>)}
+              {levels.map((l) => (
+                <th key={l}>
+                  {l} <span className="level-name">&middot; {LEVEL_NAMES[l]}</span>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -63,11 +78,11 @@ export default function WholeModelView({ data }) {
         </table>
       </div>
       <div className="legend">
-        <span><span className="swatch" style={{ background: "var(--lvl-a-fill)", borderColor: "var(--lvl-a-border)" }} /> A &mdash; Ad hoc</span>
-        <span><span className="swatch" style={{ background: "var(--lvl-b-fill)", borderColor: "var(--lvl-b-border)" }} /> B &mdash; Documented</span>
-        <span><span className="swatch" style={{ background: "var(--lvl-c-fill)", borderColor: "var(--lvl-c-border)" }} /> C &mdash; Governed</span>
-        <span><span className="swatch" style={{ background: "var(--lvl-d-fill)", borderColor: "var(--lvl-d-border)" }} /> D &mdash; Comprehensive</span>
-        <span><span className="swatch" style={{ background: "var(--lvl-e-fill)", borderColor: "var(--lvl-e-border)" }} /> E &mdash; Self-evolving</span>
+        <span><span className="swatch" style={{ background: "var(--lvl-a-fill)", borderColor: "var(--lvl-a-border)" }} /> A &mdash; Nascent</span>
+        <span><span className="swatch" style={{ background: "var(--lvl-b-fill)", borderColor: "var(--lvl-b-border)" }} /> B &mdash; Modeled</span>
+        <span><span className="swatch" style={{ background: "var(--lvl-c-fill)", borderColor: "var(--lvl-c-border)" }} /> C &mdash; Continuous</span>
+        <span><span className="swatch" style={{ background: "var(--lvl-d-fill)", borderColor: "var(--lvl-d-border)" }} /> D &mdash; Integral</span>
+        <span><span className="swatch" style={{ background: "var(--lvl-e-fill)", borderColor: "var(--lvl-e-border)" }} /> E &mdash; Telemetric</span>
         <span>⚠ = open review item</span>
       </div>
     </Layout>

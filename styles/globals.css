@@ -113,7 +113,9 @@ table.wmv th, table.wmv td { padding: 10px 12px; text-align: left; vertical-alig
 table.wmv thead th {
   font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
   color: var(--muted); background: var(--paper-raised); position: sticky; top: 0;
+  white-space: nowrap;
 }
+table.wmv thead th .level-name { text-transform: none; letter-spacing: 0; opacity: 0.75; }
 table.wmv td.dim { font-weight: 600; white-space: nowrap; background: var(--paper-raised); }
 table.wmv td.dim a { font-family: var(--mono); color: var(--blue); margin-right: 6px; text-decoration: none; }
 table.wmv td.cell { max-width: 200px; }
