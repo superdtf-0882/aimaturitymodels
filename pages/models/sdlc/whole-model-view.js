@@ -1,22 +1,12 @@
 import Link from "next/link";
 import Layout from "../../../components/Layout";
 import { getSdlcShortForm, SDLC_DIMENSION_ORDER } from "../../../lib/models";
+import { LEVEL_NAMES } from "../../../lib/levelVocabulary";
 
 export async function getStaticProps() {
   const data = await getSdlcShortForm();
   return { props: { data } };
 }
-
-// Family-wide axis vocabulary, locked 2026-07-24 (briefs/2026-07-24-
-// level-vocabulary/ in the private governance corpus) -- applied here
-// as column headers and the legend below.
-const LEVEL_NAMES = {
-  A: "Nascent",
-  B: "Modeled",
-  C: "Continuous",
-  D: "Integral",
-  E: "Telemetric",
-};
 
 export default function WholeModelView({ data }) {
   const levels = ["A", "B", "C", "D", "E"];
