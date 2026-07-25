@@ -75,7 +75,16 @@ a { color: var(--blue); }
   color: var(--muted); margin: 16px 0 4px 9px;
 }
 
-.stage { padding: 40px clamp(24px, 5vw, 64px) 90px; max-width: 900px; }
+.stage {
+  padding: 40px clamp(24px, 5vw, 64px) 90px; max-width: 900px;
+  /* min-width:0 overrides the grid item default of min-width:auto --
+     without it, .stage's min-content size (driven by the widest thing
+     inside it, e.g. table.wmv on the wide single-pane view) can force
+     the 1fr track past the viewport instead of respecting it, pushing
+     the whole page into horizontal scroll. .grid-wrap's own
+     overflow-x:auto only works if .stage itself doesn't blow out first. */
+  min-width: 0;
+}
 /* DS-012: a single-pane presentation view needs room the standard
    900px reading column doesn't give it -- wide enough that a 13-row
    dense grid can sit in one frame without horizontal scroll on a
