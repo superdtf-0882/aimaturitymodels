@@ -76,6 +76,11 @@ a { color: var(--blue); }
 }
 
 .stage { padding: 40px clamp(24px, 5vw, 64px) 90px; max-width: 900px; }
+/* DS-012: a single-pane presentation view needs room the standard
+   900px reading column doesn't give it -- wide enough that a 13-row
+   dense grid can sit in one frame without horizontal scroll on a
+   typical wide screen, without changing every other page's width. */
+.stage--wide { max-width: 1400px; }
 .crumb { font-family: var(--mono); font-size: 12px; color: var(--muted); margin: 0 0 20px; }
 .crumb a { text-decoration: none; }
 
@@ -116,6 +121,25 @@ table.wmv thead th {
   white-space: nowrap;
 }
 table.wmv thead th .level-name { text-transform: none; letter-spacing: 0; opacity: 0.75; }
+
+/* DS-012: single-pane presentation view. Column-header badges reuse
+   DS-011's oval geometry (border-radius:50% on an unequal width/height
+   box) and the System 3 A-E fill/border tokens already used for cell
+   fill below them -- same shape and palette as the landing-page hub,
+   scaled down for a table header instead of a draggable wheel. */
+table.wmv thead th.level-th {
+  text-align: center; text-transform: none; letter-spacing: 0; padding: 8px 6px;
+}
+.level-badge {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 78px; height: 56px; margin: 0 auto; border-radius: 50%;
+  background: var(--badge-fill); border: 2px solid var(--badge-border); color: #16232e;
+}
+.level-badge-letter { font-family: var(--serif); font-size: 17px; font-weight: 700; line-height: 1.15; }
+.level-badge-name {
+  font-family: var(--mono); font-size: 8.5px; text-transform: uppercase;
+  letter-spacing: 0.03em; line-height: 1.2; opacity: 0.75;
+}
 table.wmv td.dim { font-weight: 600; white-space: nowrap; background: var(--paper-raised); }
 table.wmv td.dim a { font-family: var(--mono); color: var(--blue); margin-right: 6px; text-decoration: none; }
 table.wmv td.cell { max-width: 200px; }

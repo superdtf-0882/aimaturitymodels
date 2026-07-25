@@ -5,7 +5,7 @@ import Head from "next/head";
 // C-007 attribution pattern (portfolio-wide variant, DS-008b) applied to
 // this domain's own identity rather than aisdlc's.
 
-export default function Layout({ title, crumb, children }) {
+export default function Layout({ title, crumb, wide, children }) {
   return (
     <>
       <Head>
@@ -30,7 +30,7 @@ export default function Layout({ title, crumb, children }) {
             <Link href="/models/sdlc/narrative">Narrative (D13)</Link>
           </nav>
         </aside>
-        <main className="stage">
+        <main className={`stage${wide ? " stage--wide" : ""}`}>
           {crumb && <p className="crumb">{crumb}</p>}
           {children}
         </main>

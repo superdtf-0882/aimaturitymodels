@@ -21,27 +21,40 @@ const LEVEL_NAMES = {
 export default function WholeModelView({ data }) {
   const levels = ["A", "B", "C", "D", "E"];
   return (
-    <Layout title="SDLC — Whole-Model View" crumb={
-      <>
-        <Link href="/">davidfacer.com</Link> / aimaturitymodels.com /{" "}
-        <Link href="/models">AI-Native Maturity Models</Link> /{" "}
-        <Link href="/models/sdlc/whole-model-view">AI-Native SDLC</Link> / Whole-Model View
-      </>
-    }>
+    <Layout
+      title="SDLC — Whole-Model View"
+      wide
+      crumb={
+        <>
+          <Link href="/">davidfacer.com</Link> / aimaturitymodels.com /{" "}
+          <Link href="/models">AI-Native Maturity Models</Link> /{" "}
+          <Link href="/models/sdlc/whole-model-view">AI-Native SDLC</Link> / Whole-Model View
+        </>
+      }
+    >
       <h1>AI-Native SDLC &mdash; Whole-Model View</h1>
       <p className="dek">
         Thirteen dimensions, five maturity levels each. Built to be scanned,
-        not read start to finish &mdash; click any cell for its full
-        Deep-Dive.
+        not read start to finish, and compact enough to capture as a single
+        slide &mdash; click any cell for its full Deep-Dive.
       </p>
       <div className="grid-wrap">
         <table className="wmv">
           <thead>
             <tr>
-              <th>Dimension</th>
+              <th className="dim-th">Dimension</th>
               {levels.map((l) => (
-                <th key={l}>
-                  {l} <span className="level-name">&middot; {LEVEL_NAMES[l]}</span>
+                <th key={l} className="level-th">
+                  <span
+                    className="level-badge"
+                    style={{
+                      "--badge-fill": `var(--lvl-${l.toLowerCase()}-fill)`,
+                      "--badge-border": `var(--lvl-${l.toLowerCase()}-border)`,
+                    }}
+                  >
+                    <span className="level-badge-letter">{l}</span>
+                    <span className="level-badge-name">{LEVEL_NAMES[l]}</span>
+                  </span>
                 </th>
               ))}
             </tr>
