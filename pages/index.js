@@ -6,18 +6,25 @@ import Layout from "../components/Layout";
 // Circular hub (issue #9): five entry points arranged so no one of them
 // reads as the "start" -- order follows the sequence as specified, placed
 // clockwise from the top.
+// `primary: true` marks the two nodes that are actually the product
+// (the models and their assessments); the other three -- foundation,
+// connective theory, internal tooling -- render visually smaller and
+// quieter, so the wheel itself doesn't imply parity that the copy on
+// those pages explicitly says isn't there.
 const NODES = [
   {
     href: "/models",
     kicker: "The family",
     title: "AI-Native Maturity Models",
     desc: "SDLC, PDLC, Prioritization — and what's coming.",
+    primary: true,
   },
   {
     href: "/assessments",
     kicker: "Assess yourself",
     title: "Maturity Model Assessments",
     desc: "Score yourself against each model in the family.",
+    primary: true,
   },
   {
     href: "/eaokf",
@@ -178,7 +185,7 @@ export default function Hub() {
           <Link
             key={node.href}
             href={node.href}
-            className="hub-node"
+            className={`hub-node${node.primary ? " hub-node--primary" : " hub-node--secondary"}`}
             draggable={false}
             onClick={handleNodeClick}
             onDragStart={(e) => e.preventDefault()}

@@ -21,9 +21,10 @@ export default function Layout({ title, crumb, children }) {
             <p className="group-label">Explore</p>
             <Link href="/models">AI-Native Maturity Models</Link>
             <Link href="/assessments">Maturity Model Assessments</Link>
-            <Link href="/eaokf">Enterprise Architecture OKF</Link>
-            <Link href="/strata">Strata</Link>
-            <Link href="/vellum">Vellum &amp; Seminum</Link>
+            <p className="group-label">Foundation</p>
+            <Link href="/eaokf" className="nav-secondary">Enterprise Architecture OKF</Link>
+            <Link href="/strata" className="nav-secondary">Strata</Link>
+            <Link href="/vellum" className="nav-secondary">Vellum &amp; Seminum</Link>
             <p className="group-label">SDLC Model</p>
             <Link href="/models/sdlc/whole-model-view">Whole-Model View</Link>
             <Link href="/models/sdlc/narrative">Narrative (D13)</Link>

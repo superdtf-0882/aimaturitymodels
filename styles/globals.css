@@ -69,6 +69,7 @@ a { color: var(--blue); }
 .rail nav { display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
 .rail nav a { color: var(--ink-soft); text-decoration: none; padding: 7px 9px; border-radius: 6px; display: block; }
 .rail nav a:hover { background: var(--paper-raised); }
+.rail nav a.nav-secondary { font-size: 12.5px; color: var(--muted); padding-top: 5px; padding-bottom: 5px; }
 .rail nav .group-label {
   font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em;
   color: var(--muted); margin: 16px 0 4px 9px;
@@ -178,6 +179,14 @@ table.wmv td.cell { max-width: 200px; }
 .hub-title { font-family: var(--serif); font-size: 18px; margin-bottom: 4px; }
 .hub-desc { font-size: 13.5px; color: var(--ink-soft); }
 
+/* Foundation nodes (EA OKF, Strata, Vellum & Seminum) read as visually
+   secondary to the two actual product nodes (Models, Assessments) --
+   smaller, quieter, structurally subordinate rather than co-equal.
+   Applies at every width, not just the circular layout, so the
+   stacked mobile list carries the same hierarchy. */
+.hub-node--secondary .hub-title { font-size: 15.5px; color: var(--ink-soft); }
+.hub-node--secondary .hub-desc { font-size: 12px; }
+
 @media (min-width: 640px) {
   .hub-circle { aspect-ratio: 1; cursor: grab; touch-action: none; user-select: none; }
   .hub-circle.dragging { cursor: grabbing; }
@@ -216,6 +225,19 @@ table.wmv td.cell { max-width: 200px; }
   .hub-kicker { font-size: 10px; margin-bottom: 4px; }
   .hub-title { font-size: 15.5px; line-height: 1.2; margin-bottom: 3px; }
   .hub-desc { font-size: 12px; line-height: 1.3; }
+
+  /* Smaller oval for the three foundation nodes -- half-width/height
+     shrink together with the centering margin, so it's still centered
+     on its own anchor point, not just visually smaller in place. */
+  .hub-node--secondary {
+    width: 156px;
+    height: 128px;
+    margin: -64px 0 0 -78px;
+    padding: 14px 18px;
+  }
+  .hub-node--secondary .hub-kicker { font-size: 9px; }
+  .hub-node--secondary .hub-title { font-size: 13px; }
+  .hub-node--secondary .hub-desc { font-size: 10.5px; }
 }
 
 /* Stratum model (issue #10): a click-to-expand list, S0 at top through

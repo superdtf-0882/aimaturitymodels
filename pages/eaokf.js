@@ -39,14 +39,15 @@ export default function EaOkf() {
         sharpens Intent over time as those systems actually run.
       </p>
 
-      <h2>Why the models in this family live here</h2>
+      <h2>Where the models in this family stand</h2>
       <p>
-        None of the models in this family is a standalone product. Each one
-        is a Standard in EA OKF&rsquo;s own vocabulary &mdash; a named,
-        outside method the practice measures itself against, expressed as
-        structured, machine-readable governance rather than a one-off
-        document. <Link href="/strata">Strata</Link> is the structure
-        explaining how they relate to each other once they&rsquo;re in place.
+        EA OKF is the schema this family is written in &mdash; not itself
+        one of the models, the ground they all stand on. Each model is the
+        actual product: a named Standard, expressed as structured,
+        machine-readable governance rather than a one-off document, using
+        exactly this schema underneath.{" "}
+        <Link href="/strata">Strata</Link> is the structure explaining how
+        they relate to each other once they&rsquo;re in place.
       </p>
     </Layout>
   );
