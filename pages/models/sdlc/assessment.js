@@ -1,0 +1,298 @@
+import { useState } from "react";
+import Link from "next/link";
+import { Radar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+} from "chart.js";
+import Layout from "../../../components/Layout";
+import { getSdlcAssessmentDimensions } from "../../../lib/models";
+
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
+
+export async function getStaticProps() {
+  const { dimensions, sourceCommit } = await getSdlcAssessmentDimensions();
+  return { props: { dimensions, sourceCommit } };
+}
+
+const LEVELS = ["A", "B", "C", "D", "E"];
+
+function buildAssessmentMd(dimensions, scores) {
+  const scored = Object.keys(scores).length;
+  const scoreNum = { A: 1, B: 2, C: 3, D: 4, E: 5 };
+  const avg = (dimensions.reduce((s, d) => s + (scores[d.id] ? scoreNum[scores[d.id]] : 0), 0) / dimensions.length).toFixed(1);
+  const date = new Date().toISOString().split("T")[0];
+
+  let md = "";
+  md += `# AI-Native SDLC Maturity Assessment\n\n`;
+  md += `**Framework:** AI-Native SDLC Maturity Model — David Facer (CC BY 4.0)\n`;
+  md += `**Model reference:** https://github.com/superdtf-0882/ai-native-sdlc-maturity-model\n`;
+  md += `**Generated:** ${date}\n\n`;
+  md += `> Each dimension is scored A through E. A given level is only merited when **everything** in its definition is true. `;
+  md += `Dimensions are independently scored — an organisation can be advanced in one and nascent in another.\n\n`;
+  md += `---\n\n`;
+
+  md += `## Scores\n\n`;
+  md += `| Dimension | Name | Level |\n`;
+  md += `|---|---|---|\n`;
+  dimensions.forEach((d) => {
+    md += `| ${d.id} | ${d.name} | ${scores[d.id] || "—"} |\n`;
+  });
+  md += `\n**Average score:** ${avg} / 5  (${scored} of ${dimensions.length} dimensions graded)\n\n`;
+  md += `---\n\n`;
+
+  md += `## Full maturity definitions\n\n`;
+  md += `*All five levels shown for each dimension. Your scored level is marked with ◀.*\n\n`;
+  dimensions.forEach((d) => {
+    md += `### ${d.id}. ${d.name}\n\n`;
+    md += `*${d.desc}*\n\n`;
+    LEVELS.forEach((lv) => {
+      const marker = scores[d.id] === lv ? " ◀ **your score**" : "";
+      md += `**Level ${lv}${marker}**\n\n`;
+      md += `${d.levels[lv]}\n\n`;
+    });
+    md += `---\n\n`;
+  });
+
+  md += `*AI-Native SDLC Maturity Model © 2026 David Facer — [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)*\n`;
+  md += `*Full model: https://github.com/superdtf-0882/ai-native-sdlc-maturity-model*\n`;
+  return md;
+}
+
+const READOUT_MESSAGES = [
+  "calculating dimensions", "mapping investment concentration", "measuring adjacent maturities",
+  "relationships between dimensions", "estimating organizational stage", "identifying strategic priorities",
+  "identifying delivery bottlenecks", "organizational strengths", "maturity distribution",
+  "forming executive POV", "evaluating dimensional relationships",
+];
+
+export default function Assessment({ dimensions, sourceCommit }) {
+  const [scores, setScores] = useState({});
+  const [selectedDim, setSelectedDim] = useState(dimensions[0].id);
+  const [generating, setGenerating] = useState(false);
+  const [readoutMsgIndex, setReadoutMsgIndex] = useState(0);
+  const [error, setError] = useState(null);
+
+  const dim = dimensions.find((d) => d.id === selectedDim);
+  const gradedCount = Object.keys(scores).length;
+  const allGraded = gradedCount === dimensions.length;
+  const pct = (gradedCount / dimensions.length) * 100;
+
+  function selectLevel(letter) {
+    setScores((prev) => {
+      const next = { ...prev };
+      if (next[selectedDim] === letter) delete next[selectedDim];
+      else next[selectedDim] = letter;
+      return next;
+    });
+  }
+
+  function downloadMd() {
+    const md = buildAssessmentMd(dimensions, scores);
+    const a = Object.assign(document.createElement("a"), {
+      href: URL.createObjectURL(new Blob([md], { type: "text/markdown" })),
+      download: "sdlc-maturity-assessment.md",
+    });
+    a.click();
+  }
+
+  async function tryExecutiveReadout() {
+    setError(null);
+    setGenerating(true);
+    setReadoutMsgIndex(0);
+    let i = 0;
+    const timer = setInterval(() => {
+      i = Math.min(i + 1, READOUT_MESSAGES.length - 1);
+      setReadoutMsgIndex(i);
+    }, 2500);
+
+    try {
+      const res = await fetch("/api/diagnostic", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ md: buildAssessmentMd(dimensions, scores) }),
+      });
+      const data = await res.json();
+      clearInterval(timer);
+      if (!res.ok) {
+        setGenerating(false);
+        setError(data.error || "Something went wrong generating the readout.");
+        return;
+      }
+      window.location.href = `/models/sdlc/executivereadout?hash=${data.hash}`;
+    } catch (err) {
+      clearInterval(timer);
+      setGenerating(false);
+      setError("Network error — please try again.");
+    }
+  }
+
+  return (
+    <Layout
+      title="SDLC — Assessment"
+      crumb={
+        <>
+          <Link href="/">davidfacer.com</Link> / aimaturitymodels.com /{" "}
+          <Link href="/assessments">Maturity Model Assessments</Link> / AI-Native SDLC
+        </>
+      }
+    >
+      <h1>AI-Native SDLC Maturity Assessment</h1>
+      <p className="dek">
+        Self-score your organization across {dimensions.length} AI-native delivery dimensions.
+        Download a summary, or generate an AI-assisted Executive Readout.
+      </p>
+
+      <div className="assess-tool">
+        <div className="assess-banner">
+          <strong>How to use:</strong> select any dimension on the left. Evaluate your
+          organization&rsquo;s maturity — for each level, everything in the definition must be
+          true to merit that level. The Executive Readout unlocks once all {dimensions.length}{" "}
+          dimensions are graded.
+        </div>
+
+        <div className="assess-body">
+          <div className="assess-left">
+            {dimensions.map((d) => {
+              const grade = scores[d.id];
+              const isSelected = selectedDim === d.id;
+              return (
+                <button
+                  key={d.id}
+                  className={`assess-pill${grade ? " is-graded" : ""}${isSelected ? " is-selected" : ""}`}
+                  onClick={() => setSelectedDim(d.id)}
+                >
+                  <span className="assess-pill-label">
+                    <span className="assess-pill-id">{d.id}</span>
+                    <span className="assess-pill-name">{d.name}</span>
+                  </span>
+                  {grade && <span className="assess-pill-grade">{grade}</span>}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="assess-right">
+            <div className="assess-dim-head">
+              <span>{dim.id}</span>
+              {scores[dim.id] && <span className="assess-dim-grade">{scores[dim.id]}</span>}
+            </div>
+            <h2 className="assess-dim-name">{dim.name}</h2>
+            <p className="assess-dim-desc">{dim.desc}</p>
+
+            <div className="assess-levels">
+              {LEVELS.map((l) => (
+                <button
+                  key={l}
+                  className={`assess-level-btn${scores[dim.id] === l ? " is-selected" : ""}`}
+                  onClick={() => selectLevel(l)}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
+
+            {scores[dim.id] ? (
+              <div className="assess-level-def">
+                <div className="assess-level-def-label">Level {scores[dim.id]} — definition</div>
+                <p>{dim.levels[scores[dim.id]]}</p>
+              </div>
+            ) : (
+              <div style={{ height: 20 }} />
+            )}
+
+            {gradedCount > 0 && (
+              <div className="assess-chart-wrap">
+                <div className="assess-chart-label">Maturity profile</div>
+                <div className="assess-chart-canvas">
+                  <Radar
+                    data={{
+                      labels: dimensions.map((d) => d.id),
+                      datasets: [
+                        {
+                          data: dimensions.map((d) => (scores[d.id] ? LEVELS.indexOf(scores[d.id]) + 1 : 0)),
+                          backgroundColor: "rgba(146,99,24,0.15)",
+                          borderColor: "var(--orange, #926318)",
+                          pointBackgroundColor: "#926318",
+                          pointBorderColor: "#926318",
+                          pointRadius: 3,
+                          borderWidth: 1.5,
+                        },
+                      ],
+                    }}
+                    options={{
+                      responsive: true,
+                      scales: {
+                        r: {
+                          min: 0,
+                          max: 5,
+                          ticks: {
+                            stepSize: 1,
+                            callback: (v) => ["", "A", "B", "C", "D", "E"][v] || "",
+                            color: "#8b9aa8",
+                            backdropColor: "transparent",
+                          },
+                          grid: { color: "#2a3844" },
+                          angleLines: { color: "#2a3844" },
+                          pointLabels: { color: "#b7c4d1", font: { size: 11 } },
+                        },
+                      },
+                      plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                          callbacks: {
+                            label: (ctx) => (ctx.raw > 0 ? `Level ${["", "A", "B", "C", "D", "E"][ctx.raw]}` : "Not graded"),
+                          },
+                        },
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="assess-bottom">
+          <div className="assess-progress">
+            <div className="assess-progress-track">
+              <div className="assess-progress-bar" style={{ width: `${pct}%` }} />
+            </div>
+            <span className="assess-progress-label">{gradedCount} / {dimensions.length}</span>
+          </div>
+          <button className="assess-btn assess-btn-blue" onClick={downloadMd} disabled={!allGraded}>
+            Download .md
+          </button>
+          <button className="assess-btn assess-btn-orange" onClick={tryExecutiveReadout} disabled={!allGraded || generating}>
+            Executive Readout →
+          </button>
+        </div>
+      </div>
+
+      {error && <p className="assess-error">{error}</p>}
+
+      <p className="footnote" style={{ textAlign: "center", marginTop: 14 }}>
+        <a href="https://github.com/superdtf-0882/ai-native-sdlc-maturity-model" target="_blank" rel="noopener noreferrer">
+          AI-Native SDLC Maturity Model
+        </a>{" "}
+        © 2026 David Facer —{" "}
+        <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>
+        <br />
+        Content pinned to commit <code>{sourceCommit.slice(0, 7)}</code> of the canonical model repo.
+      </p>
+
+      {generating && (
+        <div className="assess-modal-backdrop">
+          <div className="assess-modal">
+            <div className="assess-modal-title">Creating Executive Readout</div>
+            <div className="assess-modal-message">{READOUT_MESSAGES[readoutMsgIndex]}</div>
+          </div>
+        </div>
+      )}
+    </Layout>
+  );
+}

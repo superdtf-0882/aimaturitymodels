@@ -15,7 +15,7 @@ export default function AssessmentsIndex() {
       </p>
 
       <div className="model-list">
-        <a href="https://aisdlc.davidfacer.com/maturitymodelassessment/" className="model-row">
+        <Link href="/models/sdlc/assessment" className="model-row">
           <div>
             <div className="model-name">AI-Native SDLC Maturity Assessment</div>
             <div className="model-desc">
@@ -24,7 +24,7 @@ export default function AssessmentsIndex() {
             </div>
           </div>
           <span className="pill live">Live</span>
-        </a>
+        </Link>
         <div className="model-row">
           <div>
             <div className="model-name">AI-Native PDLC Maturity Assessment</div>
