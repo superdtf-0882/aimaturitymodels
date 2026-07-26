@@ -37,14 +37,24 @@ export default function WholeModelView({ dimensions, sourceCommit }) {
   const panelRef = useRef(null);
 
   useEffect(() => {
-    const m = window.location.hash.replace("#", "").match(/^d(\d+)-([a-e])$/i);
-    if (!m) return;
-    const dimId = `D${m[1]}`;
-    const level = m[2].toUpperCase();
-    if (dimensions.some((d) => d.id === dimId)) {
-      setOpenCell({ dimId, level });
-      setHeld(true);
+    // Runs on initial mount AND on hashchange -- a hash-only URL change
+    // (a shared #d6-c link opened while this page is already loaded,
+    // or browser back/forward) does not remount the component, so a
+    // mount-only effect would miss it. Found by testing the deep-link
+    // against a live, already-loaded tab, not assumed to work.
+    function openFromHash() {
+      const m = window.location.hash.replace("#", "").match(/^d(\d+)-([a-e])$/i);
+      if (!m) return;
+      const dimId = `D${m[1]}`;
+      const level = m[2].toUpperCase();
+      if (dimensions.some((d) => d.id === dimId)) {
+        setOpenCell({ dimId, level });
+        setHeld(true);
+      }
     }
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    return () => window.removeEventListener("hashchange", openFromHash);
   }, [dimensions]);
 
   const closePanel = useCallback(() => {
