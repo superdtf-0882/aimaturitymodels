@@ -151,9 +151,49 @@ table.wmv thead th.level-th {
 }
 table.wmv td.dim { font-weight: 600; white-space: nowrap; background: var(--paper-raised); }
 table.wmv td.dim a { font-family: var(--mono); color: var(--blue); margin-right: 6px; text-decoration: none; }
-table.wmv td.cell { max-width: 200px; }
-.cell-link { text-decoration: none; color: inherit; display: block; }
-.cell-inner { border-left: 3px solid var(--cell-border); background: var(--cell-fill); padding: 7px 9px; border-radius: 4px; color: #16232e; }
+table.wmv td.cell { max-width: 200px; padding: 6px !important; }
+/* DS-012 revision, 2026-07-26: the matrix is digested to pure shape --
+   color only, no prose, no per-cell label (the column-header ovals
+   already name the state). .cell-hit is the interactive hit-target;
+   content lives in .wmv-panel below, not in the cell itself. */
+.cell-hit {
+  height: 44px; border-left: 3px solid var(--cell-border); background: var(--cell-fill);
+  border-radius: 4px; cursor: pointer; outline: none;
+  transition: filter 0.12s ease, box-shadow 0.12s ease;
+}
+.cell-hit:hover, .cell-hit:focus-visible { filter: brightness(1.12); }
+.cell-hit:focus-visible { box-shadow: 0 0 0 2px var(--orange); }
+.cell-hit.is-open { box-shadow: 0 0 0 2px var(--orange); filter: brightness(1.12); }
+
+.wmv-panel {
+  margin-top: 14px; padding: 16px 20px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--paper-raised);
+  min-height: 132px; position: relative;
+}
+.wmv-panel-empty { color: var(--muted); font-size: 13.5px; margin: 0; }
+.wmv-panel-close {
+  position: absolute; top: 10px; right: 12px; width: 26px; height: 26px;
+  border-radius: 6px; border: 1px solid var(--line); background: var(--paper);
+  color: var(--muted); font-size: 15px; line-height: 1; cursor: pointer;
+}
+.wmv-panel-close:hover { color: var(--ink); border-color: var(--orange); }
+.wmv-panel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding-right: 30px; }
+.wmv-panel-level {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%; font-family: var(--mono); font-weight: 700; font-size: 13px;
+  border: 2px solid var(--cell-border); background: var(--cell-fill); color: #16232e; flex-shrink: 0;
+}
+.wmv-panel-name { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.wmv-panel-id { font-size: 13px; color: var(--ink-soft); margin-left: auto; }
+.wmv-panel-section { margin-bottom: 14px; }
+.wmv-panel-section:last-of-type { margin-bottom: 8px; }
+.wmv-panel-label {
+  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--orange); margin-bottom: 5px;
+}
+.wmv-panel-section p { margin: 0; font-size: 13.5px; line-height: 1.65; color: var(--ink-soft); max-width: 72ch; }
+.wmv-panel-pending { font-style: italic; color: var(--muted) !important; }
+.wmv-panel-link { margin: 0; font-size: 13px; }
 .flag-tag {
   display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono);
   font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--orange); margin-top: 4px;
