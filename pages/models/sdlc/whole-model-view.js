@@ -24,13 +24,15 @@ function nextLevel(l) {
 // 2026-07-26 alignment: the matrix is digested (shape only -- color,
 // no prose, no per-cell label; the ovular column headers already name
 // the state). Progressive disclosure lives in this reveal panel:
-// Definition (always available) + Transition Notes (only where the
-// canonical model actually has them today -- D1-D3; D4-D13 show that
-// honestly rather than papering over it) or Sustainment at Level E
-// (not yet authored anywhere, shown the same honest way). Hover
-// previews transiently; click or keyboard focus holds it open and
-// writes a shareable #d6-c hash; Escape, outside-click, or the close
-// control dismiss a held-open panel.
+// Definition + Transition Notes (with a Verification clause where the
+// source has one -- D4-D13 do, D1-D3 don't yet) or Sustainment at
+// Level E (D4-D13 have it; D1-D3 show the gap honestly rather than
+// papering over it). D11 carries a standing draft-caution note above
+// the panel body regardless of which level is open, since the
+// underlying dimension itself remains flagged for further research.
+// Hover previews transiently; click or keyboard focus holds it open
+// and writes a shareable #d6-c hash; Escape, outside-click, or the
+// close control dismiss a held-open panel.
 export default function WholeModelView({ dimensions, sourceCommit }) {
   const [openCell, setOpenCell] = useState(null); // { dimId, level } | null
   const [held, setHeld] = useState(false);
@@ -96,7 +98,7 @@ export default function WholeModelView({ dimensions, sourceCommit }) {
   const activeDim = openCell ? dimensions.find((d) => d.id === openCell.dimId) : null;
   const activeLevel = openCell ? openCell.level : null;
   const activeNext = activeLevel ? nextLevel(activeLevel) : null;
-  const activeTransitionText =
+  const activeTransition =
     activeDim && activeNext ? activeDim.transitions[`${activeLevel}-${activeNext}`] : null;
 
   return (
@@ -206,6 +208,10 @@ export default function WholeModelView({ dimensions, sourceCommit }) {
               <span className="wmv-panel-id">{activeDim.id} &middot; {activeDim.name}</span>
             </div>
 
+            {activeDim.transitionCaution && (
+              <p className="wmv-panel-caution">&#9888; {activeDim.transitionCaution}</p>
+            )}
+
             <div className="wmv-panel-section">
               <div className="wmv-panel-label">Definition</div>
               <p>{activeDim.levels[activeLevel]}</p>
@@ -214,11 +220,20 @@ export default function WholeModelView({ dimensions, sourceCommit }) {
             <div className="wmv-panel-section">
               <div className="wmv-panel-label">{activeNext ? `Transition to ${activeNext}` : "Sustainment"}</div>
               {activeNext ? (
-                activeTransitionText ? (
-                  <p>{activeTransitionText}</p>
+                activeTransition ? (
+                  <>
+                    <p>{activeTransition.text}</p>
+                    {activeTransition.verification && (
+                      <p className="wmv-panel-verification">
+                        <strong>Verification:</strong> {activeTransition.verification}
+                      </p>
+                    )}
+                  </>
                 ) : (
                   <p className="wmv-panel-pending">Transition notes not yet drafted for this dimension.</p>
                 )
+              ) : activeDim.sustainment ? (
+                <p>{activeDim.sustainment}</p>
               ) : (
                 <p className="wmv-panel-pending">Sustainment notes not yet drafted for this dimension.</p>
               )}

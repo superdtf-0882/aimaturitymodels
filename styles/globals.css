@@ -192,7 +192,15 @@ table.wmv td.cell { max-width: 200px; padding: 6px !important; }
   color: var(--orange); margin-bottom: 5px;
 }
 .wmv-panel-section p { margin: 0; font-size: 13.5px; line-height: 1.65; color: var(--ink-soft); max-width: 72ch; }
+.wmv-panel-section p + p { margin-top: 8px; }
 .wmv-panel-pending { font-style: italic; color: var(--muted) !important; }
+.wmv-panel-verification { font-size: 12.5px !important; color: var(--muted) !important; }
+.wmv-panel-verification strong { color: var(--ink-soft); font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+.wmv-panel-caution {
+  margin: 0 0 12px; padding: 8px 10px; border-radius: 6px; max-width: 72ch;
+  border: 1px solid var(--orange); background: color-mix(in srgb, var(--orange) 10%, transparent);
+  font-size: 12.5px; line-height: 1.5; color: var(--ink-soft);
+}
 .wmv-panel-link { margin: 0; font-size: 13px; }
 .flag-tag {
   display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono);
