@@ -157,7 +157,16 @@ table.wmv thead th.level-th {
 }
 table.wmv td.dim { font-weight: 600; background: var(--paper-raised); }
 table.wmv td.dim a { font-family: var(--mono); color: var(--blue); margin-right: 6px; text-decoration: none; }
-table.wmv td.cell { max-width: 240px; }
+/* height:1px is a known CSS table quirk, not a typo: a <td>'s height
+   from normal table layout doesn't count as a "specified height" for
+   a percentage-height child to resolve against, so .cell-hit's own
+   height:100% silently did nothing (each cell stayed its own natural
+   content height instead of the row's). An explicit height on the td
+   -- even a bogus 1px -- makes the browser treat it as specified, so
+   the child's 100% then resolves against whatever the row's real
+   final height ends up being; the td still visually grows with the
+   row exactly as before. */
+table.wmv td.cell { max-width: 240px; height: 1px; }
 /* Issue #13 + 2026-07-27 follow-up: td.dim's white-space:nowrap forced
    the column to the width of its longest unwrapped title (D4's full
    "Requirements management (specification quality & traceability)"),
