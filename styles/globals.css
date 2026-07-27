@@ -152,6 +152,16 @@ table.wmv thead th.level-th {
 table.wmv td.dim { font-weight: 600; white-space: nowrap; background: var(--paper-raised); }
 table.wmv td.dim a { font-family: var(--mono); color: var(--blue); margin-right: 6px; text-decoration: none; }
 table.wmv td.cell { max-width: 200px; padding: 6px !important; }
+/* Issue #13: on narrow viewports, td.dim's white-space:nowrap forces the
+   column to the width of its longest unwrapped title (e.g. D4's full
+   "Requirements management (specification quality & traceability)"),
+   which at auto table-layout can eat 300px+ of a 375px screen before any
+   level column is even visible -- effectively hiding the grid behind a
+   wall of dimension names. Below 640px, let titles wrap and cap the
+   column so the level grid stays reachable without scrolling as far. */
+@media (max-width: 640px) {
+  table.wmv td.dim { white-space: normal; max-width: 130px; }
+}
 /* DS-012 revision, 2026-07-26: the matrix is digested to pure shape --
    color only, no prose, no per-cell label (the column-header ovals
    already name the state). .cell-hit is the interactive hit-target;
