@@ -139,28 +139,34 @@ table.wmv thead th .level-name { text-transform: none; letter-spacing: 0; opacit
 table.wmv thead th.level-th {
   text-align: center; text-transform: none; letter-spacing: 0; padding: 8px 6px;
 }
+/* Name dominant, letter secondary (2026-07-27, David's own correction --
+   the original had it backwards: a large serif letter with a tiny mono
+   name underneath). Widened slightly so "Continuous"/"Telemetric" sit
+   on one line at the larger size. */
 .level-badge {
   display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
-  width: 78px; height: 56px; margin: 0 auto; border-radius: 50%;
+  width: 100px; height: 58px; margin: 0 auto; border-radius: 50%;
   background: var(--badge-fill); border: 2px solid var(--badge-border); color: #16232e;
 }
-.level-badge-letter { font-family: var(--serif); font-size: 17px; font-weight: 700; line-height: 1.15; }
 .level-badge-name {
-  font-family: var(--mono); font-size: 8.5px; text-transform: uppercase;
-  letter-spacing: 0.03em; line-height: 1.2; opacity: 0.75;
+  font-family: var(--serif); font-size: 13px; font-weight: 700; line-height: 1.2; white-space: nowrap;
 }
-table.wmv td.dim { font-weight: 600; white-space: nowrap; background: var(--paper-raised); }
+.level-badge-letter {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; line-height: 1.2;
+  opacity: 0.7; margin-top: 1px;
+}
+table.wmv td.dim { font-weight: 600; background: var(--paper-raised); }
 table.wmv td.dim a { font-family: var(--mono); color: var(--blue); margin-right: 6px; text-decoration: none; }
 table.wmv td.cell { max-width: 240px; }
-/* Issue #13: on narrow viewports, td.dim's white-space:nowrap forces the
-   column to the width of its longest unwrapped title (e.g. D4's full
+/* Issue #13 + 2026-07-27 follow-up: td.dim's white-space:nowrap forced
+   the column to the width of its longest unwrapped title (D4's full
    "Requirements management (specification quality & traceability)"),
-   which at auto table-layout can eat 300px+ of a 375px screen before any
-   level column is even visible -- effectively hiding the grid behind a
-   wall of dimension names. Below 640px, let titles wrap and cap the
-   column so the level grid stays reachable without scrolling as far. */
+   dragging the whole Dimension column out well past what it needs at
+   any viewport, not just mobile -- removing nowrap and capping the
+   column lets long titles wrap onto two lines instead. */
+table.wmv td.dim { white-space: normal; max-width: 190px; }
 @media (max-width: 640px) {
-  table.wmv td.dim { white-space: normal; max-width: 130px; }
+  table.wmv td.dim { max-width: 130px; }
 }
 /* Second revision, 2026-07-27: the "digested to pure shape" reading
    (2026-07-26) was a misread of David's own feedback -- what he'd
@@ -170,8 +176,14 @@ table.wmv td.cell { max-width: 240px; }
    was always meant to render here; getStaticProps just never passed
    it through. Cells hold real text again, so the fixed 44px height is
    gone in favor of a min-height + comfortable padding. */
+/* Table rows already size every <td> in a row to the tallest cell's
+   content (default table layout) -- .cell-hit just wasn't stretching
+   to fill that height, so a row with one long digest left the other
+   four cells' color blocks short, with visible gap below them inside
+   a taller row. height:100% (not min-height alone) makes the color
+   fill the row uniformly regardless of which cell's text is longest. */
 .cell-hit {
-  min-height: 60px; padding: 7px 9px; border-left: 3px solid var(--cell-border); background: var(--cell-fill);
+  height: 100%; min-height: 60px; padding: 7px 9px; border-left: 3px solid var(--cell-border); background: var(--cell-fill);
   border-radius: 4px; cursor: pointer; outline: none;
   font-size: 12px; line-height: 1.4; color: #16232e;
   transition: filter 0.12s ease, box-shadow 0.12s ease;
@@ -241,16 +253,6 @@ table.wmv td.cell { max-width: 240px; }
   font-size: 12.5px; line-height: 1.5; color: var(--ink-soft);
 }
 .wmv-panel-link { margin: 0; font-size: 13px; }
-.flag-tag {
-  display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono);
-  font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--orange); margin-top: 4px;
-  /* Overrides td.dim's white-space:nowrap, which it otherwise inherits --
-     without this, a long flag sentence (e.g. D11's) forces this one cell
-     to a single unbroken line, dragging the whole table's width out with
-     it (found live: an 816px-wide flag div driving a 1000px Dimension
-     column on the Whole-Model View). */
-  white-space: normal; max-width: 260px;
-}
 .legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 14px 0 0; font-size: 12px; color: var(--muted); }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
 .swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; border: 1px solid rgba(0,0,0,0.15); }

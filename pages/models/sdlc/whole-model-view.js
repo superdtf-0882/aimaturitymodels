@@ -10,7 +10,12 @@ export async function getStaticProps() {
   const dimensions = fullModel.dimensions.map((d) => ({
     ...d,
     title: shortForm.dimensions[d.id].title,
-    flag: shortForm.dimensions[d.id].flag || null,
+    // Review flags (e.g. D11's) are David's own call to bury in the
+    // Deep-Dive narrative, not surface at this digest layer -- the
+    // Deep-Dive page already renders this same flag under "Under
+    // review." (pages/models/sdlc/deep-dive/[dim].js), so dropping it
+    // here loses nothing, it just stops duplicating at a layer meant
+    // to stay scannable. Not fetched into props at all now.
     // The one-sentence-per-cell digest (short_form.yml) -- this is the
     // actual content the matrix cells show. Cut entirely in the prior
     // "digested to pure shape" revision on the mistaken read that David
@@ -280,8 +285,8 @@ export default function WholeModelView({ dimensions, sourceCommit }) {
                       "--badge-border": `var(--lvl-${l.toLowerCase()}-border)`,
                     }}
                   >
-                    <span className="level-badge-letter">{l}</span>
                     <span className="level-badge-name">{LEVEL_NAMES[l]}</span>
+                    <span className="level-badge-letter">{l}</span>
                   </span>
                 </th>
               ))}
@@ -293,7 +298,6 @@ export default function WholeModelView({ dimensions, sourceCommit }) {
                 <td className="dim">
                   <Link href={`/models/sdlc/deep-dive/${dim.id.toLowerCase()}`}>{dim.id}</Link>
                   {dim.title}
-                  {dim.flag && <div className="flag-tag">⚠ {dim.flag}</div>}
                 </td>
                 {LEVELS.map((l) => {
                   const isOpen = openCell && openCell.dimId === dim.id && openCell.level === l;
