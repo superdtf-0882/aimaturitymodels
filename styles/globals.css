@@ -165,7 +165,8 @@ table.wmv td.cell { max-width: 200px; padding: 6px !important; }
 /* DS-012 revision, 2026-07-26: the matrix is digested to pure shape --
    color only, no prose, no per-cell label (the column-header ovals
    already name the state). .cell-hit is the interactive hit-target;
-   content lives in .wmv-panel below, not in the cell itself. */
+   content lives in the hover tooltip / docked panel below, never in
+   the cell itself. */
 .cell-hit {
   height: 44px; border-left: 3px solid var(--cell-border); background: var(--cell-fill);
   border-radius: 4px; cursor: pointer; outline: none;
@@ -175,14 +176,42 @@ table.wmv td.cell { max-width: 200px; padding: 6px !important; }
 .cell-hit:focus-visible { box-shadow: 0 0 0 2px var(--orange); }
 .cell-hit.is-open { box-shadow: 0 0 0 2px var(--orange); filter: brightness(1.12); }
 
-.wmv-panel {
-  margin-top: 14px; padding: 16px 20px; border-radius: 10px;
+/* 2026-07-27 revision (issue #13 follow-up): hover's preview and
+   click's detail used to share one panel sitting in normal document
+   flow below a 65-cell grid -- reported live as "hover/click does
+   nothing" because nothing observable did, that far below the fold.
+   Hover now gets its own small tooltip (.wmv-tooltip), portaled to
+   <body> and positioned from the hovered cell's own rect (see
+   CellTooltip in whole-model-view.js). Click's fuller detail keeps the
+   existing content structure below but the container is now
+   .wmv-panel-fixed: docked to the viewport bottom, so it's in view the
+   instant it opens rather than requiring a scroll to discover. */
+.wmv-tooltip {
+  z-index: 60; padding: 12px 14px; border-radius: 10px;
   border: 1px solid var(--line); background: var(--paper-raised);
-  min-height: 132px; position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  pointer-events: none; /* preview only -- click still goes to the cell beneath */
 }
-.wmv-panel-empty { color: var(--muted); font-size: 13.5px; margin: 0; }
+.wmv-tooltip-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.wmv-tooltip-id { margin: 0 0 6px; font-size: 12.5px; color: var(--muted); }
+.wmv-tooltip-def { margin: 0; font-size: 13px; line-height: 1.55; color: var(--ink-soft); }
+.wmv-tooltip-hint {
+  margin: 8px 0 0; font-family: var(--mono); font-size: 10.5px; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--orange);
+}
+
+.wmv-panel-fixed {
+  position: fixed; left: 240px; right: 0; bottom: 0; z-index: 50;
+  max-height: 45vh; overflow-y: auto;
+  padding: 16px clamp(24px, 5vw, 64px) 20px; border-top: 1px solid var(--line);
+  background: var(--paper-raised); box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.14);
+}
+@media (max-width: 760px) {
+  .wmv-panel-fixed { left: 0; }
+}
+.wmv-panel-body { max-width: 1400px; }
 .wmv-panel-close {
-  position: absolute; top: 10px; right: 12px; width: 26px; height: 26px;
+  position: absolute; top: 10px; right: clamp(24px, 5vw, 64px); width: 26px; height: 26px;
   border-radius: 6px; border: 1px solid var(--line); background: var(--paper);
   color: var(--muted); font-size: 15px; line-height: 1; cursor: pointer;
 }
