@@ -139,21 +139,17 @@ table.wmv thead th .level-name { text-transform: none; letter-spacing: 0; opacit
 table.wmv thead th.level-th {
   text-align: center; text-transform: none; letter-spacing: 0; padding: 8px 6px;
 }
-/* Name dominant, letter secondary (2026-07-27, David's own correction --
-   the original had it backwards: a large serif letter with a tiny mono
-   name underneath). Widened slightly so "Continuous"/"Telemetric" sit
-   on one line at the larger size. */
+/* Name only now (2026-07-27, second pass) -- the letter is dropped
+   from this one badge specifically; it stays everywhere else (the
+   reveal popover's level circle, the legend). Freed from sharing the
+   oval with a second line, the name can run larger. */
 .level-badge {
-  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
-  width: 100px; height: 58px; margin: 0 auto; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 104px; height: 50px; margin: 0 auto; border-radius: 50%;
   background: var(--badge-fill); border: 2px solid var(--badge-border); color: #16232e;
 }
 .level-badge-name {
-  font-family: var(--serif); font-size: 13px; font-weight: 700; line-height: 1.2; white-space: nowrap;
-}
-.level-badge-letter {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; line-height: 1.2;
-  opacity: 0.7; margin-top: 1px;
+  font-family: var(--serif); font-size: 15px; font-weight: 700; line-height: 1.2; white-space: nowrap;
 }
 table.wmv td.dim { font-weight: 600; background: var(--paper-raised); }
 table.wmv td.dim a { font-family: var(--mono); color: var(--blue); margin-right: 6px; text-decoration: none; }

@@ -286,7 +286,6 @@ export default function WholeModelView({ dimensions, sourceCommit }) {
                     }}
                   >
                     <span className="level-badge-name">{LEVEL_NAMES[l]}</span>
-                    <span className="level-badge-letter">{l}</span>
                   </span>
                 </th>
               ))}
