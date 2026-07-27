@@ -40,8 +40,9 @@ export default function DeepDive({ id, title, flag, html }) {
       )}
       <div className="dd-body" dangerouslySetInnerHTML={{ __html: html }} />
       <p className="provenance">
-        Drafted from the SDLC model&rsquo;s real locked and draft content,
-        per Option A (ship now, label the gaps).
+        {flag
+          ? "Drafted from the SDLC model’s real locked content, per Option A (ship now, label the gap above)."
+          : "Drafted from the SDLC model’s real locked content."}
       </p>
     </Layout>
   );

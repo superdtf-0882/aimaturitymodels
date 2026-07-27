@@ -12,7 +12,7 @@ Family Map and Strata pages are this site's own original content — not fetched
 
 First model live: **AI-Native SDLC Maturity Model** (Whole-Model View, Narrative, 13 Deep-Dives). PDLC and Prioritization apps are not yet built — both models are still gated behind `OI-040` in the governing corpus (no repos of their own yet). They'll be added incrementally once that gate opens, per `WP-AIMM-01`'s own stated sequencing — their absence right now isn't a bug.
 
-Three dimensions in the SDLC content (D6, D9, D11) carry a visible "under review" note — shipped this way deliberately (Option A: ship now, label the gaps), not an oversight.
+One dimension in the SDLC content (D11) still carries a visible "under review" note — shipped this way deliberately (Option A: ship now, label the gap), not an oversight. D6 and D9 carried the same note originally; both were reviewed and resolved 2026-07-24 in the source repo, and their notes removed accordingly.
 
 ## Design system
 

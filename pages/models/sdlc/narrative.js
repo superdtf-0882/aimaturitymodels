@@ -18,7 +18,7 @@ export default function Narrative({ html }) {
     }>
       <div className="dd-body" dangerouslySetInnerHTML={{ __html: html }} />
       <p className="provenance">
-        Drafted from the SDLC model&rsquo;s real locked and draft content,
+        Drafted from the SDLC model&rsquo;s real locked content,
         following the D1&ndash;D3 reconciliation.
       </p>
     </Layout>
