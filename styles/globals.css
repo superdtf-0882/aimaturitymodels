@@ -187,15 +187,26 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
    four cells' color blocks short, with visible gap below them inside
    a taller row. height:100% (not min-height alone) makes the color
    fill the row uniformly regardless of which cell's text is longest. */
+/* Issue #14 (2026-07-27): the System 3 five-color heatmap (fixed
+   red-to-blue fill/border per A-E) made the 65-cell grid busier than
+   any other surface on the site -- everywhere else here (davidfacer.com
+   included) is a neutral dark card with a single hairline border and
+   one accent color on hover/focus. Cells now match that: no per-level
+   color at all, same --paper-raised/--line/--orange vocabulary already
+   used by .wmv-popover and the rest of this file. System 3's tokens
+   stay defined and still color the column-header ovals (.level-badge)
+   and the popover's small level circle (.wmv-panel-level) -- this
+   issue's own scope was the grid cells specifically, not every use of
+   the palette. */
 .cell-hit {
-  height: 100%; min-height: 60px; padding: 7px 9px; border-left: 3px solid var(--cell-border); background: var(--cell-fill);
+  height: 100%; min-height: 60px; padding: 7px 9px; border: 1px solid var(--line); background: var(--paper-raised);
   border-radius: 4px; cursor: pointer; outline: none;
-  font-size: 12px; line-height: 1.4; color: #16232e;
-  transition: filter 0.12s ease, box-shadow 0.12s ease;
+  font-size: 12px; line-height: 1.4; color: var(--ink);
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.12s ease;
 }
-.cell-hit:hover, .cell-hit:focus-visible { filter: brightness(1.12); }
+.cell-hit:hover, .cell-hit:focus-visible { border-color: var(--orange); background: var(--paper); }
 .cell-hit:focus-visible { box-shadow: 0 0 0 2px var(--orange); }
-.cell-hit.is-open { box-shadow: 0 0 0 2px var(--orange); filter: brightness(1.12); }
+.cell-hit.is-open { box-shadow: 0 0 0 2px var(--orange); border-color: var(--orange); background: var(--paper); }
 
 /* Third revision, 2026-07-27, same day: hover's preview and click's
    detail were still two disconnected pieces (a tooltip with a dead gap

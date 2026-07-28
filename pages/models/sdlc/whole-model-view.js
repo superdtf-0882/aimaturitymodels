@@ -308,10 +308,6 @@ export default function WholeModelView({ dimensions, sourceCommit }) {
                         tabIndex={0}
                         role="button"
                         aria-label={`${dim.id} Level ${l}, ${LEVEL_NAMES[l]} — ${dim.name}`}
-                        style={{
-                          "--cell-fill": `var(--lvl-${l.toLowerCase()}-fill)`,
-                          "--cell-border": `var(--lvl-${l.toLowerCase()}-border)`,
-                        }}
                         onMouseEnter={(e) => cellEnter(e, dim.id, l)}
                         onMouseLeave={cellLeave}
                         onFocus={(e) => pinOpen(dim.id, l, e.currentTarget.getBoundingClientRect())}
