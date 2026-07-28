@@ -32,8 +32,11 @@ export default function Strata() {
       <h1>Strata</h1>
       <p className="stratum-kicker">S0&ndash;S7 Stratum Model</p>
       <p className="dek">
-        AI coding agents need a language architecture. Strata tells you
-        where something belongs &mdash; but it doesn&rsquo;t stop there.
+        AI coding agents need a disciplined conceptual world that defines
+        what kinds of things may exist, where they belong, what intent
+        they realize, and what authority allows them to act. Strata tells
+        you where something belongs &mdash; but it doesn&rsquo;t stop
+        there.
         Every real piece of work in this practice also has to answer a
         second question: what is it actually for? A decision, a rule, a
         piece of work &mdash; each one needs a clear, checkable link back
@@ -74,9 +77,11 @@ export default function Strata() {
               )}
               {s.code === "S7" && (
                 <div className="stratum-loop-note">
-                  &#8635; Feeds back into S0, not into whichever layer is
-                  most convenient &mdash; observed facts continually refine
-                  the architecture.
+                  &#8635; Feedback, not fiber. The fiber already runs
+                  through every layer above &mdash; this loop is a
+                  separate, additional act: what&rsquo;s learned here
+                  returns to S0 so intent itself can be reconsidered, not
+                  just whichever layer is most convenient.
                 </div>
               )}
             </div>
