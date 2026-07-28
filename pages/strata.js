@@ -32,11 +32,15 @@ export default function Strata() {
       <h1>Strata</h1>
       <p className="stratum-kicker">S0&ndash;S7 Stratum Model</p>
       <p className="dek">
-        AI coding agents need a language architecture. A disciplined
-        conceptual world &mdash; what counts as intent, as a rule, as a
-        record, as an authorization &mdash; is what makes delegating real
-        work to one safer, faster, and more reliable. Click any layer for
-        what it actually governs.
+        AI coding agents need a language architecture. Strata tells you
+        where something belongs &mdash; but it doesn&rsquo;t stop there.
+        Every real piece of work in this practice also has to answer a
+        second question: what is it actually for? A decision, a rule, a
+        piece of work &mdash; each one needs a clear, checkable link back
+        to the specific reason it exists. Something missing that link
+        isn&rsquo;t just incomplete: it doesn&rsquo;t count as real
+        architecture, it&rsquo;s just a file sitting where architecture
+        should be. Click any layer for what it actually governs.
       </p>
 
       <div className="stratum-list">
@@ -80,8 +84,14 @@ export default function Strata() {
         })}
       </div>
 
+      <p className="stratum-fiber-caption">
+        The line running through the layers is the intent fiber &mdash;
+        it doesn&rsquo;t stop at any one stratum, and nothing built here
+        is real without it.
+      </p>
+
       <div className="layer-note stratum-principle">
-        <strong>The agent must classify before it acts.</strong>
+        <strong>Type it. Locate it. Resolve what it&rsquo;s for. Then act.</strong>
       </div>
 
       <p className="footnote" style={{ marginTop: 4 }}>

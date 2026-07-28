@@ -409,9 +409,19 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
   letter-spacing: 0.07em; color: var(--orange); margin: 0 0 10px;
 }
 .stratum-list { position: relative; margin: 28px 0 20px; }
+/* The intent fiber: a gray sheath (this practice's own established
+   fiber-through-strata visual, docs/intent-fibered-strata-stack) with
+   a thin core running through it. The core uses this site's own
+   orange accent, not the internal diagram's purple -- one accent hue
+   site-wide, per C-007/PDT-001, not a second color introduced for one
+   element. */
 .stratum-list::before {
-  content: ""; position: absolute; left: 19px; top: 19px; bottom: 19px;
-  width: 1px; background: var(--line);
+  content: ""; position: absolute; left: 15px; top: 19px; bottom: 19px;
+  width: 9px; background: var(--muted); opacity: 0.16; border-radius: 5px;
+}
+.stratum-list::after {
+  content: ""; position: absolute; left: 18.5px; top: 19px; bottom: 19px;
+  width: 2px; background: var(--orange); opacity: 0.8;
 }
 .stratum-row { position: relative; margin-bottom: 2px; }
 .stratum-header {
@@ -446,6 +456,9 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
   border-left: 2px solid var(--orange); background: var(--orange-soft); border-radius: 0 6px 6px 0;
 }
 .stratum-principle { text-align: center; font-family: var(--serif); font-size: 17px; margin: 8px 0 6px; }
+.stratum-fiber-caption {
+  margin: 6px 0 18px 52px; font-size: 12.5px; color: var(--muted); font-style: italic; max-width: 56ch;
+}
 
 .attribution {
   position: fixed; right: 14px; bottom: 12px; font-size: 11px; color: var(--muted);
