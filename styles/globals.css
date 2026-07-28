@@ -563,6 +563,28 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
 .readout-rerun { font-size: 13.5px; color: var(--muted); text-decoration: none; }
 .readout-rerun:hover { color: var(--orange); }
 
+/* Issue #15, corrected same day: a fixed upper-right badge, not a rail
+   link -- see the comment in components/Layout.js for why. Orange
+   accent (not the muted --ink-soft/--muted the rail's own "Foundation"
+   links use) specifically so it doesn't repeat the mistake of blending
+   into a list of similarly-styled things; it's the only fixed element
+   in this corner on any page, so consistent position does real work
+   for discoverability across the whole site, not just one page. */
+.ai-feed-badge {
+  position: fixed; top: 16px; right: 16px; z-index: 50;
+  display: inline-flex; align-items: center;
+  padding: 7px 14px; border-radius: 100px;
+  border: 1px solid var(--orange); background: var(--paper-raised);
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.02em;
+  color: var(--orange); text-decoration: none; white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.ai-feed-badge:hover { background: var(--orange); color: var(--paper); }
+@media (max-width: 760px) {
+  .ai-feed-badge { top: 10px; right: 10px; padding: 6px 11px; font-size: 10.5px; }
+}
+
 /* Issue #15: the AI-readable digest page. Raw markdown in a scrollable
    monospace pane -- deliberately not re-rendered as HTML, since the
    whole point is handing an AI assistant the literal source text. */

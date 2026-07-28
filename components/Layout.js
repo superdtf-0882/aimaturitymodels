@@ -25,7 +25,6 @@ export default function Layout({ title, crumb, wide, children }) {
             <Link href="/eaokf" className="nav-secondary">Enterprise Architecture OKF</Link>
             <Link href="/strata" className="nav-secondary">Strata</Link>
             <Link href="/vellum" className="nav-secondary">Vellum &amp; Seminum</Link>
-            <Link href="/ai" className="nav-secondary">Feed This to Your AI</Link>
             <p className="group-label">SDLC Model</p>
             <Link href="/models/sdlc/whole-model-view">Whole-Model View</Link>
             <Link href="/models/sdlc/narrative">Narrative (D13)</Link>
@@ -37,6 +36,15 @@ export default function Layout({ title, crumb, wide, children }) {
           {children}
         </main>
       </div>
+      {/* Issue #15, corrected same day: this started as a left-rail
+          "Foundation" link (David's own first call) but blended in --
+          same small, muted style as its siblings, easy to miss scanning
+          the rail. Moved to a fixed corner badge per his direct
+          follow-up after live testing ("the placement needs to be
+          upper-right ... it blends in"), matching his own original
+          issue text. Removed from the rail entirely rather than kept
+          in both places -- one discoverable entry point, not two. */}
+      <Link href="/ai" className="ai-feed-badge">Feed This to Your AI</Link>
       <a className="attribution" href="https://davidfacer.com">© 2026 David Facer</a>
     </>
   );
