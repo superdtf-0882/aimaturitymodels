@@ -582,7 +582,18 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
 }
 .ai-feed-badge:hover { background: var(--orange); color: var(--paper); }
 @media (max-width: 760px) {
-  .ai-feed-badge { top: 10px; right: 10px; padding: 6px 11px; font-size: 10.5px; }
+  /* The rail title runs edge-to-edge on a narrow viewport with no
+     reserved margin of its own (confirmed live: ~339px wide in a 375px
+     viewport) -- ANY fixed corner element overlaps it unless the title
+     gives up room and the badge shrinks to fit what's left. Compact
+     label via a visually-hidden full-text span + ::after, not two
+     copies of the text in the DOM -- the link's own aria-label still
+     carries the full text for assistive tech regardless of which is
+     visually shown. */
+  .ai-feed-badge { top: 10px; right: 10px; padding: 6px 10px; font-size: 10.5px; }
+  .ai-feed-badge-text { display: none; }
+  .ai-feed-badge::after { content: "Feed AI"; }
+  .rail-title { padding-right: 84px; }
 }
 
 /* Issue #15: the AI-readable digest page. Raw markdown in a scrollable

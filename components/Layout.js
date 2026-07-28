@@ -44,7 +44,9 @@ export default function Layout({ title, crumb, wide, children }) {
           upper-right ... it blends in"), matching his own original
           issue text. Removed from the rail entirely rather than kept
           in both places -- one discoverable entry point, not two. */}
-      <Link href="/ai" className="ai-feed-badge">Feed This to Your AI</Link>
+      <Link href="/ai" className="ai-feed-badge" aria-label="Feed This to Your AI">
+        <span className="ai-feed-badge-text">Feed This to Your AI</span>
+      </Link>
       <a className="attribution" href="https://davidfacer.com">© 2026 David Facer</a>
     </>
   );
