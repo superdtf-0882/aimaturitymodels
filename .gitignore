@@ -4,3 +4,7 @@ node_modules/
 .env*.local
 
 .vercel
+
+# Generated at build time by scripts/generate-llms-txt.js (postbuild) --
+# not a source file, same treatment as .next/.
+public/llms.txt

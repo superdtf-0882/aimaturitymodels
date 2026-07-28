@@ -562,3 +562,16 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
 .readout-actions { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .readout-rerun { font-size: 13.5px; color: var(--muted); text-decoration: none; }
 .readout-rerun:hover { color: var(--orange); }
+
+/* Issue #15: the AI-readable digest page. Raw markdown in a scrollable
+   monospace pane -- deliberately not re-rendered as HTML, since the
+   whole point is handing an AI assistant the literal source text. */
+.ai-digest-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-bottom: 18px; }
+.ai-digest-raw-link { font-size: 13.5px; color: var(--muted); text-decoration: none; }
+.ai-digest-raw-link:hover { color: var(--orange); }
+.ai-digest-pre {
+  max-height: 70vh; overflow: auto; padding: 18px 20px; margin: 0;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--paper-raised);
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.6; color: var(--ink-soft);
+  white-space: pre-wrap; word-break: break-word;
+}
