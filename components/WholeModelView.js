@@ -181,7 +181,15 @@ export default function WholeModelView({
         closePopover();
       }
     }
-    function onScroll() {
+    function onScroll(e) {
+      // The popover's own body scrolls internally for long transition/
+      // verification text (.wmv-popover has overflow-y: auto) -- that
+      // scroll event still reaches this window-level capturing listener
+      // even though it doesn't visually move the popover. Only close on
+      // scroll genuinely outside the popover (the page moving under it,
+      // which would otherwise leave it visually detached from its
+      // position:fixed-anchored cell).
+      if (popoverRef.current && popoverRef.current.contains(e.target)) return;
       closePopover();
     }
     document.addEventListener("keydown", onKeyDown);
