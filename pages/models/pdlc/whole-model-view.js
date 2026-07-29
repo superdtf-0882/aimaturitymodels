@@ -18,7 +18,7 @@ export default function PdlcWholeModelView({ dimensions, sourceCommit }) {
       sourceCommit={sourceCommit}
       modelLabel="AI-Native PDLC"
       dimensionCountLabel="Twelve dimensions"
-      deepDiveBasePath={null}
+      deepDiveBasePath="/models/pdlc/deep-dive"
       crumbLabel="AI-Native PDLC"
       crumbHref="/models/pdlc/whole-model-view"
     />

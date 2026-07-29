@@ -21,7 +21,7 @@ export default function PrioritizationWholeModelView({ dimensions, sourceCommit 
       sourceCommit={sourceCommit}
       modelLabel="Product Prioritization"
       dimensionCountLabel="Three dimensions"
-      deepDiveBasePath={null}
+      deepDiveBasePath="/models/prioritization/deep-dive"
       crumbLabel="Product Prioritization"
       crumbHref="/models/prioritization/whole-model-view"
     />

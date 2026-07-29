@@ -1,6 +1,5 @@
-import Link from "next/link";
-import Layout from "../../../../components/Layout";
 import { getSdlcDeepDive, getSdlcShortForm, SDLC_DIMENSION_ORDER } from "../../../../lib/models";
+import DeepDive from "../../../../components/DeepDive";
 
 export async function getStaticPaths() {
   return {
@@ -17,33 +16,19 @@ export async function getStaticProps({ params }) {
   return { props: { id, title: dim.title, flag: dim.flag || null, html } };
 }
 
-export default function DeepDive({ id, title, flag, html }) {
+export default function SdlcDeepDive({ id, title, flag, html }) {
   return (
-    <Layout title={`SDLC — ${title}`} crumb={
-      <>
-        <Link href="/">davidfacer.com</Link> / aimaturitymodels.com /{" "}
-        <Link href="/models">AI-Native Maturity Models</Link> /{" "}
-        <Link href="/models/sdlc/whole-model-view">AI-Native SDLC</Link> / {id}
-      </>
-    }>
-      <div className="dd-nav">
-        {SDLC_DIMENSION_ORDER.map((d) => (
-          <Link key={d} href={`/models/sdlc/deep-dive/${d.toLowerCase()}`} className={d === id ? "current" : ""}>
-            {d}
-          </Link>
-        ))}
-      </div>
-      {flag && (
-        <div className="review-banner">
-          <strong>Under review.</strong> {flag}
-        </div>
-      )}
-      <div className="dd-body" dangerouslySetInnerHTML={{ __html: html }} />
-      <p className="provenance">
-        {flag
-          ? "Drafted from the SDLC model’s real locked content, per Option A (ship now, label the gap above)."
-          : "Drafted from the SDLC model’s real locked content."}
-      </p>
-    </Layout>
+    <DeepDive
+      id={id}
+      title={title}
+      flag={flag}
+      html={html}
+      dimensionOrder={SDLC_DIMENSION_ORDER}
+      basePath="/models/sdlc/deep-dive"
+      modelLabel="AI-Native SDLC"
+      wmvHref="/models/sdlc/whole-model-view"
+      wmvLabel="AI-Native SDLC"
+      provenanceText="Drafted from the SDLC model’s real locked content."
+    />
   );
 }
