@@ -25,10 +25,6 @@ export default function Layout({ title, crumb, wide, children }) {
             <Link href="/eaokf" className="nav-secondary">Enterprise Architecture OKF</Link>
             <Link href="/strata" className="nav-secondary">Strata</Link>
             <Link href="/vellum" className="nav-secondary">Vellum &amp; Seminum</Link>
-            <p className="group-label">SDLC Model</p>
-            <Link href="/models/sdlc/whole-model-view">Whole-Model View</Link>
-            <Link href="/models/sdlc/narrative">Narrative (D13)</Link>
-            <Link href="/models/sdlc/assessment">Assessment</Link>
           </nav>
         </aside>
         <main className={`stage${wide ? " stage--wide" : ""}`}>
