@@ -21,6 +21,9 @@ export default function Layout({ title, crumb, wide, children }) {
             <p className="group-label">Explore</p>
             <Link href="/models">AI-Native Maturity Models</Link>
             <Link href="/assessments">Maturity Model Assessments</Link>
+            <p className="group-label">Function Models</p>
+            <p className="group-caption">Flat maps of what a function consists of &mdash; no progression scale</p>
+            <Link href="/functionmodels">Function Models</Link>
             <p className="group-label">Foundation</p>
             <p className="group-caption">The architecture methodology and tooling this practice is built on</p>
             <Link href="/eaokf" className="nav-secondary">Enterprise Architecture OKF</Link>

@@ -624,3 +624,86 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
   font-family: var(--mono); font-size: 12.5px; line-height: 1.6; color: var(--ink-soft);
   white-space: pre-wrap; word-break: break-word;
 }
+
+/* DS-014: Function Model pattern (Inputs -> Function -> Outputs). First
+   instance is the Product Management Function Model, briefs/2026-07-28-
+   function-model. The source SVG gave every category its own saturated
+   fill -- rejected as the base treatment here, same call already made
+   for the Whole-Model View grid (see Issue #14 above: "the System 3
+   five-color heatmap made the 65-cell grid busier than any other
+   surface on the site"). This page has a comparable density (40+ small
+   items), so it stays in the same neutral --paper-raised/--line card
+   vocabulary as everywhere else, with color spent in exactly two
+   places: the function box's own accent border (it's the diagram's
+   hero element) and a left-border accent per output bucket (which team
+   consumes which output is real signal, and it's four accents on four
+   boxes, not dozens of per-item fills). Net-new hues only where the
+   system had none to reuse -- Activities and Tools already had --blue/
+   --orange doing the SVG's exact job. */
+.fn-section { margin: 0 0 30px; }
+.fn-section-label {
+  font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted); margin: 0 0 10px;
+}
+.fn-arrow { text-align: center; color: var(--muted); font-size: 20px; margin: 6px 0; line-height: 1; }
+
+.fn-chip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
+.fn-chip {
+  background: var(--paper-raised); border: 1px solid var(--line); border-radius: 8px;
+  padding: 9px 12px; font-size: 13.5px; color: var(--ink);
+}
+.fn-group {
+  border: 1px dashed var(--line); border-radius: 8px; padding: 12px 14px;
+  grid-column: 1 / -1;
+}
+.fn-group-title { font-weight: 600; font-size: 13.5px; margin: 0 0 8px; }
+.fn-group ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13px; color: var(--ink-soft); }
+
+.fn-function-box {
+  border: 1px solid var(--blue); border-radius: 10px; padding: 22px 24px; background: var(--paper-raised);
+}
+.fn-function-label {
+  font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--blue); margin: 0 0 4px;
+}
+.fn-caption { font-size: 13px; color: var(--muted); font-style: italic; margin: 0 0 12px; }
+.fn-note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; }
+.fn-inner-divider { border: none; border-top: 1px dashed var(--line); margin: 22px 0; }
+
+.fn-cap-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 12px; }
+.fn-cap-groups .fn-group { grid-column: auto; }
+.fn-cap-groups .fn-group-title, .fn-cap-singles .fn-chip { color: var(--fn-capability); }
+.fn-cap-singles { display: grid; gap: 8px; margin-bottom: 8px; }
+.fn-cap-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+
+.fn-context-strip {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;
+  margin-top: 22px; padding-top: 18px; border-top: 1px dashed var(--line);
+}
+.fn-context-label {
+  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted); margin: 0 0 4px;
+}
+.fn-context-strip p { margin: 0; font-size: 13px; color: var(--ink-soft); }
+
+.fn-outputs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.fn-output-bucket {
+  border: 1px solid var(--line); border-left: 4px solid var(--bucket-accent, var(--line));
+  border-radius: 0 8px 8px 0; background: var(--paper-raised); padding: 14px 16px;
+}
+.fn-output-title { font-weight: 600; font-size: 14.5px; margin: 0 0 4px; }
+.fn-output-caption { font-size: 12.5px; color: var(--muted); margin: 0 0 10px; }
+.fn-output-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13px; color: var(--ink-soft); }
+
+/* Net-new accent tokens (not reused --lvl-* values, so nothing implies
+   an ordinal/maturity relationship): Capabilities has no existing
+   system analog, so it gets its own hue; the three output buckets
+   without one follow. Engineering & delivery / GTM / Leadership are
+   genuinely new; Operations reuses --orange, same as the source SVG's
+   own choice to reuse its amber for both Tools and Operations. */
+:root {
+  --fn-capability: #6d5fd1;
+  --fn-eng-delivery: #2f8a72;
+  --fn-gtm: #b5502a;
+  --fn-leadership: #a34a72;
+}
