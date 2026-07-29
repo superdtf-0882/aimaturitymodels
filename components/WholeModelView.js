@@ -7,10 +7,11 @@ import { LEVEL_NAMES } from "../lib/levelVocabulary";
 // Shared by all three models' Whole-Model Views (SDLC, PDLC,
 // Prioritization) -- originally built for SDLC alone
 // (pages/models/sdlc/whole-model-view.js), extracted here once PDLC and
-// Prioritization needed the identical interaction with different data
-// and, for now, no Deep-Dive pages of their own (`deepDiveBasePath`
-// null/undefined renders dimension names and the popover's own link as
-// plain text instead of a Link -- there's nowhere yet for it to go).
+// Prioritization needed the identical interaction with different data.
+// `deepDiveBasePath` started null/undefined for PDLC and Prioritization
+// (no Deep-Dive pages existed yet, so dimension names and the popover's
+// own link rendered as plain text instead of a Link); both now point at
+// real routes, since all three models have Deep-Dive pages.
 
 const LEVELS = ["A", "B", "C", "D", "E"];
 
