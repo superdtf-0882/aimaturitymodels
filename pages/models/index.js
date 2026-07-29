@@ -35,7 +35,7 @@ export default function ModelsIndex() {
               investment, and closed-loop calibration.
             </div>
           </div>
-          <span className="pill live">Live</span>
+          <span className="pill coming">Coming</span>
         </div>
         <div className="model-row">
           <div>
@@ -45,7 +45,7 @@ export default function ModelsIndex() {
               governed portfolio decisions.
             </div>
           </div>
-          <span className="pill live">Live</span>
+          <span className="pill coming">Coming</span>
         </div>
         <div className="model-row">
           <div>
@@ -70,8 +70,11 @@ export default function ModelsIndex() {
       </div>
       <p className="footnote">
         Each model stands alone &mdash; you don&rsquo;t need the others to use
-        one. Grids for the remaining live models are on their way; the SDLC
-        model&rsquo;s is built first since its content was ready first.
+        one. PDLC and Prioritization are complete models with published
+        repos, level-by-level definitions, and verification clauses &mdash;
+        already in the AI digest (<Link href="/ai">Feed This to Your AI</Link>)
+        &mdash; but don&rsquo;t have their own site pages yet. The SDLC
+        model&rsquo;s page is built first since its content was ready first.
       </p>
     </Layout>
   );
