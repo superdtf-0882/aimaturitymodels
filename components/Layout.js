@@ -22,6 +22,7 @@ export default function Layout({ title, crumb, wide, children }) {
             <Link href="/models">AI-Native Maturity Models</Link>
             <Link href="/assessments">Maturity Model Assessments</Link>
             <p className="group-label">Foundation</p>
+            <p className="group-caption">The architecture methodology and tooling this practice is built on</p>
             <Link href="/eaokf" className="nav-secondary">Enterprise Architecture OKF</Link>
             <Link href="/strata" className="nav-secondary">Strata</Link>
             <Link href="/vellum" className="nav-secondary">Vellum &amp; Seminum</Link>
