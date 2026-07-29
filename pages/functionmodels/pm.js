@@ -8,7 +8,6 @@ export default function PmFunctionModelPage() {
     <Layout
       title={pmFunctionModel.title}
       crumb={<><Link href="/">davidfacer.com</Link> / aimaturitymodels.com / <Link href="/functionmodels">Function Models</Link> / {pmFunctionModel.title}</>}
-      wide
     >
       <FunctionModel data={pmFunctionModel} />
     </Layout>
