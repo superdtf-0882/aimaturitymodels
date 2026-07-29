@@ -35,10 +35,10 @@ export default function Ai({ digest }) {
     >
       <h1>Feed This to Your AI</h1>
       <p className="dek">
-        One markdown file: the AI-Native SDLC Maturity Model in full, the
-        Strata governance-layer model, and the Enterprise Architecture OKF
-        explainer. Copy it into your own AI assistant, or point it at{" "}
-        <a href="/llms.txt">/llms.txt</a> directly.
+        One markdown file: the AI-Native Maturity Model family, the
+        Strata governance-layer model, the Enterprise Architecture OKF
+        explainer, and the site's Function Models. Copy it into your own AI
+        assistant, or point it at <a href="/llms.txt">/llms.txt</a> directly.
       </p>
       <div className="ai-digest-actions">
         <button type="button" className="assess-btn assess-btn-blue" onClick={handleCopy}>
