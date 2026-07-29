@@ -24,7 +24,7 @@ const POPOVER_WIDTH = 360;
 const POPOVER_MARGIN = 10;
 const HOVER_CLOSE_DELAY = 150;
 
-function CellPopover({ dim, level, rect, pinned, deepDiveBasePath, onExpand, onClose, onMouseEnter, onMouseLeave }) {
+function CellPopover({ dim, level, rect, pinned, deepDiveBasePath, onExpand, onClose, onMouseEnter, onMouseLeave, containerRef }) {
   const viewportW = typeof window !== "undefined" ? window.innerWidth : 1024;
   const viewportH = typeof window !== "undefined" ? window.innerHeight : 768;
 
@@ -43,6 +43,7 @@ function CellPopover({ dim, level, rect, pinned, deepDiveBasePath, onExpand, onC
 
   return (
     <div
+      ref={containerRef}
       className={`wmv-popover${pinned ? " is-pinned" : ""}`}
       style={{ position: "fixed", left, width: POPOVER_WIDTH, ...positionStyle }}
       onMouseEnter={onMouseEnter}
@@ -311,6 +312,7 @@ export default function WholeModelView({
             onClose={closePopover}
             onMouseEnter={cancelClose}
             onMouseLeave={cellLeave}
+            containerRef={popoverRef}
           />,
           document.body
         )}
