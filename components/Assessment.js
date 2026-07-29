@@ -25,8 +25,6 @@ const LEVELS = ["A", "B", "C", "D", "E"];
 
 function buildAssessmentMd({ modelTitle, modelFullName, repoUrl, dimensions, scores }) {
   const scored = Object.keys(scores).length;
-  const scoreNum = { A: 1, B: 2, C: 3, D: 4, E: 5 };
-  const avg = (dimensions.reduce((s, d) => s + (scores[d.id] ? scoreNum[scores[d.id]] : 0), 0) / dimensions.length).toFixed(1);
   const date = new Date().toISOString().split("T")[0];
 
   let md = "";
@@ -44,7 +42,7 @@ function buildAssessmentMd({ modelTitle, modelFullName, repoUrl, dimensions, sco
   dimensions.forEach((d) => {
     md += `| ${d.id} | ${d.name} | ${scores[d.id] || "—"} |\n`;
   });
-  md += `\n**Average score:** ${avg} / 5  (${scored} of ${dimensions.length} dimensions graded)\n\n`;
+  md += `\n*${scored} of ${dimensions.length} dimensions graded.* No averaged score is computed above — dimensions are independently scored, and collapsing ordinal A–E judgments into a single mean would lend false interval precision to a profile that is only meaningful dimension by dimension.\n\n`;
   md += `---\n\n`;
 
   md += `## Full maturity definitions\n\n`;
@@ -53,7 +51,7 @@ function buildAssessmentMd({ modelTitle, modelFullName, repoUrl, dimensions, sco
     md += `### ${d.id}. ${d.name}\n\n`;
     md += `*${d.desc}*\n\n`;
     LEVELS.forEach((lv) => {
-      const marker = scores[d.id] === lv ? " ◀ **your score**" : "";
+      const marker = scores[d.id] === lv ? " — your score ◀" : "";
       md += `**Level ${lv}${marker}**\n\n`;
       md += `${d.levels[lv]}\n\n`;
     });
