@@ -25,7 +25,7 @@ export default function AssessmentsIndex() {
           </div>
           <span className="pill live">Live</span>
         </Link>
-        <div className="model-row">
+        <Link href="/models/pdlc/assessment" className="model-row">
           <div>
             <div className="model-name">AI-Native PDLC Maturity Assessment</div>
             <div className="model-desc">
@@ -33,9 +33,9 @@ export default function AssessmentsIndex() {
               PDLC model&rsquo;s dimensions.
             </div>
           </div>
-          <span className="pill coming">Coming</span>
-        </div>
-        <div className="model-row">
+          <span className="pill live">Live</span>
+        </Link>
+        <Link href="/models/prioritization/assessment" className="model-row">
           <div>
             <div className="model-name">Product Prioritization Maturity Assessment</div>
             <div className="model-desc">
@@ -43,8 +43,8 @@ export default function AssessmentsIndex() {
               dimensions.
             </div>
           </div>
-          <span className="pill coming">Coming</span>
-        </div>
+          <span className="pill live">Live</span>
+        </Link>
         <div className="model-row">
           <div>
             <div className="model-name">Product Marketing Lifecycle Maturity Assessment</div>
@@ -65,9 +65,12 @@ export default function AssessmentsIndex() {
         </div>
       </div>
       <p className="footnote">
-        The SDLC assessment already exists and works well &mdash; the plan
-        for the rest of the family is to reuse its exact shape, not invent a
-        new one per model.
+        All three live models share the same instrument shape &mdash; self-score
+        each dimension, download a summary, or generate an AI-assisted
+        Executive Readout. Formal instrument-scored assessment (the
+        SPEC-D6-SCORE equivalent) exists only for SDLC so far; PDLC and
+        Prioritization&rsquo;s own scoring instruments are tracked separately
+        (issues #19 and #26).
       </p>
     </Layout>
   );
