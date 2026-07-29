@@ -166,9 +166,8 @@ export default function Hub() {
     <Layout title="Home">
       <h1>AI-Native Maturity Models</h1>
       <p className="dek hub-intro">
-        Five ways in — it doesn&rsquo;t matter which one a visitor
-        starts from. Each leads somewhere different; together they&rsquo;re
-        one system. Click and drag the wheel to spin it.
+        Regardless of what drove you to explore here, each path leads
+        to a coherent system. Click and drag the wheel to spin it.
       </p>
 
       <div
