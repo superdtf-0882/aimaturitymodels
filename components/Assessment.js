@@ -81,7 +81,10 @@ export default function Assessment({
   executiveReadoutHref, // e.g. "/models/pdlc/executivereadout"
   downloadFilename, // e.g. "pdlc-maturity-assessment.md"
 }) {
-  const [scores, setScores] = useState({});
+  // Issue #29: D1 starts pre-graded at level A so a first-time visitor
+  // sees what a graded cell looks like before doing anything themselves --
+  // context for how to engage the assessment, not a real default score.
+  const [scores, setScores] = useState({ [dimensions[0].id]: "A" });
   const [selectedDim, setSelectedDim] = useState(dimensions[0].id);
   const [generating, setGenerating] = useState(false);
   const [readoutMsgIndex, setReadoutMsgIndex] = useState(0);
