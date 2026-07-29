@@ -292,6 +292,8 @@ export default function Assessment({
         © 2026 David Facer —{" "}
         <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>
         <br />
+        Dimensions are scored independently — no averaged score is computed; the profile above is the result.
+        <br />
         Content pinned to commit <code>{sourceCommit.slice(0, 7)}</code> of the canonical model repo.
       </p>
 
