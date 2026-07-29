@@ -27,7 +27,7 @@ export default function ModelsIndex() {
           </div>
           <span className="pill live">Live</span>
         </Link>
-        <div className="model-row">
+        <Link href="/models/pdlc/whole-model-view" className="model-row">
           <div>
             <div className="model-name">AI-Native PDLC Maturity Model</div>
             <div className="model-desc">
@@ -35,9 +35,9 @@ export default function ModelsIndex() {
               investment, and closed-loop calibration.
             </div>
           </div>
-          <span className="pill coming">Coming</span>
-        </div>
-        <div className="model-row">
+          <span className="pill live">Live</span>
+        </Link>
+        <Link href="/models/prioritization/whole-model-view" className="model-row">
           <div>
             <div className="model-name">Product Prioritization Maturity Model</div>
             <div className="model-desc">
@@ -45,8 +45,8 @@ export default function ModelsIndex() {
               governed portfolio decisions.
             </div>
           </div>
-          <span className="pill coming">Coming</span>
-        </div>
+          <span className="pill live">Live</span>
+        </Link>
         <div className="model-row">
           <div>
             <div className="model-name">Product Marketing Lifecycle Maturity Model</div>
@@ -70,11 +70,9 @@ export default function ModelsIndex() {
       </div>
       <p className="footnote">
         Each model stands alone &mdash; you don&rsquo;t need the others to use
-        one. PDLC and Prioritization are complete models with published
-        repos, level-by-level definitions, and verification clauses &mdash;
-        already in the AI digest (<Link href="/ai">Feed This to Your AI</Link>)
-        &mdash; but don&rsquo;t have their own site pages yet. The SDLC
-        model&rsquo;s page is built first since its content was ready first.
+        one. Whole-Model Views for all three live models share the same
+        interaction: hover a cell for its definition, click for the
+        transition and verification.
       </p>
     </Layout>
   );
