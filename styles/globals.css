@@ -686,7 +686,13 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
 }
 .fn-context-strip p { margin: 0; font-size: 13px; color: var(--ink-soft); }
 
-.fn-outputs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.fn-outputs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 760px) {
+  .fn-outputs-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .fn-outputs-grid { grid-template-columns: 1fr; }
+}
 .fn-output-bucket {
   border: 1px solid var(--line); border-left: 4px solid var(--bucket-accent, var(--line));
   border-radius: 0 8px 8px 0; background: var(--paper-raised); padding: 14px 16px;
