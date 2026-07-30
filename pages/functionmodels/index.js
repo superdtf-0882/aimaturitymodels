@@ -39,6 +39,17 @@ export default function FunctionModelsIndex() {
           </div>
           <span className="pill live">Live</span>
         </Link>
+        <Link href="/functionmodels/softwareengineering" className="model-row">
+          <div>
+            <div className="model-name">Software Engineering Function Model</div>
+            <div className="model-desc">
+              How approved requirements become reliable, secure, maintainable
+              software in production &mdash; and what it hands back to product,
+              GTM, operations, and leadership.
+            </div>
+          </div>
+          <span className="pill live">Live</span>
+        </Link>
       </div>
       <p className="footnote">
         Each Function Model shares this same Inputs / Function / Outputs

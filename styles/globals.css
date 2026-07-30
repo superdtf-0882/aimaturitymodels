@@ -728,6 +728,11 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
      Marketing intake, no existing analog to reuse. */
   --fn-customer-success: #1e7a8c;
   --fn-demand-gen: #7a5a1e;
+  /* Issue #34: one genuinely new category from the Software Engineering
+     intake (Security & Compliance) -- Data & Platform Teams reuses
+     --fn-eng-delivery, defined earlier but never actually wired to an
+     output key until now. */
+  --fn-security-compliance: #7a2e2e;
 }
 
 /* Issue #30: per-model explainer, a link under the dek that opens a

@@ -28,6 +28,8 @@ const OUTPUT_ACCENTS = {
   "demand-gen": "var(--fn-demand-gen)",
   "product-mgmt": "var(--blue)",
   "sales-partners": "var(--fn-gtm)",
+  "security-compliance": "var(--fn-security-compliance)",
+  "data-platform": "var(--fn-eng-delivery)",
 };
 
 // Issue #30: an optional per-model "explainer" -- longer prose than a
@@ -121,9 +123,16 @@ export default function FunctionModel({ data }) {
 
         <p className="fn-caption">{data.activities.caption}</p>
         <div className="fn-chip-grid">
-          {data.activities.items.map((item) => (
-            <div className="fn-chip" key={item}>{item}</div>
-          ))}
+          {data.activities.items.map((item) => {
+            const isRich = typeof item === "object";
+            const title = isRich ? item.title : item;
+            return (
+              <div className="fn-chip" key={title}>
+                <div className="fn-chip-title">{title}</div>
+                {isRich && item.description && <p className="fn-note">{item.description}</p>}
+              </div>
+            );
+          })}
         </div>
 
         <hr className="fn-inner-divider" />
