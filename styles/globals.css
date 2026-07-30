@@ -713,3 +713,39 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
   --fn-gtm: #b5502a;
   --fn-leadership: #a34a72;
 }
+
+/* Issue #30: per-model explainer, a link under the dek that opens a
+   modal -- reuses .assess-modal-backdrop's overlay mechanism (fixed,
+   centered, dark scrim, Escape/backdrop-click to close) but gets its
+   own card styling: .assess-modal is a narrow centered status message,
+   this is readable prose with lists, so it needs real width, left
+   alignment, and a close control that one didn't. */
+.fn-explainer-link {
+  background: none; border: none; padding: 0; margin: -8px 0 26px;
+  font-size: 13.5px; color: var(--blue); text-decoration: underline;
+  cursor: pointer; font-family: inherit;
+}
+.fn-explainer-link:hover { color: var(--orange); }
+.fn-explainer-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000;
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.fn-explainer-modal {
+  background: var(--paper-raised); border: 1px solid var(--line); border-radius: 12px;
+  padding: 28px 32px; max-width: 60ch; width: 100%; max-height: 85vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.fn-explainer-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  margin-bottom: 14px;
+}
+.fn-explainer-title { font-family: var(--serif); font-size: 19px; margin: 0; }
+.fn-explainer-close {
+  background: none; border: none; color: var(--muted); font-size: 24px; line-height: 1;
+  cursor: pointer; padding: 0 2px; flex: none;
+}
+.fn-explainer-close:hover { color: var(--ink); }
+.fn-explainer-modal p { font-size: 14px; line-height: 1.65; color: var(--ink-soft); margin: 0 0 14px; }
+.fn-explainer-list { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 10px; }
+.fn-explainer-list li { font-size: 14px; line-height: 1.65; color: var(--ink-soft); }
+.fn-explainer-list strong { color: var(--ink); }

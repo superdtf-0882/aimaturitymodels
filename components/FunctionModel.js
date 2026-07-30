@@ -4,6 +4,8 @@
 // per-model knowledge, so adding the next Function Model to the family
 // means writing a content file, not a new page layout.
 
+import { useEffect, useState } from "react";
+
 const OUTPUT_ACCENTS = {
   eng: "var(--blue)",
   gtm: "var(--fn-gtm)",
@@ -11,13 +13,66 @@ const OUTPUT_ACCENTS = {
   leadership: "var(--fn-leadership)",
 };
 
+// Issue #30: an optional per-model "explainer" -- longer prose than a
+// hover popover comfortably holds, so it's a link-triggered modal
+// instead, matching this site's existing modal mechanism (the
+// Executive Readout's progress modal) rather than inventing a new
+// overlay pattern. Its own card styling (.fn-explainer-*) is distinct
+// from .assess-modal since that one is sized for a short centered
+// status message, not readable prose with lists.
+function ExplainerModal({ explainer, onClose }) {
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div className="fn-explainer-backdrop" onClick={onClose}>
+      <div className="fn-explainer-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="fn-explainer-header">
+          <p className="fn-explainer-title">{explainer.title}</p>
+          <button type="button" className="fn-explainer-close" onClick={onClose} aria-label="Close">
+            ×
+          </button>
+        </div>
+        {explainer.blocks.map((block, i) =>
+          block.type === "list" ? (
+            <ul className="fn-explainer-list" key={i}>
+              {block.items.map((item) => (
+                <li key={item.term}>
+                  <strong>{item.term}:</strong> {item.text}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p key={i}>{block.text}</p>
+          )
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function FunctionModel({ data }) {
+  const [explainerOpen, setExplainerOpen] = useState(false);
+
   return (
     <>
       <h1>{data.title}</h1>
       {data.dek.map((line, i) => (
         <p className="dek" key={i}>{line}</p>
       ))}
+      {data.explainer && (
+        <button type="button" className="fn-explainer-link" onClick={() => setExplainerOpen(true)}>
+          {data.explainer.linkLabel}
+        </button>
+      )}
+      {explainerOpen && data.explainer && (
+        <ExplainerModal explainer={data.explainer} onClose={() => setExplainerOpen(false)} />
+      )}
 
       <section className="fn-section">
         <p className="fn-section-label">Inputs</p>
