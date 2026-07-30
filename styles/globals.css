@@ -652,6 +652,8 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
   background: var(--paper-raised); border: 1px solid var(--line); border-radius: 8px;
   padding: 9px 12px; font-size: 13.5px; color: var(--ink);
 }
+.fn-chip-title { font-weight: 600; }
+.fn-chip .fn-note { margin-top: 4px; }
 .fn-group {
   border: 1px dashed var(--line); border-radius: 8px; padding: 12px 14px;
   grid-column: 1 / -1;
@@ -666,6 +668,11 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
   font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em;
   color: var(--blue); margin: 0 0 4px;
 }
+.fn-function-statement {
+  background: var(--orange-soft); border: 1px solid color-mix(in srgb, var(--orange) 35%, transparent);
+  border-radius: 8px; padding: 10px 14px; font-size: 13.5px; color: var(--ink-soft);
+  margin: 0 0 16px;
+}
 .fn-caption { font-size: 13px; color: var(--muted); font-style: italic; margin: 0 0 12px; }
 .fn-note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; }
 .fn-inner-divider { border: none; border-top: 1px dashed var(--line); margin: 22px 0; }
@@ -676,15 +683,20 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
 .fn-cap-singles { display: grid; gap: 8px; margin-bottom: 8px; }
 .fn-cap-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
 
-.fn-context-strip {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;
-  margin-top: 22px; padding-top: 18px; border-top: 1px dashed var(--line);
+/* Issue #33: replaces the old .fn-context-strip -- Tools and the
+   Governance/Resources/Standards row were always the same concept
+   (what the function runs on), just rendered two different ways.
+   One grid of dashed .fn-group boxes now, same as Capabilities'
+   groups, rather than a second bespoke layout. */
+.fn-substrates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.fn-substrates-grid .fn-group { grid-column: auto; }
+
+.fn-boundary-note {
+  border: 1px solid var(--line); border-left: 4px solid var(--orange);
+  border-radius: 0 8px 8px 0; background: var(--paper-raised); padding: 14px 18px;
 }
-.fn-context-label {
-  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em;
-  color: var(--muted); margin: 0 0 4px;
-}
-.fn-context-strip p { margin: 0; font-size: 13px; color: var(--ink-soft); }
+.fn-boundary-note ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.fn-boundary-note li { font-size: 13.5px; line-height: 1.5; color: var(--ink-soft); }
 
 .fn-outputs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 @media (max-width: 760px) {
@@ -712,6 +724,10 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
   --fn-eng-delivery: #2f8a72;
   --fn-gtm: #b5502a;
   --fn-leadership: #a34a72;
+  /* Issue #33: two genuinely new output categories from the Product
+     Marketing intake, no existing analog to reuse. */
+  --fn-customer-success: #1e7a8c;
+  --fn-demand-gen: #7a5a1e;
 }
 
 /* Issue #30: per-model explainer, a link under the dek that opens a

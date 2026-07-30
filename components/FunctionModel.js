@@ -3,6 +3,19 @@
 // shape authored in lib/functionModels/*.js; this component has no
 // per-model knowledge, so adding the next Function Model to the family
 // means writing a content file, not a new page layout.
+//
+// Extended for the Product Marketing intake (issue #33), tracked for
+// later evaluation on whether it needs its own architecture record:
+// - inputs.items carry an optional description (Product Marketing has
+//   one per input; Product Management's inputs don't -- both work).
+// - `substrates` (named category + bullet items) replaces the old
+//   `tools`/`contextStrip` split -- those were always the same concept
+//   (what the function runs on) rendered two different ways. Product
+//   Management's own Tools/Governance/Resources/Standards content
+//   migrated into this one shape rather than keeping two.
+// - `boundaryNote` (optional): a short "who owns what" callout.
+// - `functionStatement` (optional): a one-line governing statement
+//   inside the function box.
 
 import { useEffect, useState } from "react";
 
@@ -11,6 +24,10 @@ const OUTPUT_ACCENTS = {
   gtm: "var(--fn-gtm)",
   ops: "var(--orange)",
   leadership: "var(--fn-leadership)",
+  "customer-success": "var(--fn-customer-success)",
+  "demand-gen": "var(--fn-demand-gen)",
+  "product-mgmt": "var(--blue)",
+  "sales-partners": "var(--fn-gtm)",
 };
 
 // Issue #30: an optional per-model "explainer" -- longer prose than a
@@ -77,17 +94,22 @@ export default function FunctionModel({ data }) {
       <section className="fn-section">
         <p className="fn-section-label">Inputs</p>
         <div className="fn-chip-grid">
-          {data.inputs.simple.map((item) => (
-            <div className="fn-chip" key={item}>{item}</div>
+          {data.inputs.items.map((item) => (
+            <div className="fn-chip" key={item.title}>
+              <div className="fn-chip-title">{item.title}</div>
+              {item.description && <p className="fn-note">{item.description}</p>}
+            </div>
           ))}
-          <div className="fn-group">
-            <p className="fn-group-title">{data.inputs.group.title}</p>
-            <ul>
-              {data.inputs.group.items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
+          {data.inputs.group && (
+            <div className="fn-group">
+              <p className="fn-group-title">{data.inputs.group.title}</p>
+              <ul>
+                {data.inputs.group.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </section>
 
@@ -95,6 +117,7 @@ export default function FunctionModel({ data }) {
 
       <section className="fn-section fn-function-box">
         <p className="fn-function-label">{data.functionLabel}</p>
+        {data.functionStatement && <p className="fn-function-statement">{data.functionStatement}</p>}
 
         <p className="fn-caption">{data.activities.caption}</p>
         <div className="fn-chip-grid">
@@ -106,19 +129,21 @@ export default function FunctionModel({ data }) {
         <hr className="fn-inner-divider" />
 
         <p className="fn-caption">{data.capabilities.caption}</p>
-        <div className="fn-cap-groups">
-          {data.capabilities.groups.map((group) => (
-            <div className="fn-group" key={group.title}>
-              <p className="fn-group-title">{group.title}</p>
-              <ul>
-                {group.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-              {group.note && <p className="fn-note">{group.note}</p>}
-            </div>
-          ))}
-        </div>
+        {data.capabilities.groups && data.capabilities.groups.length > 0 && (
+          <div className="fn-cap-groups">
+            {data.capabilities.groups.map((group) => (
+              <div className="fn-group" key={group.title}>
+                <p className="fn-group-title">{group.title}</p>
+                <ul>
+                  {group.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+                {group.note && <p className="fn-note">{group.note}</p>}
+              </div>
+            ))}
+          </div>
+        )}
         <div className="fn-cap-singles">
           {data.capabilities.singles.map((single) => (
             <div className="fn-chip" key={single.title}>
@@ -127,37 +152,29 @@ export default function FunctionModel({ data }) {
             </div>
           ))}
         </div>
-        <div className="fn-cap-pair">
-          {data.capabilities.pair.map((item) => (
-            <div className="fn-chip" key={item}>{item}</div>
-          ))}
-        </div>
-
-        <hr className="fn-inner-divider" />
-
-        <p className="fn-caption">Tools</p>
-        {data.tools.rows.map((row, i) => (
-          <div className="fn-chip-grid" key={i} style={{ marginBottom: 8 }}>
-            {row.map((item) => (
+        {data.capabilities.pair && data.capabilities.pair.length > 0 && (
+          <div className="fn-cap-pair">
+            {data.capabilities.pair.map((item) => (
               <div className="fn-chip" key={item}>{item}</div>
             ))}
           </div>
-        ))}
+        )}
 
-        <div className="fn-context-strip">
-          <div>
-            <p className="fn-context-label">Governance</p>
-            <p>{data.contextStrip.governance}</p>
-          </div>
-          <div>
-            <p className="fn-context-label">Resources</p>
-            <p>{data.contextStrip.resources.text}</p>
-            <p className="fn-note">{data.contextStrip.resources.note}</p>
-          </div>
-          <div>
-            <p className="fn-context-label">Standards</p>
-            <p>{data.contextStrip.standards}</p>
-          </div>
+        <hr className="fn-inner-divider" />
+
+        <p className="fn-caption">Enabling substrates</p>
+        <div className="fn-substrates-grid">
+          {data.substrates.map((substrate) => (
+            <div className="fn-group" key={substrate.title}>
+              <p className="fn-group-title">{substrate.title}</p>
+              <ul>
+                {substrate.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              {substrate.note && <p className="fn-note">{substrate.note}</p>}
+            </div>
+          ))}
         </div>
       </section>
 
@@ -173,7 +190,7 @@ export default function FunctionModel({ data }) {
               style={{ "--bucket-accent": OUTPUT_ACCENTS[bucket.key] || "var(--line)" }}
             >
               <p className="fn-output-title">{bucket.title}</p>
-              <p className="fn-output-caption">{bucket.caption}</p>
+              {bucket.caption && <p className="fn-output-caption">{bucket.caption}</p>}
               <ul className="fn-output-items">
                 {bucket.items.map((item) => (
                   <li key={item}>{item}</li>
@@ -183,6 +200,17 @@ export default function FunctionModel({ data }) {
           ))}
         </div>
       </section>
+
+      {data.boundaryNote && (
+        <section className="fn-section fn-boundary-note">
+          <p className="fn-section-label">{data.boundaryNote.title}</p>
+          <ul>
+            {data.boundaryNote.items.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
+      )}
     </>
   );
 }

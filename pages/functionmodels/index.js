@@ -28,10 +28,21 @@ export default function FunctionModelsIndex() {
           </div>
           <span className="pill live">Live</span>
         </Link>
+        <Link href="/functionmodels/productmarketing" className="model-row">
+          <div>
+            <div className="model-name">Product Marketing Function Model</div>
+            <div className="model-desc">
+              A bounded corollary to Product Management &mdash; how market and
+              buyer context becomes messaging, launch assets, and field
+              enablement, and what it hands back to the rest of the business.
+            </div>
+          </div>
+          <span className="pill live">Live</span>
+        </Link>
       </div>
       <p className="footnote">
-        First of a family &mdash; more Function Models share this same
-        Inputs / Function / Outputs structure as they land.
+        Each Function Model shares this same Inputs / Function / Outputs
+        structure &mdash; more are planned.
       </p>
     </Layout>
   );
