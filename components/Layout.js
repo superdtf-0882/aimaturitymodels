@@ -18,16 +18,19 @@ export default function Layout({ title, crumb, wide, children }) {
             <Link href="/">AI-Native Maturity Models</Link>
           </p>
           <nav>
-            <p className="group-label">Explore</p>
+            {/* Issue #36: dropped the "Explore"/"Function Models"/
+                "Foundation" group labels and captions entirely -- David's
+                own principle, applied consistently: "the content can
+                state itself." Strata promoted to the same major tier as
+                Models/Assessments/Function Models (no nav-secondary
+                class); EA OKF and Vellum & Seminum now sit as minor
+                items directly beneath Strata specifically, not under a
+                separate abstract "Foundation" heading. */}
             <Link href="/models">AI-Native Maturity Models</Link>
             <Link href="/assessments">Maturity Model Assessments</Link>
-            <p className="group-label">Function Models</p>
-            <p className="group-caption">Flat maps of what a function consists of &mdash; no progression scale</p>
             <Link href="/functionmodels">Function Models</Link>
-            <p className="group-label">Foundation</p>
-            <p className="group-caption">The architecture methodology and tooling this practice is built on</p>
+            <Link href="/strata">Strata</Link>
             <Link href="/eaokf" className="nav-secondary">Enterprise Architecture OKF</Link>
-            <Link href="/strata" className="nav-secondary">Strata</Link>
             <Link href="/vellum" className="nav-secondary">Vellum &amp; Seminum</Link>
           </nav>
         </aside>

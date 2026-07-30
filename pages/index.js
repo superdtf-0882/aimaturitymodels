@@ -3,17 +3,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 
-// Circular hub (issue #9, +1 node issue #31): entry points arranged so
-// no one of them reads as the "start" -- order follows the sequence as
-// specified, placed clockwise from the top.
+// Circular hub (issue #9, +1 node issue #31, -1 node + Strata promoted
+// issue #37): entry points arranged so no one of them reads as the
+// "start" -- order follows the sequence as specified, placed clockwise
+// from the top.
 // `primary: true` marks the nodes that are actually the product (the
-// models, their assessments, and Function Models); the remaining three
-// -- foundation, connective theory, internal tooling -- render visually
-// smaller and quieter, so the wheel itself doesn't imply parity that
-// the copy on those pages explicitly says isn't there. Function Models
-// joins the primary tier, not Foundation's -- it's real content, not
-// governance/tooling substrate, same distinction the rail nav already
-// draws with its own top-level group (neither Explore nor Foundation).
+// models, their assessments, Function Models, and now Strata -- it
+// connects the whole family, the same standing as the other three);
+// EA OKF is the one remaining minor node, matching the rail nav's own
+// tiering (components/Layout.js). Vellum & Seminum dropped from the
+// wheel entirely -- handled in the rail nav now, doesn't need wheel
+// space too (issue #37).
 const NODES = [
   {
     href: "/models",
@@ -37,22 +37,17 @@ const NODES = [
     primary: true,
   },
   {
-    href: "/eaokf",
-    kicker: "The foundation",
-    title: "Enterprise Architecture OKF",
-    desc: "The schema this family is written in.",
-  },
-  {
     href: "/strata",
     kicker: "Why it connects",
     title: "Strata",
     desc: "Why these models fit together at all.",
+    primary: true,
   },
   {
-    href: "/vellum",
-    kicker: "The tooling",
-    title: "Vellum & Seminum",
-    desc: "Making a corpus visible, and portable.",
+    href: "/eaokf",
+    kicker: "The foundation",
+    title: "Enterprise Architecture OKF",
+    desc: "The schema this family is written in.",
   },
 ];
 
