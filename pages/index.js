@@ -3,14 +3,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 
-// Circular hub (issue #9): five entry points arranged so no one of them
-// reads as the "start" -- order follows the sequence as specified, placed
-// clockwise from the top.
-// `primary: true` marks the two nodes that are actually the product
-// (the models and their assessments); the other three -- foundation,
-// connective theory, internal tooling -- render visually smaller and
-// quieter, so the wheel itself doesn't imply parity that the copy on
-// those pages explicitly says isn't there.
+// Circular hub (issue #9, +1 node issue #31): entry points arranged so
+// no one of them reads as the "start" -- order follows the sequence as
+// specified, placed clockwise from the top.
+// `primary: true` marks the nodes that are actually the product (the
+// models, their assessments, and Function Models); the remaining three
+// -- foundation, connective theory, internal tooling -- render visually
+// smaller and quieter, so the wheel itself doesn't imply parity that
+// the copy on those pages explicitly says isn't there. Function Models
+// joins the primary tier, not Foundation's -- it's real content, not
+// governance/tooling substrate, same distinction the rail nav already
+// draws with its own top-level group (neither Explore nor Foundation).
 const NODES = [
   {
     href: "/models",
@@ -24,6 +27,13 @@ const NODES = [
     kicker: "Assess yourself",
     title: "Maturity Model Assessments",
     desc: "Score yourself against each model in the family.",
+    primary: true,
+  },
+  {
+    href: "/functionmodels",
+    kicker: "What it's made of",
+    title: "Function Models",
+    desc: "Flat maps of what a function consists of — no progression scale.",
     primary: true,
   },
   {
