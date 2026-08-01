@@ -95,8 +95,17 @@ export default function Strata() {
         is real without it.
       </p>
 
+      {/* Four checks, then act -- not three. The authority check was
+          missing here until 2026-08-01, which made this line contradict
+          both the page's own intro (which names all four) and
+          SPEC-STRATA v2.3, ratified the same day: "a thing can be
+          correctly typed, correctly placed, and correctly fibered to a
+          real intent, and still not be actionable, because being
+          well-formed is not the same as being authorized." The old
+          wording put "act" in the fourth slot, which read as a
+          three-step clearance rather than a four-part gate. */}
       <div className="layer-note stratum-principle">
-        <strong>Type it. Locate it. Resolve what it&rsquo;s for. Then act.</strong>
+        <strong>Type it. Locate it. Resolve what it&rsquo;s for. Check what authorizes it. Then act.</strong>
       </div>
 
       <p className="footnote" style={{ marginTop: 4 }}>
