@@ -1,0 +1,5 @@
+# Normalize line endings. core.autocrlf is true at SYSTEM scope on this
+# machine (Git for Windows installer default), which nobody chose and
+# which produced 1,870 lines of zero-content churn across this repo
+# before this file existed. Added 2026-08-25.
+* text=auto
