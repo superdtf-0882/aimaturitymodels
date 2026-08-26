@@ -9,10 +9,11 @@ export default function Vellum() {
     >
       <h1>Vellum &amp; Seminum</h1>
       <p className="dek">
-        Two internal tools built on top of <Link href="/eaokf">EA OKF</Link>,
-        for two different problems: seeing a corpus, and seeding one. Neither
-        is public &mdash; both are closed, trusted-access tooling by design,
-        described here so their absence from the rest of this site doesn&rsquo;t
+        Two tools built on top of <Link href="/eaokf">EA OKF</Link>, for two
+        different problems: seeing a corpus, and seeding one. They began as a
+        matched pair of internal tools and have since diverged &mdash; Vellum
+        stays closed working tooling, Seminum is on its way to being a product.
+        Described here so their absence from the rest of this site doesn&rsquo;t
         read as an oversight.
       </p>
 
@@ -38,13 +39,21 @@ export default function Vellum() {
         portable package of that pattern &mdash; sanitized of any one
         practice&rsquo;s own instance data &mdash; meant to be dropped into a
         new repository so a new practice starts from something proven
-        instead of a blank page. It&rsquo;s planned, not yet shipped.
+        instead of a blank page.
+      </p>
+      <p>
+        Seminum is built, and it is in a closed beta with a small number of
+        reviewers. It is not publicly available. The pattern layer it carries
+        is currently unlicensed; a licence is intended at its first public
+        release, and no date has been set for that.
       </p>
 
       <p className="footnote">
-        Both stay closed-access, by design &mdash; not because there&rsquo;s
-        anything to hide, but because a corpus browser and a seed package
-        are internal working tools, not public-facing products.
+        Vellum stays closed-access by design &mdash; not because there&rsquo;s
+        anything to hide, but because a corpus browser is an internal working
+        tool rather than a product. Seminum was described the same way here
+        until it was reclassified as a product in waiting; what changed then
+        was its destination, not its present state.
       </p>
     </Layout>
   );
