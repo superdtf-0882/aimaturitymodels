@@ -68,9 +68,12 @@ export default function AssessmentsIndex() {
         All three live models share the same instrument shape &mdash; self-score
         each dimension, download a summary, or generate an AI-assisted
         Executive Readout. Formal instrument-scored assessment (the
-        SPEC-D6-SCORE equivalent) exists only for SDLC so far; PDLC and
-        Prioritization&rsquo;s own scoring instruments are tracked separately
-        (issues #19 and #26).
+        SPEC-D6-SCORE equivalent) now exists for all three &mdash;
+        SPEC-D6-SCORE for SDLC, and SPEC-D6-SCORE-PDLC and
+        SPEC-D6-SCORE-PRIORITIZATION for the other two. Their criteria text
+        lives in a private governance corpus rather than in these public
+        repositories, so the formal instruments themselves aren&rsquo;t
+        published here.
       </p>
     </Layout>
   );
