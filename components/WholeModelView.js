@@ -125,6 +125,7 @@ function CellPopover({ dim, level, rect, pinned, deepDiveBasePath, onExpand, onC
 export default function WholeModelView({
   dimensions,
   sourceCommit,
+  currencyBasis,
   modelLabel,
   dimensionCountLabel,
   deepDiveBasePath, // e.g. "/models/sdlc/deep-dive" -- null/undefined if this model has none yet
@@ -325,8 +326,20 @@ export default function WholeModelView({
         <span><span className="swatch" style={{ background: "var(--lvl-e-fill)", borderColor: "var(--lvl-e-border)" }} /> E &mdash; Telemetric</span>
         <span>⚠ = open review item</span>
       </div>
+      {/*
+        CURRENCY BASIS, added 2026-08-26. This replaced "Content pinned to
+        commit <sha> of the canonical model repo", which was true of PDLC
+        and Prioritization and NOT TRUE OF SDLC: that page's short-form
+        cells are fetched from main while its full model text is pinned,
+        so the old sentence claimed one basis for a page that renders two.
+        The string is computed in lib/models.js from the same constants
+        the fetchers use -- never hand-written, because a hand-maintained
+        currency claim is the next stale one.
+      */}
       <p className="footnote" style={{ marginTop: 10 }}>
-        Content pinned to commit <code>{sourceCommit.slice(0, 7)}</code> of the canonical model repo.
+        {currencyBasis || (
+          <>Content pinned to commit <code>{sourceCommit.slice(0, 7)}</code> of the canonical model repo.</>
+        )}
       </p>
     </Layout>
   );

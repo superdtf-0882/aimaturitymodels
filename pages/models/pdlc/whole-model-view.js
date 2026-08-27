@@ -1,4 +1,4 @@
-import { getPdlcShortForm, getPdlcFullModel } from "../../../lib/models";
+import { getPdlcShortForm, getPdlcFullModel, currencyBasisLine } from "../../../lib/models";
 import WholeModelView from "../../../components/WholeModelView";
 
 export async function getStaticProps() {
@@ -8,14 +8,15 @@ export async function getStaticProps() {
     title: shortForm.dimensions[d.id].title,
     digest: shortForm.dimensions[d.id].levels,
   }));
-  return { props: { dimensions, sourceCommit: fullModel.sourceCommit } };
+  return { props: { dimensions, sourceCommit: fullModel.sourceCommit, currencyBasis: currencyBasisLine("pdlc") } };
 }
 
-export default function PdlcWholeModelView({ dimensions, sourceCommit }) {
+export default function PdlcWholeModelView({ dimensions, sourceCommit, currencyBasis }) {
   return (
     <WholeModelView
       dimensions={dimensions}
       sourceCommit={sourceCommit}
+      currencyBasis={currencyBasis}
       modelLabel="AI-Native PDLC"
       dimensionCountLabel="Twelve dimensions"
       deepDiveBasePath="/models/pdlc/deep-dive"

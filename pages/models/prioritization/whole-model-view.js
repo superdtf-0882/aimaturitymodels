@@ -1,4 +1,4 @@
-import { getPrioritizationShortForm, getPrioritizationFullModel } from "../../../lib/models";
+import { getPrioritizationShortForm, getPrioritizationFullModel, currencyBasisLine } from "../../../lib/models";
 import WholeModelView from "../../../components/WholeModelView";
 
 export async function getStaticProps() {
@@ -11,14 +11,15 @@ export async function getStaticProps() {
     title: shortForm.dimensions[d.id].title,
     digest: shortForm.dimensions[d.id].levels,
   }));
-  return { props: { dimensions, sourceCommit: fullModel.sourceCommit } };
+  return { props: { dimensions, sourceCommit: fullModel.sourceCommit, currencyBasis: currencyBasisLine("prioritization") } };
 }
 
-export default function PrioritizationWholeModelView({ dimensions, sourceCommit }) {
+export default function PrioritizationWholeModelView({ dimensions, sourceCommit, currencyBasis }) {
   return (
     <WholeModelView
       dimensions={dimensions}
       sourceCommit={sourceCommit}
+      currencyBasis={currencyBasis}
       modelLabel="Product Prioritization"
       dimensionCountLabel="Three dimensions"
       deepDiveBasePath="/models/prioritization/deep-dive"

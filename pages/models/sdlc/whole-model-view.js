@@ -1,4 +1,4 @@
-import { getSdlcShortForm, getSdlcFullModel } from "../../../lib/models";
+import { getSdlcShortForm, getSdlcFullModel, currencyBasisLine } from "../../../lib/models";
 import WholeModelView from "../../../components/WholeModelView";
 
 export async function getStaticProps() {
@@ -22,14 +22,15 @@ export async function getStaticProps() {
     // never pulled from shortForm to begin with.
     digest: shortForm.dimensions[d.id].levels,
   }));
-  return { props: { dimensions, sourceCommit: fullModel.sourceCommit } };
+  return { props: { dimensions, sourceCommit: fullModel.sourceCommit, currencyBasis: currencyBasisLine("sdlc") } };
 }
 
-export default function SdlcWholeModelView({ dimensions, sourceCommit }) {
+export default function SdlcWholeModelView({ dimensions, sourceCommit, currencyBasis }) {
   return (
     <WholeModelView
       dimensions={dimensions}
       sourceCommit={sourceCommit}
+      currencyBasis={currencyBasis}
       modelLabel="AI-Native SDLC"
       dimensionCountLabel="Thirteen dimensions"
       deepDiveBasePath="/models/sdlc/deep-dive"
