@@ -49,11 +49,10 @@ export default function Vellum() {
       </p>
 
       <p className="footnote">
-        Vellum stays closed-access by design &mdash; not because there&rsquo;s
-        anything to hide, but because a corpus browser is an internal working
-        tool rather than a product. Seminum was described the same way here
-        until it was reclassified as a product in waiting; what changed then
-        was its destination, not its present state.
+        Vellum is an internal working tool rather than a product, and it
+        isn&rsquo;t linked from here. Seminum was described the same way until
+        it was reclassified as a product in waiting; what changed then was its
+        destination, not its present state.
       </p>
     </Layout>
   );
