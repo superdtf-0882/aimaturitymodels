@@ -16,7 +16,12 @@ import { STRATA } from "../lib/strataData";
 
 export default function Strata() {
   const [open, setOpen] = useState(() => new Set());
-  const [loopActive, setLoopActive] = useState(false);
+  // Renamed from loopActive with SPEC-STRATA v2.4: hovering S7 no longer
+  // lights a fixed S7->S0 pair, because feedback does not return only to
+  // Intent. It lights every stratum S7 can address -- the fan-out the
+  // note beneath the row now describes. S7 itself is already lit by its
+  // own :hover/:focus-visible rule, so the source is not double-marked.
+  const [fanoutActive, setFanoutActive] = useState(false);
 
   function toggle(code) {
     setOpen((prev) => {
@@ -80,7 +85,7 @@ export default function Strata() {
       <div className="stratum-list">
         {STRATA.map((s, i) => {
           const isOpen = open.has(s.code);
-          const isLinked = loopActive && (s.code === "S0" || s.code === "S7");
+          const isLinked = fanoutActive && s.code !== "S7";
           return (
             <div key={s.code} className={`stratum-row${isLinked ? " linked" : ""}`}>
               <button
@@ -89,10 +94,10 @@ export default function Strata() {
                 aria-expanded={isOpen}
                 aria-controls={`stratum-detail-${s.code}`}
                 onClick={() => toggle(s.code)}
-                onMouseEnter={() => s.code === "S7" && setLoopActive(true)}
-                onMouseLeave={() => s.code === "S7" && setLoopActive(false)}
-                onFocus={() => s.code === "S7" && setLoopActive(true)}
-                onBlur={() => s.code === "S7" && setLoopActive(false)}
+                onMouseEnter={() => s.code === "S7" && setFanoutActive(true)}
+                onMouseLeave={() => s.code === "S7" && setFanoutActive(false)}
+                onFocus={() => s.code === "S7" && setFanoutActive(true)}
+                onBlur={() => s.code === "S7" && setFanoutActive(false)}
               >
                 <span className="stratum-code">{s.code}</span>
                 <span className="stratum-text">
