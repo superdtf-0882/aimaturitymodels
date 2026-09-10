@@ -108,11 +108,12 @@ export default function Strata() {
               )}
               {s.code === "S7" && (
                 <div className="stratum-loop-note">
-                  &#8635; Feedback, not fiber. The fiber already runs
-                  through every layer above &mdash; this loop is a
-                  separate, additional act: what&rsquo;s learned here
-                  returns to S0 so intent itself can be reconsidered, not
-                  just whichever layer is most convenient.
+                  &#8635; Feedback, not fiber. The fiber runs through
+                  every layer above; this loop is separate and
+                  additional. What&rsquo;s learned here returns to the
+                  stratum it bears on, and naming that stratum is part of
+                  the claim. Intent stays reachable &mdash; rarely, and
+                  never casually; the rarity is the signal.
                 </div>
               )}
             </div>
