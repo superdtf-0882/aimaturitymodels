@@ -153,18 +153,20 @@ export default function Strata() {
       <p>
         These are different structures. <strong>Fiber is
         structural</strong>: Intent is present throughout every valid
-        stratum. <strong>Feedback is dynamic</strong>: Observatio may
-        return evidence to Intent so that Intent itself can be
-        reconsidered. A system can be correctly typed and connected to
-        Intent without a feedback event having occurred.
+        stratum. <strong>Feedback is dynamic</strong>: Observatio returns
+        evidence to the stratum it bears on &mdash; Intent among them, so
+        that Intent itself can be reconsidered, rarely. A system can be
+        correctly typed and connected to Intent without a feedback event
+        having occurred.
       </p>
       <p>
         And when feedback does occur, it doesn&rsquo;t bypass the
         governed world. An observation that challenges Intent still needs
         its own valid type, placement, Intent reference, and authority
-        path. Feedback doesn&rsquo;t mean &ldquo;change whatever layer is
-        convenient&rdquo; &mdash; it means reality has produced evidence
-        strong enough to reopen a governed question.
+        path &mdash; and it has to name the stratum it addresses, because
+        that address is part of the claim. An observation with no
+        resolved Intent is <strong>ill-typed</strong>; one routed to a
+        stratum it doesn&rsquo;t bear on is <strong>misplaced</strong>.
       </p>
 
       <h2>Authority crosses the strata</h2>
