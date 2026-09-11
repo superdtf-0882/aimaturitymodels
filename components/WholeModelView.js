@@ -15,6 +15,15 @@ import { LEVEL_NAMES } from "../lib/levelVocabulary";
 
 const LEVELS = ["A", "B", "C", "D", "E"];
 
+// Header rule lengths, A->E. Ordinality is a true property of A-E and
+// deserves an encoding; LENGTH says "further along" where HUE says
+// "better or worse". A bar has no scale, no units and no zero, so it
+// cannot be totalled and carries no valence -- nothing about a short bar
+// says failure, where #a32d2d does. If it ever reads as ornament it is
+// the first thing to cut, and the header survives without it.
+// (briefs/2026-09-11-level-header/01- section 2, OKF-TOGAF#118.)
+const BAR_WIDTHS = [22, 34, 46, 58, 70];
+
 function nextLevel(l) {
   const i = LEVELS.indexOf(l);
   return i < LEVELS.length - 1 ? LEVELS[i + 1] : null;
@@ -243,16 +252,17 @@ export default function WholeModelView({
           <thead>
             <tr>
               <th className="dim-th">Dimension</th>
-              {LEVELS.map((l) => (
+              {/* The letter was never missing from this page -- it was filed
+                  nine rows away, in the legend, and the ONLY thing joining
+                  "A" to "Nascent" was the hue. That is what the colour ramp
+                  was doing here: carrying an adjacency at a distance. Marrying
+                  the two deletes the legend's level half outright. */}
+              {LEVELS.map((l, i) => (
                 <th key={l} className="level-th">
-                  <span
-                    className="level-badge"
-                    style={{
-                      "--badge-fill": `var(--lvl-${l.toLowerCase()}-fill)`,
-                      "--badge-border": `var(--lvl-${l.toLowerCase()}-border)`,
-                    }}
-                  >
-                    <span className="level-badge-name">{LEVEL_NAMES[l]}</span>
+                  <span className="level-head">
+                    <span className="ltr">{l}</span>
+                    <span className="nm">{LEVEL_NAMES[l]}</span>
+                    <span className="bar" style={{ width: BAR_WIDTHS[i] }} />
                   </span>
                 </th>
               ))}
@@ -318,12 +328,11 @@ export default function WholeModelView({
           document.body
         )}
 
+      {/* The five level keys were cut 2026-09-11: the header now carries the
+          letter beside its own name, so a swatch-to-oval colour round-trip
+          has nothing left to do. The div and the review-item key STAY -- the
+          legend's level half went, the legend did not. */}
       <div className="legend">
-        <span><span className="swatch" style={{ background: "var(--lvl-a-fill)", borderColor: "var(--lvl-a-border)" }} /> A &mdash; Nascent</span>
-        <span><span className="swatch" style={{ background: "var(--lvl-b-fill)", borderColor: "var(--lvl-b-border)" }} /> B &mdash; Modeled</span>
-        <span><span className="swatch" style={{ background: "var(--lvl-c-fill)", borderColor: "var(--lvl-c-border)" }} /> C &mdash; Continuous</span>
-        <span><span className="swatch" style={{ background: "var(--lvl-d-fill)", borderColor: "var(--lvl-d-border)" }} /> D &mdash; Integral</span>
-        <span><span className="swatch" style={{ background: "var(--lvl-e-fill)", borderColor: "var(--lvl-e-border)" }} /> E &mdash; Telemetric</span>
         <span>⚠ = open review item</span>
       </div>
       {/*

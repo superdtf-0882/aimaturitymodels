@@ -27,7 +27,22 @@
   --paper-raised: #182430;
   --line: #2a3844;
 
-  /* System 3 maturity colors -- fixed, never reassigned */
+  /* System 3 maturity colors -- fixed, never reassigned.
+     NOT RETIRED 2026-09-11, AND THE REASON IS LOAD-BEARING. OKF-TOGAF#118
+     edit 6 called for deleting these ten properties once the header badges
+     and the legend swatches were gone, "since they are the only consumers."
+     THEY ARE NOT. components/WholeModelView.js:63-64 sets --cell-fill /
+     --cell-border from them for .wmv-panel-level, the popover's level
+     circle, which is STILL LIVE and belongs to move 2 (the navigation
+     pass), not to this move. Deleting these would have left that circle
+     unstyled.
+     WHY THE MEASUREMENT MISSED IT, because the next person will measure the
+     same way: the popover is CONDITIONALLY RENDERED -- it is absent from the
+     DOM until hover or pin -- so a sweep of the page at rest counts twenty
+     --lvl-* occurrences and sees two consumers. A source grep for the
+     literal `--lvl-a` misses it too: lines 63-64 build the name by template
+     literal from the level letter. Both instruments were accurate about what
+     they reached. Retire these with move 2, or not at all. */
   --lvl-a-fill: #fcebeb; --lvl-a-border: #a32d2d;
   --lvl-b-fill: #f7dccb; --lvl-b-border: #993c1d;
   --lvl-c-fill: #f3e4b8; --lvl-c-border: #854f0b;
@@ -127,26 +142,40 @@ table.wmv thead th {
 }
 table.wmv thead th .level-name { text-transform: none; letter-spacing: 0; opacity: 0.75; }
 
-/* DS-012: single-pane presentation view. Column-header badges reuse
-   DS-011's oval geometry (border-radius:50% on an unequal width/height
-   box) and the System 3 A-E fill/border tokens already used for cell
-   fill below them -- same shape and palette as the landing-page hub,
-   scaled down for a table header instead of a draggable wheel. */
+/* DS-012: single-pane presentation view.
+   ENGRAVED LEVEL HEADER, 2026-09-11 (OKF-TOGAF#118,
+   briefs/2026-09-11-level-header/01-). Replaces the DS-011 oval badges.
+   The ovals carried the NAME only -- the LETTER lived in the legend, nine
+   rows below, and the hue was the sole join between the two. So the ramp
+   here was never decoration; it was an adjacency carried at a distance,
+   and the colour could not go until the letter sat beside the name. It
+   now does, and the legend's five keys went with it.
+   LEFT-ALIGNED, not centred: the cells beneath are left-aligned text in
+   .cell-hit, and a header left where the fixed-width oval sat would float
+   mid-column over text starting at the left edge. The letter now sits
+   over the first character of the cell below it. */
+/* PADDING-LEFT IS 22px, NOT 6px, AND THAT IS A DEPARTURE FROM THE BRIEF'S
+   EDIT LIST, MADE TO MEET THE BRIEF'S OWN STATED PURPOSE. Edit 3 said only
+   "text-align:left"; section 4(a) said why -- "so the letter sits over the
+   first character of the cell below." Measured in the browser after the
+   literal edit, it did not: the header content started at x=448.5 and the
+   cell text at x=464.2, SIXTEEN PIXELS APART. th and td share a left edge,
+   but the cell's text carries an inset the header does not -- td padding
+   12px + .cell-hit border 1px + .cell-hit padding 9px = 22px. Matching it
+   here is what actually delivers 4(a). Recorded rather than silently
+   adjusted, because the value was not in the spec. */
 table.wmv thead th.level-th {
-  text-align: center; text-transform: none; letter-spacing: 0; padding: 8px 6px;
+  text-align: left; text-transform: none; letter-spacing: 0; padding: 8px 6px 8px 22px;
 }
-/* Name only now (2026-07-27, second pass) -- the letter is dropped
-   from this one badge specifically; it stays everywhere else (the
-   reveal popover's level circle, the legend). Freed from sharing the
-   oval with a second line, the name can run larger. */
-.level-badge {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 104px; height: 50px; margin: 0 auto; border-radius: 50%;
-  background: var(--badge-fill); border: 2px solid var(--badge-border); color: #16232e;
+.level-head { display: block; text-align: left; }
+.level-head .ltr {
+  display: block; font: 12px var(--mono); color: var(--muted); margin-bottom: 5px;
 }
-.level-badge-name {
-  font-family: var(--serif); font-size: 15px; font-weight: 700; line-height: 1.2; white-space: nowrap;
+.level-head .nm {
+  display: block; font: 700 15px/1.2 var(--serif); color: var(--ink); white-space: nowrap;
 }
+/* Length, not hue. See BAR_WIDTHS in components/WholeModelView.js. */
+.level-head .bar { display: block; height: 2px; background: #44525d; margin-top: 10px; }
 table.wmv td.dim { font-weight: 600; background: var(--paper-raised); }
 table.wmv td.dim a { font-family: var(--mono); color: var(--blue); margin-right: 6px; text-decoration: none; }
 /* height:1px is a known CSS table quirk, not a typo: a <td>'s height
@@ -193,7 +222,12 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
    stay defined and still color the column-header ovals (.level-badge)
    and the popover's small level circle (.wmv-panel-level) -- this
    issue's own scope was the grid cells specifically, not every use of
-   the palette. */
+   the palette.
+   AMENDED 2026-09-11 (OKF-TOGAF#118): the column-header ovals are GONE
+   and .level-badge no longer exists. The sentence above is left standing
+   as the record of what was true then; the live consumer of System 3's
+   tokens is now .wmv-panel-level alone, which is why they were not
+   retired. See the note at their declaration. */
 .cell-hit {
   height: 100%; min-height: 60px; padding: 7px 9px; border: 1px solid var(--line); background: var(--paper-raised);
   border-radius: 4px; cursor: pointer; outline: none;
@@ -267,7 +301,11 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
 .wmv-panel-link { margin: 0; font-size: 13px; }
 .legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 14px 0 0; font-size: 12px; color: var(--muted); }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
-.swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; border: 1px solid rgba(0,0,0,0.15); }
+/* .swatch was deleted 2026-09-11 with the legend's five level keys, its
+   only consumers in this repo (OKF-TOGAF#118 edit 7, left to CC's call).
+   Deleted rather than kept: a rule with no element is the derived-value
+   problem in CSS form -- it reads as a live pattern to the next author
+   and is maintained by nobody. `git log -S .swatch` recovers it. */
 
 .review-banner {
   background: var(--orange-soft); border-left: 3px solid var(--orange); border-radius: 0 6px 6px 0;
