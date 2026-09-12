@@ -1,0 +1,10 @@
+# GENERATED -- DO NOT EDIT.
+# Source of truth: corpus/catalog_applications.md in the OKF-TOGAF repo.
+# Regenerate: node tools/gen-surface-projection.js --write
+#
+# A three-field projection of the Work Item SOP surface register, carrying
+# only what the commit-msg hook reads. Edit the corpus row, not this file --
+# a hand-edit here is drift and the check will say so.
+#
+# Format: <repository>\t<path or ->\t<work_item_required>
+aimaturitymodels	-	true

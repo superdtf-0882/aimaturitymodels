@@ -1,0 +1,90 @@
+#!/bin/sh
+# Work Item SOP -- ring 2. SOURCE OF RECORD; copies live in each declared
+# public repository as tools/hooks/commit-msg.
+#
+# Ruled by DT2 (briefs/2026-09-12-work-item-reliability/08-DT2 §2), ratified
+# "I ratify stages 2-4 as amended by 08-DT2 -- David Facer, 9/11/2026".
+#
+# STAGE 3: WARNS. REFUSES NOTHING. EXITS 0 ALWAYS.
+# Warn period 2026-09-12 to 2026-09-17 UTC, five days, David's decision:
+# "Let's go for five days and revisit unless something acute happens."
+# Stage 4 -- refusing -- takes a SEPARATE SIGNATURE PER SURFACE and is not
+# authorised by the stage 2-4 ratification. Do not flip this to exit 1 without
+# one. The `exit 0` at the bottom is load-bearing governance, not a stub.
+#
+# WHY commit-msg AND NOT pre-commit. pre-commit runs BEFORE the message exists
+# and is handed nothing -- proven by attempting, 2026-09-12, both hooks
+# instrumented in a throwaway repo: pre-commit argc=0, commit-msg receives
+# .git/COMMIT_EDITMSG. 03-DT2 §3 originally placed ring 2 in pre-commit and was
+# corrected before execution. This hook reads the message AND shells
+# `git diff --cached` for the staged paths, so one hook has both halves.
+#
+# HOW THIS CONTROL CAN BE CROSSED (RULE-10)
+#   1. `git commit --no-verify` skips it entirely. Git's documented behaviour,
+#      identical to the pre-commit gate in the governed repo.
+#   2. IT CANNOT SEE COMMITS THAT NEVER TOUCH A LOCAL GIT CLIENT. A GitHub
+#      Action or API commit runs no local hook at all. Measured: open-wire-bot
+#      authored 10 of open-wire-editions' 26 commits in 30 days as "Heartbeat".
+#      Ring 2 covers workstation commits and nothing else, by construction --
+#      which is why ring 3 exists and why it is not optional.
+#   3. A fresh clone has no hooks until `git config core.hooksPath tools/hooks`
+#      is run. Per-clone, never committed. Same gap the governed repo's own
+#      pre-commit header names and does not solve.
+#   4. .work-item-surfaces absent or unreadable -> this hook says nothing.
+#      Fail-open, deliberately: a surface nobody declared is not governed
+#      (01-DTOG §2 P1), and a warn-mode hook that shouted about its own missing
+#      config would train people to ignore it before it ever refuses.
+
+MSG_FILE="$1"
+[ -n "$MSG_FILE" ] && [ -f "$MSG_FILE" ] || exit 0
+
+repo_root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+SURFACES="$repo_root/.work-item-surfaces"
+[ -f "$SURFACES" ] || exit 0
+
+staged=$(git diff --cached --name-only 2>/dev/null)
+[ -n "$staged" ] || exit 0
+
+# Does this commit touch a declared in-scope surface?
+# Projection format: <repository>\t<path or ->\t<true|false>
+touched=""
+while IFS="$(printf '\t')" read -r _repo spath required; do
+  case "$_repo" in \#*|"") continue ;; esac
+  [ "$required" = "true" ] || continue
+  if [ "$spath" = "-" ]; then
+    touched="yes"; break
+  fi
+  if printf '%s\n' "$staged" | grep -q "^$spath/"; then
+    touched="yes"; break
+  fi
+done < "$SURFACES"
+
+[ -n "$touched" ] || exit 0
+
+# Trailer must be qualified: "OKF-TOGAF#119", never a bare "#119".
+# 08-DT2 §3: the repository qualifier is mandatory even while it is constant.
+if grep -Eq '^Work-Item:[[:space:]]*[A-Za-z0-9_.-]+#[0-9]+[[:space:]]*$' "$MSG_FILE"; then
+  exit 0
+fi
+
+echo "" >&2
+echo "WORK ITEM SOP -- this commit touches a declared public surface and carries no Work-Item trailer." >&2
+echo "" >&2
+echo "  WARNING ONLY. Nothing is refused, and nothing will be until stage 4 is" >&2
+echo "  signed per surface. Warn period: 2026-09-12 to 2026-09-17 UTC." >&2
+echo "" >&2
+echo "  Add a trailer to the commit message, qualified:" >&2
+echo "" >&2
+echo "      Work-Item: OKF-TOGAF#NNN" >&2
+echo "" >&2
+echo "  No Work Item yet? Create one from the governed repo:" >&2
+echo "      node tools/type-issue.js create --repo superdtf-0882/OKF-TOGAF \\" >&2
+echo "        --title \"...\" --body-file <path> --type work_item \\" >&2
+echo "        --realizes INT-002 --strata S6" >&2
+echo "" >&2
+echo "  Declared surfaces for this repo: $SURFACES" >&2
+echo "  Governing record: corpus/catalog_applications.md (OKF-TOGAF)" >&2
+echo "" >&2
+
+# STAGE 3 WARNS. See the header before changing this line.
+exit 0
