@@ -47,8 +47,35 @@ staged=$(git diff --cached --name-only 2>/dev/null)
 
 # Does this commit touch a declared in-scope surface?
 # Projection format: <repository>\t<path or ->\t<true|false>
+#
+# CR STRIPPING, ADDED 2026-09-12, AND IT IS THE DIFFERENCE BETWEEN THIS HOOK
+# WORKING AND DOING NOTHING. .work-item-surfaces is committed with LF, and a
+# clone with core.autocrlf=true -- which every clone in this estate has --
+# receives it as CRLF ON CHECKOUT. `read` then hands the LAST field a trailing
+# carriage return, so `required` is "true\r", the test below is FALSE for every
+# row, `touched` stays empty, and this hook exits 0 having printed nothing.
+# Not an error. Silence.
+#
+# Which meant ring 2 fired ONLY in the clone that generated its own projection
+# and had never re-checked it out. Found 2026-09-12 when a cherry-pick onto
+# main gave superdtf-0882.github.io a fresh CRLF copy and a real commit to a
+# declared surface passed unwarned -- inside OI-76's own warn window, which
+# was therefore measuring a control that could not fire. Brief:
+# briefs/2026-09-12-work-item-reliability/12-CC.
+#
+# All three fields are stripped, not just the last: a row with fewer fields
+# than expected parks the CR on whichever field ends up last.
+# ${var%$CR} is POSIX parameter expansion -- $'\r' is a bashism and this is
+# #!/bin/sh. And the loop still redirects from the file rather than piping
+# `tr -d '\r'` into it, because a pipe runs the loop in a subshell and
+# `touched` would not survive it -- which would replace this bug with a
+# quieter one.
+CR=$(printf '\r')
 touched=""
 while IFS="$(printf '\t')" read -r _repo spath required; do
+  _repo=${_repo%"$CR"}
+  spath=${spath%"$CR"}
+  required=${required%"$CR"}
   case "$_repo" in \#*|"") continue ;; esac
   [ "$required" = "true" ] || continue
   if [ "$spath" = "-" ]; then
