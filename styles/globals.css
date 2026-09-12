@@ -27,27 +27,38 @@
   --paper-raised: #182430;
   --line: #2a3844;
 
-  /* System 3 maturity colors -- fixed, never reassigned.
-     NOT RETIRED 2026-09-11, AND THE REASON IS LOAD-BEARING. OKF-TOGAF#118
-     edit 6 called for deleting these ten properties once the header badges
-     and the legend swatches were gone, "since they are the only consumers."
-     THEY ARE NOT. components/WholeModelView.js:63-64 sets --cell-fill /
-     --cell-border from them for .wmv-panel-level, the popover's level
-     circle, which is STILL LIVE and belongs to move 2 (the navigation
-     pass), not to this move. Deleting these would have left that circle
-     unstyled.
-     WHY THE MEASUREMENT MISSED IT, because the next person will measure the
-     same way: the popover is CONDITIONALLY RENDERED -- it is absent from the
-     DOM until hover or pin -- so a sweep of the page at rest counts twenty
-     --lvl-* occurrences and sees two consumers. A source grep for the
-     literal `--lvl-a` misses it too: lines 63-64 build the name by template
-     literal from the level letter. Both instruments were accurate about what
-     they reached. Retire these with move 2, or not at all. */
-  --lvl-a-fill: #fcebeb; --lvl-a-border: #a32d2d;
-  --lvl-b-fill: #f7dccb; --lvl-b-border: #993c1d;
-  --lvl-c-fill: #f3e4b8; --lvl-c-border: #854f0b;
-  --lvl-d-fill: #dcecc7; --lvl-d-border: #3b6d11;
-  --lvl-e-fill: #cfe3f6; --lvl-e-border: #185fa5;
+  /* SYSTEM 3'S TEN MATURITY COLOUR TOKENS ARE RETIRED, 2026-09-11, with move 2.
+     They were --lvl-a-fill/--lvl-a-border through --lvl-e-*: a fixed red-to-blue
+     ramp across the five maturity levels. `git log -S --lvl-a-fill` recovers
+     the values; System 3 itself is defined in the OKF TOGAF corpus
+     (spec/portfolio-design-tokens.md), which is their source of truth and is
+     untouched by this. What is retired is this site's USE of them, not the
+     system.
+
+     THE SEQUENCE, because it is the whole argument for why they went.
+     Move 1 (OKF-TOGAF#118) removed the column-header ovals and the legend's
+     five swatches, and its brief's edit 6 called for deleting these ten "since
+     they are the only consumers." THEY WERE NOT: .wmv-panel-level, the
+     popover's level circle, read them through --cell-fill/--cell-border, and
+     edit 6 was REFUSED with that evidence rather than executed -- deleting
+     them then would have left a live element unstyled.
+
+     WHY BOTH MEASUREMENTS HAD MISSED IT, kept because the next person will
+     measure the same way: the popover was CONDITIONALLY RENDERED, absent from
+     the DOM until hover, so a sweep of the page at rest counted twenty
+     occurrences and saw two consumers; and a source grep for the literal
+     `--lvl-a` missed it too, because the name was built by template literal
+     from the level letter. Both instruments were accurate about what they
+     reached.
+
+     MOVE 2 DELETED THAT POPOVER. The rail replaces it, and the rail carries no
+     coloured level circle by design: the engraved header names the level and
+     the selected column says which one is showing, so a third restatement in a
+     hue would be exactly the adjacency-at-a-distance move 1 existed to remove.
+     With the popover gone the consumer count really is zero -- verified by
+     grep for `lvl-` across components, lib, pages and styles AFTER the
+     rewrite, not before it. Hue said "better or worse"; nothing on this page
+     says that any more. */
 
   --serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
   --sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -223,82 +234,129 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
    and the popover's small level circle (.wmv-panel-level) -- this
    issue's own scope was the grid cells specifically, not every use of
    the palette.
-   AMENDED 2026-09-11 (OKF-TOGAF#118): the column-header ovals are GONE
-   and .level-badge no longer exists. The sentence above is left standing
-   as the record of what was true then; the live consumer of System 3's
-   tokens is now .wmv-panel-level alone, which is why they were not
-   retired. See the note at their declaration. */
+   AMENDED TWICE ON 2026-09-11, and the paragraph above is left standing
+   both times as the record of what was true when it was written.
+   Move 1 (OKF-TOGAF#118): the column-header ovals went and .level-badge
+   ceased to exist, leaving .wmv-panel-level the sole consumer of System 3's
+   tokens -- which is why move 1 refused to retire them.
+   Move 2: .wmv-panel-level went too, with the whole popover, and the ten
+   tokens ARE now retired. So this paragraph's closing clause -- "not every
+   use of the palette" -- has become the whole of it: there is no use of the
+   per-level palette left anywhere on this page. See the note at the top of
+   this file. */
 .cell-hit {
   height: 100%; min-height: 60px; padding: 7px 9px; border: 1px solid var(--line); background: var(--paper-raised);
   border-radius: 4px; cursor: pointer; outline: none;
   font-size: 12px; line-height: 1.4; color: var(--ink);
   transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.12s ease;
 }
-.cell-hit:hover, .cell-hit:focus-visible { border-color: var(--orange); background: var(--paper); }
-.cell-hit:focus-visible { box-shadow: 0 0 0 2px var(--orange); }
-.cell-hit.is-open { box-shadow: 0 0 0 2px var(--orange); border-color: var(--orange); background: var(--paper); }
+/* MOVE 2, 2026-09-11. `.is-open` became `.is-selected`, and the rename is the
+   change: a cell used to be OPEN (it had uncovered a popover that could be
+   closed again) and is now SELECTED (it is what the always-present rail is
+   showing). There is no closed state to return to.
+   HOVER NO LONGER CARRIES MEANING -- rule 2. It keeps a border tint as an
+   affordance so the grid still reads as clickable, but it reveals nothing and
+   is deliberately weaker than selection, which owns the ring. */
+.cell-hit:hover { border-color: var(--orange); }
+.cell-hit:focus-visible { box-shadow: 0 0 0 2px var(--orange); border-color: var(--orange); }
+.cell-hit.is-selected { box-shadow: 0 0 0 2px var(--orange); border-color: var(--orange); background: var(--paper); }
 
-/* Third revision, 2026-07-27, same day: hover's preview and click's
-   detail were still two disconnected pieces (a tooltip with a dead gap
-   that closed before you could reach it -- reachable at all only by
-   accident, via a touchscreen tapping through pointer-events:none --
-   and an unrelated docked bar that needed manual closing just to get
-   back to hovering). Replaced with one popover (CellPopover in
-   whole-model-view.js) anchored at the cell's own rect that escalates
-   in place: hover shows Definition with a real "Show more" button;
-   clicking it (or the cell) pins the same popover with the fuller
-   content. Overlaps the cell's own top edge by design (occludes it,
-   per the fix David proposed) so there's no gap for the cursor to
-   cross, plus a short close-delay in the component itself covers the
-   rest. Positioned above OR below the cell depending on available
-   viewport room, with a max-height clamp on whichever side has less
-   space -- a 13-row grid means this can be anchored anywhere in a
-   very tall page. */
-.wmv-popover {
-  z-index: 60; overflow-y: auto; border-radius: 10px;
-  border: 1px solid var(--line); background: var(--paper-raised);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-}
-.wmv-popover-expand {
-  display: inline-block; margin-top: 4px; padding: 6px 10px; border-radius: 6px;
-  border: 1px solid var(--orange); background: color-mix(in srgb, var(--orange) 10%, transparent);
-  font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
-  color: var(--orange); cursor: pointer;
-}
-.wmv-popover-expand:hover { background: color-mix(in srgb, var(--orange) 18%, transparent); }
+/* ==========================================================================
+   MOVE 2, 2026-09-11 -- the rail, the band, and the selected column.
+   Specified in briefs/2026-09-11-level-header/02-DTOG, geometry ruled in
+   05-DT2, gone ahead by David at a 1920x1200 design floor.
 
-.wmv-panel-body { padding: 14px 18px; }
-.wmv-panel-close {
-  position: absolute; top: 10px; right: 12px; width: 26px; height: 26px;
-  border-radius: 6px; border: 1px solid var(--line); background: var(--paper);
-  color: var(--muted); font-size: 15px; line-height: 1; cursor: pointer;
+   WHAT THIS REPLACED: .wmv-popover and the .wmv-panel-* family -- a portalled,
+   position:fixed panel anchored to a rect captured at open time, with a
+   150ms hover-close timer, an Escape handler, an outside-mousedown handler and
+   a scroll handler that CLOSED IT because the frozen rect meant a scrolled page
+   left it anchored to nothing. All of that is gone rather than ported: an
+   always-open rail has no closed state, so the five ways of closing it and the
+   two disclosure tiers had nothing left to do.
+
+   DESIGN FLOOR 1920x1200, David's ruling. Below it the matrix scrolls
+   horizontally inside .grid-wrap and that is ACCEPTED, not a defect --
+   measured in 07-CC: the rail leaves the matrix 888px at the floor, against
+   SDLC's 760px and PDLC's real 802px content floor, so nothing scrolls AT the
+   floor. No responsive breakpoint and no .stage cap change were authorised.
+   ========================================================================== */
+.wmv-layout { display: grid; align-items: start; }
+.wmv-layout--below { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+
+/* THE STICKY TRAP, and the reason for this comment sitting on a layout rule.
+   An ancestor with `overflow` other than `visible` silently makes a sticky
+   descendant non-sticky -- no error, no warning, nothing on screen to see.
+   .grid-wrap is overflow-x:auto, so .wmv-rail is its SIBLING and must stay
+   one. Do not move the rail inside the scroller to "keep them together".
+   DTOG hit this in the move-2 study with an `overflow:hidden` added forty
+   lines away for a rounded corner; `overflow: clip` clips without creating a
+   scroll container, if a future rounded container needs one. */
+.wmv-rail { min-width: 0; }
+.wmv-layout--below .wmv-rail { margin-top: 4px; }
+
+.wmv-detail {
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--paper-raised); padding: 14px 18px 16px;
 }
-.wmv-panel-close:hover { color: var(--ink); border-color: var(--orange); }
-.wmv-panel-head { display: flex; align-items: center; gap: 10px; padding: 14px 18px 10px; padding-right: 40px; }
-.wmv-panel-level {
+.wmv-detail--below { padding: 16px 20px 18px; }
+.wmv-detail-head { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; flex-wrap: wrap; }
+/* No coloured circle here -- see the --lvl-* note at the top of this file.
+   The engraved header names the level and the selected column says which one
+   is showing, so a third restatement in a hue would be the exact adjacency-at-
+   a-distance move 1 removed. */
+.wmv-detail-level {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 26px; height: 26px; border-radius: 50%; font-family: var(--mono); font-weight: 700; font-size: 13px;
-  border: 2px solid var(--cell-border); background: var(--cell-fill); color: #16232e; flex-shrink: 0;
+  min-width: 26px; height: 26px; padding: 0 6px; border-radius: 6px;
+  font-family: var(--mono); font-weight: 700; font-size: 13px;
+  border: 1px solid var(--line); background: var(--paper); color: var(--ink); flex-shrink: 0;
 }
-.wmv-panel-name { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
-.wmv-panel-id { font-size: 13px; color: var(--ink-soft); margin-left: auto; }
-.wmv-panel-section { margin-bottom: 14px; }
-.wmv-panel-section:last-of-type { margin-bottom: 8px; }
-.wmv-panel-label {
-  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--orange); margin-bottom: 5px;
+.wmv-detail-name { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.wmv-detail-id { font-size: 13px; color: var(--ink-soft); margin-left: auto; }
+.wmv-detail-section { margin-bottom: 14px; }
+.wmv-detail-section:last-of-type { margin-bottom: 8px; }
+.wmv-detail-label {
+  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--muted); margin-bottom: 5px;
 }
-.wmv-panel-section p { margin: 0; font-size: 13.5px; line-height: 1.65; color: var(--ink-soft); max-width: 72ch; }
-.wmv-panel-section p + p { margin-top: 8px; }
-.wmv-panel-pending { font-style: italic; color: var(--muted) !important; }
-.wmv-panel-verification { font-size: 12.5px !important; color: var(--muted) !important; }
-.wmv-panel-verification strong { color: var(--ink-soft); font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; }
-.wmv-panel-caution {
-  margin: 0 18px 12px; padding: 8px 10px; border-radius: 6px; max-width: 72ch;
+.wmv-detail-section p { margin: 0; font-size: 13.5px; line-height: 1.65; color: var(--ink-soft); max-width: 72ch; }
+.wmv-detail-section p + p { margin-top: 8px; }
+.wmv-detail-pending { font-style: italic; color: var(--muted) !important; }
+.wmv-detail-verification { font-size: 12.5px !important; color: var(--muted) !important; }
+.wmv-detail-verification strong { color: var(--ink-soft); font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+.wmv-detail-caution {
+  margin: 0 0 12px; padding: 8px 10px; border-radius: 6px; max-width: 72ch;
   border: 1px solid var(--orange); background: color-mix(in srgb, var(--orange) 10%, transparent);
   font-size: 12.5px; line-height: 1.5; color: var(--ink-soft);
 }
-.wmv-panel-link { margin: 0; font-size: 13px; }
+.wmv-detail-link { margin: 0; font-size: 13px; }
+
+/* THE BAND -- one row, all five columns. It is below the matrix rather than in
+   the rail for a measured reason, not a tidiness one: the rail's longest cell
+   renders 747px against a 900px viewport and fits WITHOUT an internal
+   scrollbar only because this content was moved out of it. Put it back and the
+   scrollbar returns. */
+.wmv-band {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px 28px; margin: 18px 0 0; padding: 14px 18px;
+  border: 1px solid var(--line); border-radius: 10px; background: var(--paper-raised);
+}
+.wmv-band-col { min-width: 0; }
+.wmv-band-label {
+  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--muted); margin-bottom: 5px;
+}
+.wmv-band p { margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink-soft); max-width: 72ch; }
+
+/* THE SELECTED COLUMN. 01-DTOG section 4b was explicit that nothing marked a
+   selected column and that move 1 must NOT invent one, because selection was
+   per-cell and a column-selection model did not exist. Move 2 creates that
+   model, so the header may now say which column is showing -- and it says it
+   in weight and a rule, not in a fill, because the fill is what move 1 removed. */
+table.wmv thead th.level-th.is-selected .nm { color: var(--ink); }
+table.wmv thead th.level-th.is-selected .ltr { color: var(--orange); }
+table.wmv thead th.level-th.is-selected .bar { background: var(--orange); height: 3px; }
+table.wmv tbody tr.is-selected td.dim { background: var(--paper); }
+
 .legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 14px 0 0; font-size: 12px; color: var(--muted); }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
 /* .swatch was deleted 2026-09-11 with the legend's five level keys, its
