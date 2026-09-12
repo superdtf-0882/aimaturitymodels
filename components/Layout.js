@@ -14,8 +14,19 @@ export default function Layout({ title, crumb, wide, children }) {
       </Head>
       <div className="shell">
         <aside className="rail">
+          {/* OKF-TOGAF#129: this link and the "AI-Native Maturity Models" nav
+              item below carried the SAME accessible name and went to DIFFERENT
+              places -- this one home, that one to /models. A reader navigating
+              by name rather than by position could not tell them apart: a
+              screen-reader user hears one name twice, and an agent selecting
+              by name gets whichever it happens to find. The visible wording is
+              deliberately unchanged -- it is the masthead and reads correctly
+              to someone looking at the page; only the name exposed to anything
+              that cannot see the layout is disambiguated. */}
           <p className="rail-title">
-            <Link href="/">AI-Native Maturity Models</Link>
+            <Link href="/" aria-label="AI-Native Maturity Models — home">
+              AI-Native Maturity Models
+            </Link>
           </p>
           <nav>
             {/* Issue #36: dropped the "Explore"/"Function Models"/

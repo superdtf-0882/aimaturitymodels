@@ -91,7 +91,21 @@ a { color: var(--blue); }
   text-transform: uppercase; color: var(--muted); margin: 0 0 4px;
 }
 .rail-title { font-family: var(--serif); font-size: 19px; margin: 0 0 22px; }
-.rail-title a { color: var(--ink); text-decoration: none; }
+/* `inline-block` is load-bearing, not cosmetic (OKF-TOGAF#128, 2026-09-12).
+   As a plain inline element this link wraps to TWO line boxes -- "AI-Native
+   Maturity" at y 28-49 and "Models" at y 57-78 -- with an 8px leading gap
+   between them. Its bounding box spans both, so the box's CENTRE (y 53) sits
+   in that gap, which belongs to the <p> and not to the <a>. A click there
+   hits the paragraph and nothing happens.
+
+   A person clicking the words navigates fine, which is why this survived
+   every internal check. An automated reader clicking the centre of the
+   element's box -- which is what one does -- misses every time. An external
+   probe reported it as a stopped route on 45 of 47 pages before anyone here
+   knew it existed. `inline-block` makes the box contiguous, so the centre is
+   inside the link. The nav links below have carried `display: block` from the
+   start, which is why they were never affected. */
+.rail-title a { color: var(--ink); text-decoration: none; display: inline-block; }
 .rail nav { display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
 .rail nav a { color: var(--ink-soft); text-decoration: none; padding: 7px 9px; border-radius: 6px; display: block; }
 .rail nav a:hover { background: var(--paper-raised); }
