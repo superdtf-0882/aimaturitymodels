@@ -113,5 +113,51 @@ echo "  Declared surfaces for this repo: $SURFACES" >&2
 echo "  Governing record: corpus/catalog_applications.md (OKF-TOGAF)" >&2
 echo "" >&2
 
+# ---------------------------------------------------------------------
+# THE WARN LOG. Ruled by DT2 2026-09-12 (briefs/2026-09-12-work-item-
+# reliability/13-DT2 §2) and PROMOTED FROM RIDER TO GATE: OI-76's second
+# warn window does not open until this line exists. The first window was
+# closed as ABORTED because its instrument could not fire, and DTOG's
+# standing question -- are warnings retained anywhere? -- had assumed a
+# numerator the window never had. A second window without a log would be
+# the same instrument-less count with a fresh date.
+#
+# WHAT THIS MEASURES (RULE-4 scope). One line per occasion on which this
+# hook PRINTED the warning above. That is all it is. It does NOT measure:
+# commits made without a trailer (a --no-verify commit never reaches
+# here), whether any human read the warning, or whether the missing
+# trailer was later added by amend. The denominator for "how often does a
+# public-surface commit lack a trailer" is NOT in this file and cannot be
+# derived from it.
+#
+# HOW THIS CONTROL CAN BE CROSSED (RULE-10)
+#   1. IT LIVES IN .git/ AND DOES NOT TRAVEL. Never committed, never
+#      pushed, per-clone exactly as core.hooksPath is. A warning in one
+#      clone is invisible in every other, and a fresh clone starts empty.
+#      Counting a window means collecting from each clone by hand.
+#   2. `git commit --no-verify` skips the hook, so it skips the log. The
+#      commit that most wants counting is the one that can opt out.
+#   3. A commit that never touches a local git client -- a GitHub Action,
+#      the API, the web editor -- runs no hook and writes no line.
+#   4. The file is append-only by convention, not by permission. Anyone
+#      with the clone can edit or delete it, and nothing detects that.
+#   5. If .git/ is unwritable the append fails and IS DELIBERATELY
+#      SWALLOWED. A logging failure must never break a commit, and a
+#      warn-mode hook that shouted about its own logging would train
+#      people to ignore it before stage 4 ever refuses.
+LOG="$repo_root/.git/work-item-warnings.log"
+# Each field is built and bounded to ONE LINE before printf, because the
+# obvious form -- $(git rev-parse --abbrev-ref HEAD || echo '?') -- emits
+# BOTH the command's output and the fallback when the command prints
+# something AND fails, which is exactly what rev-parse does in a
+# repository with no commits yet: "HEAD" on stdout, non-zero exit. That
+# wrote two log lines per warning and was caught by the harness counting
+# lines rather than by reading the code.
+log_when=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
+log_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null | head -n 1)
+[ -n "$log_branch" ] || log_branch="?"
+log_files=$(printf '%s' "$staged" | tr '\n' ',')
+printf '%s\t%s\t%s\n' "$log_when" "$log_branch" "$log_files" >> "$LOG" 2>/dev/null || true
+
 # STAGE 3 WARNS. See the header before changing this line.
 exit 0
