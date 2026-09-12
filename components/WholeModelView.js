@@ -43,8 +43,22 @@ const LEVELS = ["A", "B", "C", "D", "E"];
 // David reviewed it live 2026-09-11: "It reads as a progression."
 const BAR_WIDTHS = [22, 34, 46, 58, 70];
 
-const RAIL_WIDTH = 360;   // 02-DTOG section 3: prose runs ~337px, ~47 chars.
-const RAIL_GAP = 24;
+// RAIL WIDTH AND GAP, retuned 2026-09-11 on David's report: "the width is a bit
+// more than necessary and the padding to its right is more than necessary. This
+// results in Column E getting clipped."
+//
+// MEASURED FIRST. At a 1440 viewport the matrix got 673px, the table held at its
+// 760px min-width, and 89px were hidden -- column E is 118px wide and only 30px
+// of it was visible. That is the clip, reproduced.
+//
+// WHERE THE WIDTH CAME BACK FROM, and why mostly NOT from the rail: 02-DTOG §3
+// measured the rail's prose at ~337px, about 47 characters -- already sitting on
+// the FLOOR of the comfortable 45-75 band. Narrowing the rail is the expensive
+// lever, so it gives up only 8px here and .wmv-detail's own padding drops 18->14
+// to hand that back to the prose. The other 88px come from space that was doing
+// nothing: the gap, and .stage--wide's 64px side padding (see globals.css).
+const RAIL_WIDTH = 352;   // was 360
+const RAIL_GAP = 16;      // was 24
 const RAIL_STICKY_TOP = 24;
 
 // ---------------------------------------------------------------------------

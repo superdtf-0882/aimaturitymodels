@@ -111,7 +111,25 @@ a { color: var(--blue); }
    900px reading column doesn't give it -- wide enough that a 13-row
    dense grid can sit in one frame without horizontal scroll on a
    typical wide screen, without changing every other page's width. */
-.stage--wide { max-width: 1400px; }
+/* SIDE PADDING NARROWED 64px -> 24px, 2026-09-11, on David's report that column
+   E was being clipped. THE MAX-WIDTH IS UNTOUCHED: DS-015's ruling was "no cap
+   change", and this is not one -- .stage's base rule spends
+   `clamp(24px, 5vw, 64px)` of its own width on side padding, and at wide
+   viewports that is 64px a side, 128px total, taken out of the one page on this
+   site that is short of horizontal room. A reading column wants that breathing
+   space; a dense presentation grid beside a rail does not, which is the same
+   distinction DS-015's scope clause already draws.
+   THIS OVERRIDE IS SCOPED TO .stage--wide, whose only consumer is the
+   whole-model view, so no reading page changes by a pixel.
+   WHAT IT BOUGHT, measured: +80px to the layout, which with the gap (24->16)
+   and a small rail trim (360->352) is +96px to the matrix. At 1440 the matrix
+   goes 673 -> 769 and the clip is gone; at 1920 it goes 888 -> 984.
+   WHAT IT DID NOT FIX, and it is the larger number: at a 1920 viewport 344px
+   still sit UNUSED to the right of the rail, because max-width:1400 stops the
+   stage taking room the shell is offering. That is the cap, it is DS-012's
+   governed value, and David ruled it out of move 2's scope -- reported in
+   briefs/2026-09-11-level-header/, not changed here. */
+.stage--wide { max-width: 1400px; padding-left: 24px; padding-right: 24px; }
 .crumb { font-family: var(--mono); font-size: 12px; color: var(--muted); margin: 0 0 20px; }
 .crumb a { text-decoration: none; }
 
@@ -294,9 +312,12 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
 .wmv-rail { min-width: 0; }
 .wmv-layout--below .wmv-rail { margin-top: 4px; }
 
+/* Side padding 18 -> 14 with the 2026-09-11 retune: the rail gave up 8px of
+   width, and this hands 8px back to the prose so the reading measure does not
+   pay for the matrix's gain. Net prose width is unchanged. */
 .wmv-detail {
   border: 1px solid var(--line); border-radius: 10px;
-  background: var(--paper-raised); padding: 14px 18px 16px;
+  background: var(--paper-raised); padding: 14px 14px 16px;
 }
 .wmv-detail--below { padding: 16px 20px 18px; }
 .wmv-detail-head { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; flex-wrap: wrap; }
