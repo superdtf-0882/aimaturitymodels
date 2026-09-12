@@ -13,7 +13,10 @@ import Layout from "./Layout";
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 
-// Shared by all three models' self-assessment tools -- originally built for
+// Shared by the self-assessment tools of the three models that have one --
+// SDLC, PDLC and Prioritization. The family is four models as of 2026-09-12;
+// EA's assessment is tracked, open work, so this count is of this surface
+// and not of the family. Originally built for
 // SDLC alone (pages/models/sdlc/assessment.js), extracted here for issue #25
 // once PDLC and Prioritization needed the identical scoring/chart/download/
 // Executive-Readout interaction with different data and a different

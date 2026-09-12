@@ -19,7 +19,7 @@ const NODES = [
     href: "/models",
     kicker: "The family",
     title: "AI-Native Maturity Models",
-    desc: "SDLC, PDLC, Prioritization — and what's coming.",
+    desc: "SDLC, PDLC, Prioritization, Enterprise Architecture — and what's coming.",
     primary: true,
   },
   {

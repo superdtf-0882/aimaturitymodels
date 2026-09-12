@@ -207,6 +207,12 @@ table.wmv thead th.level-th {
 .level-head .bar { display: block; height: 2px; background: #44525d; margin-top: 10px; }
 table.wmv td.dim { font-weight: 600; background: var(--paper-raised); }
 table.wmv td.dim a { font-family: var(--mono); color: var(--blue); margin-right: 6px; text-decoration: none; }
+/* The same id, in the branch that has no Deep-Dive page to link to. Mono and
+   spaced like the link; not blue, because it is not a link. Added 2026-09-12
+   with EA -- until then this branch rendered a bare <span> with neither, so
+   the id ran into the title ("D1Architecture process"). PDLC and Prioritization
+   both shipped that way before they gained Deep-Dive pages. */
+table.wmv td.dim .dim-id { font-family: var(--mono); color: var(--ink-soft); margin-right: 6px; }
 /* height:1px is a known CSS table quirk, not a typo: a <td>'s height
    from normal table layout doesn't count as a "specified height" for
    a percentage-height child to resolve against, so .cell-hit's own
@@ -348,6 +354,22 @@ table.wmv td.dim { white-space: normal; max-width: 190px; }
   margin: 0 0 12px; padding: 8px 10px; border-radius: 6px; max-width: 72ch;
   border: 1px solid var(--orange); background: color-mix(in srgb, var(--orange) 10%, transparent);
   font-size: 12.5px; line-height: 1.5; color: var(--ink-soft);
+}
+/* A dimension-level open question. Same box shape as the caution above so
+   the two read as one family of dimension-level notes, in a cooler hue --
+   a caution warns about a transition, a flag says the QUESTION behind the
+   dimension is still open while the content itself stands. */
+.wmv-detail-flag {
+  margin: 0 0 12px; padding: 8px 10px; border-radius: 6px; max-width: 72ch;
+  border: 1px solid var(--line); background: color-mix(in srgb, var(--ink) 5%, transparent);
+  font-size: 12.5px; line-height: 1.5; color: var(--ink-soft);
+}
+/* The row marker. Not a colour-only signal: it carries a title and sits
+   inline after the dimension title, so it survives greyscale and a reader
+   who never hovers still sees a glyph that is plainly not punctuation. */
+.dim-flag {
+  margin-left: 6px; font-size: 11px; color: var(--ink-soft); cursor: help;
+  vertical-align: 1px;
 }
 .wmv-detail-link { margin: 0; font-size: 13px; }
 

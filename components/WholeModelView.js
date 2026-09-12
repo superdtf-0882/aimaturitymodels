@@ -3,14 +3,18 @@ import Link from "next/link";
 import Layout from "./Layout";
 import { LEVEL_NAMES } from "../lib/levelVocabulary";
 
-// Shared by all three models' Whole-Model Views (SDLC, PDLC,
-// Prioritization) -- originally built for SDLC alone
+// Shared by all four models' Whole-Model Views (SDLC, PDLC,
+// Prioritization, EA) -- originally built for SDLC alone
 // (pages/models/sdlc/whole-model-view.js), extracted here once PDLC and
 // Prioritization needed the identical interaction with different data.
 // `deepDiveBasePath` started null/undefined for PDLC and Prioritization
 // (no Deep-Dive pages existed yet, so dimension names and the popover's
 // own link rendered as plain text instead of a Link); both now point at
-// real routes, since all three models have Deep-Dive pages.
+// real routes. EA, added 2026-09-12, passes no path at all and exercises
+// that original branch again -- its Deep-Dive pages are a tracked work
+// item and a link to a 404 would be worse than no link. So the sentence
+// that used to read "all three models have Deep-Dive pages" is now false
+// of the family and the optional branch is load-bearing, not legacy.
 //
 // ===========================================================================
 // MOVE 2, 2026-09-11 -- the navigation pass. OKF-TOGAF#118's successor,
@@ -115,6 +119,24 @@ function CellDetail({ dim, level, deepDiveBasePath, geometry }) {
         <p className="wmv-detail-caution">&#9888; {dim.transitionCaution}</p>
       )}
 
+      {/* A dimension-level open question, rendered wherever that dimension
+          is inspected. Added 2026-09-12 with the EA model, whose D4, D5 and
+          D6 ship flagged under the ratified flags-not-blockers disposition
+          -- the cell content is accurate as drafted and the question behind
+          the dimension is still open.
+
+          Only models that PASS a flag get one. SDLC carries a flag on D11
+          and deliberately does not pass it here, because its Deep-Dive page
+          renders the same text under "Under review." and duplicating it at
+          this layer costs scannability for nothing. EA has no Deep-Dive
+          pages yet (its own work item), so for EA this is the only place
+          the flags exist -- and WP-EA-01 requires them rendered visibly
+          rather than dropped. Same field, two correct answers, decided per
+          model by the route rather than here. */}
+      {dim.flag && (
+        <p className="wmv-detail-flag">&#9873; <strong>Open question.</strong> {dim.flag}</p>
+      )}
+
       <div className="wmv-detail-section">
         <div className="wmv-detail-label">Definition</div>
         <p>{dim.levels[level]}</p>
@@ -153,9 +175,12 @@ function CellDetail({ dim, level, deepDiveBasePath, geometry }) {
 
 // THE BAND -- one row, all five columns. Rule 6: always open, row-scoped, and
 // constant as you move across the levels, which is precisely why it is NOT in
-// the rail. `desc` is present on all 28 dimensions across the three models;
-// `sustainment` is present on 22 of 28, so "Where it ends" carries the same
+// the rail. `desc` is present on all 37 dimensions across the four models;
+// `sustainment` is present on 31 of 37, so "Where it ends" carries the same
 // not-yet-drafted line the detail uses rather than rendering an empty section.
+// (28/22 before EA. Both figures recomputed by parsing all four models, not
+// by adding nine to the old number -- EA's descriptions needed a parser fix
+// to be captured at all, so the arithmetic would have been wrong.)
 function DimensionBand({ dim }) {
   return (
     <section className="wmv-band" aria-live="polite">
@@ -337,9 +362,25 @@ export default function WholeModelView({
                       {deepDiveBasePath ? (
                         <Link href={`${deepDiveBasePath}/${dim.id.toLowerCase()}`}>{dim.id}</Link>
                       ) : (
-                        <span>{dim.id}</span>
+                        // Carries `dim-id` so the no-deep-dive branch gets the
+                        // same mono face and right margin as the Link branch.
+                        // Without it the id butts straight against the title
+                        // -- "D1Architecture process". Latent since this branch
+                        // was written: PDLC and Prioritization both rendered it
+                        // before they had Deep-Dive pages, and EA re-exposed it.
+                        // A bare `td.dim span` selector would also catch the
+                        // flag marker, hence the class.
+                        <span className="dim-id">{dim.id}</span>
                       )}
                       {dim.title}
+                      {/* Marks the row so a flagged dimension is findable
+                          without clicking every cell; the text itself is in
+                          the detail panel. */}
+                      {dim.flag && (
+                        <span className="dim-flag" title="Open question — select a cell in this row to read it">
+                          &#9873;
+                        </span>
+                      )}
                     </td>
                     {LEVELS.map((l) => {
                       const isSel = rowSelected && sel.level === l;

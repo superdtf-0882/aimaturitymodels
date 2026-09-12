@@ -57,7 +57,7 @@ export default function ModelsIndex() {
           </div>
           <span className="pill coming">Coming</span>
         </div>
-        <div className="model-row">
+        <Link href="/models/ea/whole-model-view" className="model-row">
           <div>
             <div className="model-name">AI-Native EA Maturity Model</div>
             <div className="model-desc">
@@ -65,12 +65,12 @@ export default function ModelsIndex() {
               governed cognition isn&rsquo;t exclusively human.
             </div>
           </div>
-          <span className="pill coming">Coming</span>
-        </div>
+          <span className="pill live">Live</span>
+        </Link>
       </div>
       <p className="footnote">
         Each model stands alone &mdash; you don&rsquo;t need the others to use
-        one. Whole-Model Views for all three live models share the same
+        one. Whole-Model Views for all four live models share the same
         interaction: hover a cell for its definition, click for the
         transition and verification.
       </p>

@@ -1,7 +1,10 @@
 import Link from "next/link";
 import Layout from "./Layout";
 
-// Shared by all three models' Deep-Dive pages -- originally built for
+// Shared by the Deep-Dive pages of the three models that have them --
+// SDLC, PDLC and Prioritization. The family is four models as of 2026-09-12;
+// EA has no Deep-Dive pages yet, which is why its Whole-Model View passes
+// no deepDiveBasePath. Originally built for
 // SDLC alone (pages/models/sdlc/deep-dive/[dim].js), extracted here once
 // PDLC and Prioritization needed the identical page shape with different
 // data (dimension order, model label, Whole-Model View crumb target).

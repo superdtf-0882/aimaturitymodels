@@ -3,7 +3,9 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import Layout from "./Layout";
 
-// Shared by all three models' Executive Readout pages -- originally built
+// Shared by the Executive Readout pages of the three models that have them
+// -- SDLC, PDLC and Prioritization. The family is four models as of
+// 2026-09-12; EA has no readout yet. Originally built
 // for SDLC alone (pages/models/sdlc/executivereadout.js), extracted here for
 // issue #25. Each model's own thin wrapper page still owns its
 // getServerSideProps (the KV lookup needs the request-time `hash` query

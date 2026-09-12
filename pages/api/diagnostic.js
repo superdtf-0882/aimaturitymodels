@@ -3,7 +3,10 @@
 // rate-limit + cache + OpenAI logic, converted from an App Router route
 // handler to a Pages Router API handler (this repo is Pages Router).
 //
-// Generalized for issue #25 to serve all three models, not just SDLC:
+// Generalized for issue #25 to serve all three models that have a
+// diagnostic, not just SDLC (the family is four models as of 2026-09-12;
+// EA has no diagnostic yet, so "three" here is a count of THIS surface
+// and not of the family):
 // dimension count and prompt are looked up per `body.model` rather than
 // hardcoded to 13. `model` is required, not defaulted -- every caller
 // (including the SDLC assessment page) now sends it explicitly, so there's

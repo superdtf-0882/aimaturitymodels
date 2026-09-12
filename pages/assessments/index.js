@@ -65,7 +65,7 @@ export default function AssessmentsIndex() {
         </div>
       </div>
       <p className="footnote">
-        All three live models share the same instrument shape &mdash; self-score
+        All three live assessments share the same instrument shape &mdash; self-score
         each dimension, download a summary, or generate an AI-assisted
         Executive Readout. Formal instrument-scored assessment (the
         SPEC-D6-SCORE equivalent) now exists for all three &mdash;
