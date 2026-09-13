@@ -68,11 +68,24 @@ export default function ModelsIndex() {
           <span className="pill live">Live</span>
         </Link>
       </div>
+      {/* OKF-TOGAF#131. This sentence described hover-then-click, from before
+          move 2 (2026-09-11) replaced it with the always-open rail -- so it
+          contradicted all four pages it describes, each of which says "Select
+          a cell to read it — click, or use the arrow keys. The detail is
+          always open."
+
+          Worth a comment because of HOW it survived: CC edited this exact
+          sentence hours earlier, changing "three live models" to "four", and
+          did not see that the second half was false too. The count was what
+          was being looked for, so the count was what got checked. The wording
+          below is kept deliberately close to what the model pages themselves
+          say, so the next drift shows up as a difference rather than needing
+          to be reasoned about. */}
       <p className="footnote">
         Each model stands alone &mdash; you don&rsquo;t need the others to use
         one. Whole-Model Views for all four live models share the same
-        interaction: hover a cell for its definition, click for the
-        transition and verification.
+        interaction: select a cell to read it &mdash; click, or use the arrow
+        keys &mdash; and the detail stays open beside the matrix.
       </p>
     </Layout>
   );
