@@ -32,7 +32,7 @@ export default function EaWholeModelView({ dimensions, sourceCommit, currencyBas
       sourceCommit={sourceCommit}
       currencyBasis={currencyBasis}
       modelLabel="Enterprise Architecture"
-      dimensionCountLabel="Nine dimensions"
+      dimensionCountLabel="Ten dimensions"
       // No deepDiveBasePath: the EA repo has no deep_dives/ yet, and the
       // component renders a plain id rather than a link when it is absent.
       // Back-porting them is its own work item; a link to a 404 would be
