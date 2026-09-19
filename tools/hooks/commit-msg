@@ -5,12 +5,45 @@
 # Ruled by DT2 (briefs/2026-09-12-work-item-reliability/08-DT2 §2), ratified
 # "I ratify stages 2-4 as amended by 08-DT2 -- David Facer, 9/11/2026".
 #
-# STAGE 3: WARNS. REFUSES NOTHING. EXITS 0 ALWAYS.
-# Warn period 2026-09-12 to 2026-09-17 UTC, five days, David's decision:
-# "Let's go for five days and revisit unless something acute happens."
-# Stage 4 -- refusing -- takes a SEPARATE SIGNATURE PER SURFACE and is not
-# authorised by the stage 2-4 ratification. Do not flip this to exit 1 without
-# one. The `exit 0` at the bottom is load-bearing governance, not a stub.
+# STAGE IS PER SURFACE AND IS READ, NOT WRITTEN HERE. The fourth field of
+# .work-item-surfaces -- work_item_enforced -- decides it for the surface this
+# invocation is running on:
+#
+#   false or absent -> STAGE 3. Warns. Refuses nothing. Exits 0.
+#   true            -> STAGE 4. Warns and REFUSES. Exits 1.
+#
+# THIS HOOK STATES ITS MODE ON EVERY WARNING IT PRINTS. A control whose output
+# cannot be read against its behaviour is a control nobody can check.
+#
+# WHY THE MODE IS A FIELD AND NOT A FLAG IN THIS FILE. Stage 4 takes a SEPARATE
+# SIGNATURE PER SURFACE, and this file is copied byte-identically into every
+# declared repository -- so there is no line here that could say "enforced on
+# two of eleven" without forking the copies. Making enforcement a generated
+# corpus field keeps one hook, keeps the copies identical, and makes a
+# per-surface signature what this practice already knows how to record: a
+# signature on a corpus row. Ruled by DT2 in
+# briefs/2026-09-16-reconstitution-run/27-DT2 section 1, on the RULE-9
+# consultation requested in 26-CC.
+#
+# ENFORCED SINCE 2026-09-19 on two surfaces, signed "I enforce
+# ai-native-ea-maturity-model and aimaturitymodels -- David Facer 9/19/2026",
+# after the stage 4 ratification of the day before. WHICH surfaces are enforced
+# is NOT listed here: that is the register's to say and this file's to read.
+# A list here would be the derived-value-by-memory class, in a control.
+#
+# NO DATE APPEARS IN THIS HOOK'S OUTPUT AND NONE SHOULD. The warn period used
+# to be printed as "2026-09-12 to 2026-09-17 UTC" -- a hand-maintained derived
+# value inside a control, with a guaranteed expiry, and it did expire while
+# still being printed. RULE-8. 27-DT2 section 4 ruled it out and ruled that it
+# does not come back.
+#
+# ROLLBACK (27-DT2 section 6). Setting work_item_enforced back to false, or
+# removing it, returns a surface to stage 3. That is available to David without
+# a further consultation and introduces no governance -- it restores the state
+# stage 3 already ratified, and it records itself as a corpus row change.
+# TIGHTENING is structural and takes the consultation route. Removing stage 3
+# as well -- a surface that neither warns nor refuses -- is a third thing and
+# is authorised by nothing here.
 #
 # WHY commit-msg AND NOT pre-commit. pre-commit runs BEFORE the message exists
 # and is handed nothing -- proven by attempting, 2026-09-12, both hooks
@@ -20,20 +53,51 @@
 # `git diff --cached` for the staged paths, so one hook has both halves.
 #
 # HOW THIS CONTROL CAN BE CROSSED (RULE-10)
+#
+# RE-DECLARED 2026-09-19, ruled by DT2 in 27-DT2 section 5. The four paths are
+# unchanged; WHAT CROSSING THEM COSTS is not, and a declaration written for a
+# hook that warned does not describe a hook that refuses.
+#
 #   1. `git commit --no-verify` skips it entirely. Git's documented behaviour,
 #      identical to the pre-commit gate in the governed repo.
+#      COST CHANGED: under stage 3 this skipped a warning -- a convenience.
+#      Under stage 4 it BYPASSES A REFUSAL. Same flag, different act.
 #   2. IT CANNOT SEE COMMITS THAT NEVER TOUCH A LOCAL GIT CLIENT. A GitHub
 #      Action or API commit runs no local hook at all. Measured: open-wire-bot
 #      authored 10 of open-wire-editions' 26 commits in 30 days as "Heartbeat".
 #      Ring 2 covers workstation commits and nothing else, by construction --
 #      which is why ring 3 exists and why it is not optional.
+#      COST CHANGED: under stage 3 such a commit wrote no warn-log line. Under
+#      stage 4 it is not reached at all, so an enforced surface receiving them
+#      is enforced against one population and open to another. That is ring
+#      3's, and 27-DT2 section 8 declines to carry it on OI-82.
 #   3. A fresh clone has no hooks until `git config core.hooksPath tools/hooks`
 #      is run. Per-clone, never committed. Same gap the governed repo's own
 #      pre-commit header names and does not solve.
+#      COST CHANGED, AND THIS IS THE ONE TO READ. Under stage 3 an unset
+#      hooksPath meant a silent hook. Under stage 4 it means ENFORCEMENT IS
+#      ABSENT AND NOTHING SAYS SO -- the clone reads as compliant rather than
+#      as unguarded. Measured 2026-09-19: set in 11 of 11 clones on one machine
+#      at one instant, which is a statement about a moment and not about the
+#      estate. Declared, not solved.
 #   4. .work-item-surfaces absent or unreadable -> this hook says nothing.
 #      Fail-open, deliberately: a surface nobody declared is not governed
-#      (01-DTOG §2 P1), and a warn-mode hook that shouted about its own missing
-#      config would train people to ignore it before it ever refuses.
+#      (01-DTOG section 2 P1), and a warn-mode hook that shouted about its own
+#      missing config would train people to ignore it before it ever refuses.
+#      COST CHANGED: fail-open now means REFUSES NOTHING, so a deleted or
+#      corrupt projection silently disables stage 4 on that surface. The guard
+#      is gen-surface-projection.js, which acquired a caller on 2026-09-19
+#      (tools/hooks/pre-commit GATE 4, and corpus-validation.yml) precisely
+#      because this became load-bearing.
+#   5. A THREE-FIELD PROJECTION LEAVES THE FOURTH FIELD EMPTY, which reads as
+#      not-enforced and warns. Deliberate and stated: it is the safe direction,
+#      and it is why the field needed no flag day. But a surface whose deployed
+#      projection was never updated is SIGNED AND NOT ENFORCED, and nothing on
+#      the surface itself detects that. Added 2026-09-19 with the field.
+#
+# Authority for all five: this file, as the governed source of record. Each is
+# reconsidered when the stage changes for any surface -- the event that
+# rewrote costs 1-4 today.
 
 MSG_FILE="$1"
 [ -n "$MSG_FILE" ] && [ -f "$MSG_FILE" ] || exit 0
@@ -45,8 +109,10 @@ SURFACES="$repo_root/.work-item-surfaces"
 staged=$(git diff --cached --name-only 2>/dev/null)
 [ -n "$staged" ] || exit 0
 
-# Does this commit touch a declared in-scope surface?
-# Projection format: <repository>\t<path or ->\t<true|false>
+# Does this commit touch a declared in-scope surface, and is that surface
+# ENFORCED?
+# Projection format:
+#   <repository>\t<path or ->\t<work_item_required>\t<work_item_enforced>
 #
 # CR STRIPPING, ADDED 2026-09-12, AND IT IS THE DIFFERENCE BETWEEN THIS HOOK
 # WORKING AND DOING NOTHING. .work-item-surfaces is committed with LF, and a
@@ -63,26 +129,42 @@ staged=$(git diff --cached --name-only 2>/dev/null)
 # was therefore measuring a control that could not fire. Brief:
 # briefs/2026-09-12-work-item-reliability/12-CC.
 #
-# All three fields are stripped, not just the last: a row with fewer fields
-# than expected parks the CR on whichever field ends up last.
+# All four fields are stripped, not just the last: a row with fewer fields
+# than expected parks the CR on whichever field ends up last -- which is
+# exactly what a three-field projection does to `required`, and is why every
+# field is stripped rather than the one that is nominally last.
 # ${var%$CR} is POSIX parameter expansion -- $'\r' is a bashism and this is
 # #!/bin/sh. And the loop still redirects from the file rather than piping
 # `tr -d '\r'` into it, because a pipe runs the loop in a subshell and
 # `touched` would not survive it -- which would replace this bug with a
 # quieter one.
+#
+# THE LOOP NO LONGER BREAKS ON THE FIRST MATCH, and that is a behaviour
+# change rather than a tidy-up. With a per-surface mode, a repository whose
+# projection holds several rows can have one enforced and another not, and
+# breaking early would take the mode of whichever row happened to sort first.
+# Every matching row is now read and THE STRICTER WINS -- the same rule the
+# generator applies when two rows collapse onto one surface.
 CR=$(printf '\r')
 touched=""
-while IFS="$(printf '\t')" read -r _repo spath required; do
+enforce=""
+while IFS="$(printf '\t')" read -r _repo spath required enforced; do
   _repo=${_repo%"$CR"}
   spath=${spath%"$CR"}
   required=${required%"$CR"}
+  enforced=${enforced%"$CR"}
   case "$_repo" in \#*|"") continue ;; esac
   [ "$required" = "true" ] || continue
+  hit=""
   if [ "$spath" = "-" ]; then
-    touched="yes"; break
+    hit="yes"
+  elif printf '%s\n' "$staged" | grep -q "^$spath/"; then
+    hit="yes"
   fi
-  if printf '%s\n' "$staged" | grep -q "^$spath/"; then
-    touched="yes"; break
+  [ -n "$hit" ] || continue
+  touched="yes"
+  if [ "$enforced" = "true" ]; then
+    enforce="yes"
   fi
 done < "$SURFACES"
 
@@ -94,11 +176,28 @@ if grep -Eq '^Work-Item:[[:space:]]*[A-Za-z0-9_.-]+#[0-9]+[[:space:]]*$' "$MSG_F
   exit 0
 fi
 
+# THE MODE IS STATED ON EVERY WARNING, ruled by DT2 in 27-DT2 section 4.
+# It is read from the projection for THIS surface, never written here, and
+# it carries no date: the old text named a warn period that had already
+# expired while the hook went on printing it.
+if [ -n "$enforce" ]; then
+  wi_headline="WORK ITEM SOP -- REFUSED. This commit touches an ENFORCED public surface and carries no Work-Item trailer."
+  wi_mode_a="  MODE: STAGE 4 -- REFUSING on this surface. This commit was NOT created."
+  wi_mode_b="  Enforcement is declared per surface in corpus/catalog_applications.md"
+  wi_mode_c="  (work_item_enforced) and reaches this hook through the projection below."
+else
+  wi_headline="WORK ITEM SOP -- this commit touches a declared public surface and carries no Work-Item trailer."
+  wi_mode_a="  MODE: STAGE 3 -- WARNING on this surface. Nothing is refused."
+  wi_mode_b="  Enforcement is declared per surface in corpus/catalog_applications.md"
+  wi_mode_c="  (work_item_enforced) and is not set for this one."
+fi
+
 echo "" >&2
-echo "WORK ITEM SOP -- this commit touches a declared public surface and carries no Work-Item trailer." >&2
+echo "$wi_headline" >&2
 echo "" >&2
-echo "  WARNING ONLY. Nothing is refused, and nothing will be until stage 4 is" >&2
-echo "  signed per surface. Warn period: 2026-09-12 to 2026-09-17 UTC." >&2
+echo "$wi_mode_a" >&2
+echo "$wi_mode_b" >&2
+echo "$wi_mode_c" >&2
 echo "" >&2
 echo "  Add a trailer to the commit message, qualified:" >&2
 echo "" >&2
@@ -130,6 +229,15 @@ echo "" >&2
 # public-surface commit lack a trailer" is NOT in this file and cannot be
 # derived from it.
 #
+# A FOURTH FIELD WAS ADDED 2026-09-19: WARNED or REFUSED. Until stage 4 a
+# line meant one thing, so the mode did not need recording; now the same
+# log holds both outcomes and a count that did not distinguish them would
+# be the coverage-rate mistake again. It is APPENDED rather than inserted,
+# and nothing parses this file positionally -- grepped across tools/ and
+# .github/ on 2026-09-19 and found no reader at all; it has been read by
+# hand every time. A REFUSED line records a commit that DOES NOT EXIST,
+# which is the one way this log now differs in kind from what it was.
+#
 # HOW THIS CONTROL CAN BE CROSSED (RULE-10)
 #   1. IT LIVES IN .git/ AND DOES NOT TRAVEL. Never committed, never
 #      pushed, per-clone exactly as core.hooksPath is. A warning in one
@@ -157,7 +265,15 @@ log_when=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
 log_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null | head -n 1)
 [ -n "$log_branch" ] || log_branch="?"
 log_files=$(printf '%s' "$staged" | tr '\n' ',')
-printf '%s\t%s\t%s\n' "$log_when" "$log_branch" "$log_files" >> "$LOG" 2>/dev/null || true
+if [ -n "$enforce" ]; then log_mode="REFUSED"; else log_mode="WARNED"; fi
+printf '%s\t%s\t%s\t%s\n' "$log_when" "$log_branch" "$log_files" "$log_mode" >> "$LOG" 2>/dev/null || true
 
-# STAGE 3 WARNS. See the header before changing this line.
+# STAGE 3 WARNS; STAGE 4 REFUSES. WHICH ONE IS NOT DECIDED HERE -- it came
+# from work_item_enforced in the projection, for the surface this commit
+# touches. See the header before changing either line. The `exit 0` is still
+# load-bearing governance for every surface that is not enforced, and it is
+# still the majority of them.
+if [ -n "$enforce" ]; then
+  exit 1
+fi
 exit 0

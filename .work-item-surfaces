@@ -2,9 +2,14 @@
 # Source of truth: corpus/catalog_applications.md in the OKF-TOGAF repo.
 # Regenerate: node tools/gen-surface-projection.js --write
 #
-# A three-field projection of the Work Item SOP surface register, carrying
+# A four-field projection of the Work Item SOP surface register, carrying
 # only what the commit-msg hook reads. Edit the corpus row, not this file --
 # a hand-edit here is drift and the check will say so.
 #
-# Format: <repository>\t<path or ->\t<work_item_required>
-aimaturitymodels	-	true
+# Format: <repository>\t<path or ->\t<work_item_required>\t<work_item_enforced>
+#
+# work_item_enforced is stage 4. true means the hook REFUSES a commit to this
+# surface that carries no trailer; false or absent means it warns. A hook that
+# reads a three-field projection sees an empty fourth field and warns, which
+# is the safe direction and is why the field needed no flag day.
+aimaturitymodels	-	true	true
