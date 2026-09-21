@@ -1,206 +1,93 @@
-import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 
-// Circular hub (issue #9, +1 node issue #31, -1 node + Strata promoted
-// issue #37): entry points arranged so no one of them reads as the
-// "start" -- order follows the sequence as specified, placed clockwise
-// from the top.
-// `primary: true` marks the nodes that are actually the product (the
-// models, their assessments, Function Models, and now Strata -- it
-// connects the whole family, the same standing as the other three);
-// EA OKF is the one remaining minor node, matching the rail nav's own
-// tiering (components/Layout.js). Vellum & Seminum dropped from the
-// wheel entirely -- handled in the rail nav now, doesn't need wheel
-// space too (issue #37).
-const NODES = [
-  {
-    href: "/models",
-    kicker: "The family",
-    title: "AI-Native Maturity Models",
-    desc: "SDLC, PDLC, Prioritization, Enterprise Architecture — and what's coming.",
-    primary: true,
-  },
-  {
-    href: "/assessments",
-    kicker: "Assess yourself",
-    title: "Maturity Model Assessments",
-    desc: "Score yourself against each model in the family.",
-    primary: true,
-  },
-  {
-    href: "/functionmodels",
-    kicker: "What it's made of",
-    title: "Function Models",
-    desc: "Flat maps of what a function consists of — no progression scale.",
-    primary: true,
-  },
-  {
-    href: "/strata",
-    kicker: "Why it connects",
-    title: "Strata",
-    desc: "Why these models fit together at all.",
-    primary: true,
-  },
-  {
-    href: "/eaokf",
-    kicker: "The foundation",
-    title: "Enterprise Architecture OKF",
-    desc: "The schema this family is written in.",
-  },
-];
+// THE WHEEL IS RETIRED (2026-09-21). It was five entry points on a
+// drag-spun circle (issues #9, #31, #37). What retired it is not taste:
+// its five destinations -- /models, /assessments, /functionmodels,
+// /strata, /eaokf -- were a STRICT SUBSET of the six in the rail nav
+// beside it (components/Layout.js, which also carries /vellum). Measured
+// on the served page, not just in this source: wheel-minus-rail is the
+// empty set. So the page's most valuable space reached strictly fewer
+// destinations than the navigation next to it, while spending a drag
+// handler, a 500ms arrival spin and a session key to do it -- and its own
+// copy had to explain itself ("Click and drag the wheel to spin it").
+//
+// WHAT REPLACES IT is the argument the family exists to make. Every word
+// of the copy below is David's own, carried verbatim from the prototype
+// he authored 2026-09-18 (71,417 chars, 21:29). CC changed no word of it.
+// The prototype's links were absolute https://aimaturitymodels.com/ URLs
+// -- an artifact of saving a page from a browser, not a design choice --
+// and are Next <Link> hrefs here. That is a transport fix, not an edit.
+//
+// GOVERNED RECORD: OKF TOGAF, briefs/2026-09-19-capture-and-admission/
+// 24-DT2 section 1. Recorded under STD-SVM-01 as a DATED GATE -- "expires
+// 2026-09-21, act regardless of rank" -- and deliberately NOT scored to
+// the top of the Strategic Value Matrix: a deadline is not value, and
+// bending a merit cell to encode a schedule is the unnatural act R3
+// exists to prevent. Urgency got its own channel instead.
+//
+// DELETED DELIBERATELY RATHER THAN ORPHANED, because the wheel was this
+// page's only interactive element and its parts outlive it silently:
+// DRAG_SENSITIVITY, CLICK_MOVE_THRESHOLD_PX, BASE_ANGLES, the ring path,
+// SPIN_DURATION_MS, the `aimm-hub-spun` sessionStorage key and its
+// prefers-reduced-motion guard, all five pointer handlers, and the
+// .hub-* rules in styles/globals.css. This file no longer needs useState,
+// useRef, useEffect, useRouter or the NODES table, and is now static.
 
-const R = 30; // percent radius -- kept well under 50 minus the node's own
-// half-width-as-percent-of-container, so a card can never push past the
-// circle's own box (and, in turn, never widen the page) at any container
-// size down to the 640px breakpoint where this layout takes over.
-const BASE_ANGLES = NODES.map((_, i) => -90 + i * (360 / NODES.length));
-
-// Rotation tracks total horizontal drag distance directly (degrees per
-// pixel), not the true geometric angle from the wheel's center. The
-// angle-from-center approach saturates on a small-radius wheel: a normal
-// straight-line drag quickly overshoots the circle, and the angle stops
-// increasing well before the pointer has traveled far -- capping the
-// spin at 10-20 degrees regardless of how far you actually dragged.
-// Distance-based rotation has no such ceiling and needs no layout
-// measurement at drag time.
-const DRAG_SENSITIVITY = 0.6; // degrees of rotation per pixel of horizontal drag
-const CLICK_MOVE_THRESHOLD_PX = 5; // below this, a drag counts as a plain click
-
-// Arrival spin: a random flick on first landing, once per browser tab
-// session. sessionStorage (not a cookie -- never sent to a server, gone
-// when the tab closes) is enough to remember "already spun this visit"
-// without needing any consent banner.
-const SPIN_SESSION_KEY = "aimm-hub-spun";
-const SPIN_DURATION_MS = 500;
-const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
-
-export default function Hub() {
-  const router = useRouter();
-  const [rotation, setRotation] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragState = useRef({
-    active: false,
-    startX: 0,
-    startY: 0,
-    startRotation: 0,
-    moved: false,
-    targetHref: null,
-  });
-
-  useEffect(() => {
-    if (window.sessionStorage.getItem(SPIN_SESSION_KEY)) return;
-    window.sessionStorage.setItem(SPIN_SESSION_KEY, "1");
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const direction = Math.random() < 0.5 ? -1 : 1;
-    const target = direction * (240 + Math.random() * 300); // 240-540 degrees
-    const start = performance.now();
-    let frameId;
-
-    function tick(now) {
-      if (dragState.current.active) return; // user grabbed the wheel -- yield to them
-      const t = Math.min((now - start) / SPIN_DURATION_MS, 1);
-      setRotation(target * easeOutCubic(t));
-      if (t < 1) frameId = requestAnimationFrame(tick);
-    }
-    frameId = requestAnimationFrame(tick);
-
-    return () => cancelAnimationFrame(frameId);
-  }, []);
-
-  function handlePointerDown(e) {
-    dragState.current.active = true;
-    dragState.current.moved = false;
-    dragState.current.startX = e.clientX;
-    dragState.current.startY = e.clientY;
-    dragState.current.startRotation = rotation;
-    const nodeEl = e.target.closest && e.target.closest(".hub-node");
-    dragState.current.targetHref = nodeEl ? nodeEl.getAttribute("href") : null;
-    setIsDragging(true);
-    e.currentTarget.setPointerCapture(e.pointerId);
-  }
-
-  function handlePointerMove(e) {
-    if (!dragState.current.active) return;
-    const dx = e.clientX - dragState.current.startX;
-    const dy = e.clientY - dragState.current.startY;
-    if (Math.hypot(dx, dy) > CLICK_MOVE_THRESHOLD_PX) dragState.current.moved = true;
-    setRotation(dragState.current.startRotation + dx * DRAG_SENSITIVITY);
-  }
-
-  // Pointer capture (needed to keep tracking the drag even once the
-  // pointer leaves the wheel) retargets the resulting pointerup -- and
-  // the native "click" synthesized from it -- to the capturing element
-  // (.hub-circle) instead of whichever node was actually pressed. That
-  // means Link's own click-driven navigation never fires for a mouse or
-  // touch interaction here, dragged or not, so navigation is triggered
-  // explicitly instead of relying on the (unreachable) native click.
-  function handlePointerUp() {
-    if (dragState.current.active && !dragState.current.moved && dragState.current.targetHref) {
-      router.push(dragState.current.targetHref);
-    }
-    dragState.current.active = false;
-    dragState.current.moved = false;
-    setIsDragging(false);
-  }
-
-  function handlePointerCancel() {
-    dragState.current.active = false;
-    dragState.current.moved = false;
-    setIsDragging(false);
-  }
-
-  // Fallback for keyboard activation (Enter/Space on a focused link) --
-  // that path never goes through pointerdown/pointerup, so it isn't
-  // affected by the capture-retargeting issue above and still fires a
-  // normal click straight on the anchor.
-  function handleNodeClick(e) {
-    if (dragState.current.moved) e.preventDefault();
-  }
-
-  const points = BASE_ANGLES.map((base) => {
-    const angle = ((base + rotation) * Math.PI) / 180;
-    return { x: 50 + R * Math.cos(angle), y: 50 + R * Math.sin(angle) };
-  });
-  const ringPath =
-    points.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ") + " Z";
-
+export default function Home() {
   return (
     <Layout title="Home">
       <h1>AI-Native Maturity Models</h1>
-      <p className="dek hub-intro">
-        Regardless of what drove you to explore here, each path leads
-        to a coherent system. Click and drag the wheel to spin it.
+      <p className="dek">
+        A family of models, assessments, and governance artifacts for
+        understanding and building AI-native practice.
       </p>
 
-      <div
-        className={`hub-circle${isDragging ? " dragging" : ""}`}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerCancel}
-      >
-        <svg className="hub-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <path d={ringPath} fill="none" stroke="var(--line)" strokeWidth="0.4" strokeDasharray="1.6 2" />
-        </svg>
-        {NODES.map((node, i) => (
-          <Link
-            key={node.href}
-            href={node.href}
-            className={`hub-node${node.primary ? " hub-node--primary" : " hub-node--secondary"}`}
-            draggable={false}
-            onClick={handleNodeClick}
-            onDragStart={(e) => e.preventDefault()}
-            style={{ left: `${points[i].x}%`, top: `${points[i].y}%` }}
-          >
-            <div className="hub-kicker">{node.kicker}</div>
-            <div className="hub-title">{node.title}</div>
-            <div className="hub-desc">{node.desc}</div>
-          </Link>
-        ))}
-      </div>
+      <section className="thesis" aria-labelledby="thesis-heading">
+        <h2 className="question" id="thesis-heading">
+          What do the electric motor, the spreadsheet, and the shipping
+          container have in common?
+        </h2>
+
+        <div className="answer">
+          <p className="history">
+            Each delivered modest gains when inserted into existing
+            operations. Massive gains were available to organizations that
+            could redesign their processes, capabilities, and structures
+            around them.
+          </p>
+          <p className="claim">
+            <span className="opportunity">AI presents the same opportunity.</span>{" "}
+            Local augmentation can improve individual tasks. System-level
+            returns require the system itself to change.
+          </p>
+        </div>
+
+        <div className="definition">
+          <div>
+            <strong>AI-enabled</strong>
+            <p>
+              AI is added to work designed around existing organizational
+              constraints.
+            </p>
+          </div>
+          <div>
+            <strong>AI-native</strong>
+            <p>
+              Work, context, authority, and feedback are redesigned around
+              what people and AI can do together.
+            </p>
+          </div>
+        </div>
+
+        <p className="system-note">
+          This site contains the <Link href="/models">maturity models</Link>,{" "}
+          <Link href="/assessments">assessments</Link>,{" "}
+          <Link href="/functionmodels">function models</Link>, and{" "}
+          <Link href="/strata">governance structure</Link> for making that
+          redesign explicit and assessable.
+        </p>
+      </section>
     </Layout>
   );
 }
