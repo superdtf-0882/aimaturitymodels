@@ -873,3 +873,26 @@ table.wmv tbody tr.is-selected td.dim { background: var(--paper); }
 .fn-explainer-list { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 10px; }
 .fn-explainer-list li { font-size: 14px; line-height: 1.65; color: var(--ink-soft); }
 .fn-explainer-list strong { color: var(--ink); }
+
+/* Strategic Value Matrix (models/prioritization/strategic-value-matrix) */
+.wmv-note { color: var(--ink-soft); margin: -18px 0 24px; max-width: 62ch; }
+.svm { margin: 0 0 36px; }
+.svm-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+.svm-label { color: var(--muted); font-size: 13px; margin-right: 4px; }
+.svm-controls button { background: var(--paper-raised); color: var(--ink-soft); border: 1px solid var(--line); border-radius: 4px; padding: 5px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+.svm-controls button.svm-on { border-color: var(--blue); color: var(--ink); background: var(--blue-soft); }
+.svm-note { color: var(--muted); font-size: 14px; max-width: 72ch; margin: 0 0 14px; }
+.svm-wrap { overflow-x: auto; }
+.svm-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.svm-table th, .svm-table td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+.svm-table th { color: var(--ink-soft); font-weight: 600; }
+.svm-table th.svm-half { text-align: center; border-bottom: 1px solid var(--blue); }
+.svm-table .svm-crit { font-weight: 500; font-size: 12px; }
+.svm-table .svm-w { display: block; color: var(--muted); font-size: 11px; }
+.svm-table .n { text-align: right; font-variant-numeric: tabular-nums; }
+.svm-table .svm-total { color: var(--ink); font-weight: 600; }
+.svm-table select { background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 3px; font: inherit; font-size: 13px; }
+.svm-lifted td { background: var(--paper-raised); }
+.svm-lift { display: block; color: var(--orange); font-size: 12px; }
+.svm-frame { max-width: 72ch; }
+.svm-source { color: var(--muted); font-size: 13px; max-width: 72ch; margin-top: 28px; }

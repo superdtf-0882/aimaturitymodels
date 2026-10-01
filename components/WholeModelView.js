@@ -207,6 +207,7 @@ export default function WholeModelView({
   deepDiveBasePath, // e.g. "/models/sdlc/deep-dive" -- null/undefined if this model has none yet
   crumbLabel, // e.g. "AI-Native SDLC"
   crumbHref, // e.g. "/models/sdlc/whole-model-view"
+  note, // optional, one line under the dek -- e.g. a model's reference pattern
 }) {
   const geometry = geometryFor(crumbHref);
 
@@ -323,6 +324,7 @@ export default function WholeModelView({
         {dimensionCountLabel}, five maturity levels each. Select a cell to read
         it &mdash; click, or use the arrow keys. The detail is always open.
       </p>
+      {note && <p className="wmv-note">{note}</p>}
 
       <div
         className={`wmv-layout wmv-layout--${geometry}`}

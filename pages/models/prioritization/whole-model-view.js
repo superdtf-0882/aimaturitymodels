@@ -1,4 +1,5 @@
 import { getPrioritizationShortForm, getPrioritizationFullModel, currencyBasisLine } from "../../../lib/models";
+import Link from "next/link";
 import WholeModelView from "../../../components/WholeModelView";
 
 export async function getStaticProps() {
@@ -25,6 +26,13 @@ export default function PrioritizationWholeModelView({ dimensions, sourceCommit,
       deepDiveBasePath="/models/prioritization/deep-dive"
       crumbLabel="Product Prioritization"
       crumbHref="/models/prioritization/whole-model-view"
+      note={
+        <>
+          Level E&rsquo;s reference pattern, the{" "}
+          <Link href="/models/prioritization/strategic-value-matrix">Strategic Value Matrix</Link>, ranks a
+          sample portfolio you can edit.
+        </>
+      }
     />
   );
 }
