@@ -5,7 +5,7 @@
   "description": "aimaturitymodels.com -- AI-Native Maturity Model family site. Content-only: fetches each model's canonical content at build time from that model's own public repo; never duplicates it. Governed by ADR-008 (OKF TOGAF corpus, private) and built under AC-008.",
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/work-item-gate.js --report && node scripts/svm-conformance.js",
+    "prebuild": "node scripts/work-item-gate.js && node scripts/svm-conformance.js",
     "build": "next build",
     "postbuild": "node scripts/generate-llms-txt.js",
     "build:local": "node scripts/svm-conformance.js && next build && node scripts/generate-llms-txt.js",
