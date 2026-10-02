@@ -2,14 +2,20 @@
 # Source of truth: corpus/catalog_applications.md in the OKF-TOGAF repo.
 # Regenerate: node tools/gen-surface-projection.js --write
 #
-# A four-field projection of the Work Item SOP surface register, carrying
+# A five-field projection of the Work Item SOP surface register, carrying
 # only what the commit-msg hook reads. Edit the corpus row, not this file --
 # a hand-edit here is drift and the check will say so.
 #
-# Format: <repository>\t<path or ->\t<work_item_required>\t<work_item_enforced>
+# Format: <repository>\t<path or ->\t<work_item_required>\t<work_item_enforced>\t<work_item_tooling_paths>
 #
 # work_item_enforced is stage 4. true means the hook REFUSES a commit to this
 # surface that carries no trailer; false or absent means it warns. A hook that
 # reads a three-field projection sees an empty fourth field and warns, which
 # is the safe direction and is why the field needed no flag day.
-aimaturitymodels	-	true	true
+#
+# work_item_tooling_paths (comma-joined; a folder ends in /, a file is named
+# exactly) is where this surface keeps its tooling. The hook refuses the mark
+# Work-Item: de-minimis on a commit touching one of them -- tooling is never
+# de minimis. A projection WITHOUT this field refuses the mark on an enforced
+# surface: fail closed, the opposite direction from the fourth field.
+aimaturitymodels	-	true	true	tools/,scripts/,package.json,next.config.js

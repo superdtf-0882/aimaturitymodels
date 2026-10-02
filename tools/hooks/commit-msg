@@ -95,9 +95,49 @@
 #      projection was never updated is SIGNED AND NOT ENFORCED, and nothing on
 #      the surface itself detects that. Added 2026-09-19 with the field.
 #
-# Authority for all five: this file, as the governed source of record. Each is
+#   6. THE MARK, `Work-Item: de-minimis` -- a DECLARED, VISIBLE crossing, and
+#      the point of it. Added 2026-10-02, Ring 3 step 1 (below). A commit the
+#      owner judged too small for a Work Item carries the mark instead, and the
+#      coverage report lists every one, so the judgment is reviewable without
+#      anyone ruling on "small" in advance. It is refused on tooling (7).
+#   7. THE TOOLING-PATH LIST IS ONLY AS COMPLETE AS EACH ROW SAYS. The mark is
+#      refused on a commit touching a path the surface's projection names in its
+#      fifth field. A tooling file the row does not name is not recognised as
+#      tooling, and the mark passes on it. Paths are matched from the repository
+#      root: a folder ends in /, a file is named exactly.
+#
+# Authority for all seven: this file, as the governed source of record. Each is
 # reconsidered when the stage changes for any surface -- the event that
-# rewrote costs 1-4 today.
+# rewrote costs 1-4 on 2026-09-19.
+#
+# RING 3 STEP 1, 2026-10-02 -- THE MARK, THE TOOLING PATHS, AND THE 2048 RULE.
+# Ruled by DT2 in briefs/2026-10-01-svm-tranche-3/10-DT2 section 1, on the
+# consultation 07-DT2 as settled by 08-CC; ratified "I ratify 10-DT2 of
+# svm-tranche-3; previews: refused like production; SDLC short form pinned at
+# 0c9b887 (11-CC §3); build:local without the gate (11-CC §4) -- David Facer
+# 10/2/2026". Work Item OKF-TOGAF#141.
+#
+#   THE MARK is accepted on every surface, enforced or not -- SPEC-DISPATCH-SOP
+#   v1.4 Entry 3's de minimis, made visible. EXCEPT ON TOOLING: SPEC-DISPATCH-SOP
+#   v1.4 rules "tooling is never de minimis ... standing, no exceptions", and a
+#   commit with the mark that touches one of this surface's tooling paths is
+#   REFUSED where enforced and WARNED elsewhere. A projection WITHOUT the fifth
+#   field cannot say what tooling is, so the mark is refused on an enforced
+#   surface and warned on any other -- fail closed, the opposite direction from
+#   crossing 5, deliberately: that one guards a wrong refusal, this one a wrong
+#   acceptance.
+#
+#   THE 2048 RULE. The deploy gate reads the message through Vercel's
+#   commit-message variable, which Vercel truncates past 2048 bytes -- and this
+#   practice's messages are long, with the trailer at the end. On the deployed
+#   commits since 2026-09-01, half the Work-Item lines fell past the cut
+#   (09-CC). So a Work-Item line, or the mark, MUST LIE WHOLLY INSIDE THE FIRST
+#   2048 BYTES: refused where enforced, warned elsewhere. "Wholly" is CC's
+#   execution reading of 10-DT2's "begin within", declared in 12-CC: a line cut
+#   at byte 2048 can still match the pattern with the WRONG number (#141 cut to
+#   #14), so a message longer than 2048 bytes is read with its last, possibly
+#   partial, line dropped. The line may sit anywhere in the message -- near the
+#   top is the simplest way to pass.
 
 MSG_FILE="$1"
 [ -n "$MSG_FILE" ] && [ -f "$MSG_FILE" ] || exit 0
@@ -112,7 +152,7 @@ staged=$(git diff --cached --name-only 2>/dev/null)
 # Does this commit touch a declared in-scope surface, and is that surface
 # ENFORCED?
 # Projection format:
-#   <repository>\t<path or ->\t<work_item_required>\t<work_item_enforced>
+#   <repository>\t<path or ->\t<work_item_required>\t<work_item_enforced>\t<work_item_tooling_paths>
 #
 # CR STRIPPING, ADDED 2026-09-12, AND IT IS THE DIFFERENCE BETWEEN THIS HOOK
 # WORKING AND DOING NOTHING. .work-item-surfaces is committed with LF, and a
@@ -145,14 +185,23 @@ staged=$(git diff --cached --name-only 2>/dev/null)
 # breaking early would take the mode of whichever row happened to sort first.
 # Every matching row is now read and THE STRICTER WINS -- the same rule the
 # generator applies when two rows collapse onto one surface.
+#
+# THE FIFTH FIELD, 2026-10-02: work_item_tooling_paths, comma-joined. For
+# every touched row it decides two things: whether a staged path is tooling
+# (tool_hit), and whether the row could say at all (no_tpaths). It is matched
+# in awk rather than a shell loop over IFS, because changing IFS inside this
+# loop would change how `read` splits the very next row.
 CR=$(printf '\r')
 touched=""
 enforce=""
-while IFS="$(printf '\t')" read -r _repo spath required enforced; do
+tool_hit=""
+no_tpaths=""
+while IFS="$(printf '\t')" read -r _repo spath required enforced tpaths; do
   _repo=${_repo%"$CR"}
   spath=${spath%"$CR"}
   required=${required%"$CR"}
   enforced=${enforced%"$CR"}
+  tpaths=${tpaths%"$CR"}
   case "$_repo" in \#*|"") continue ;; esac
   [ "$required" = "true" ] || continue
   hit=""
@@ -166,27 +215,82 @@ while IFS="$(printf '\t')" read -r _repo spath required enforced; do
   if [ "$enforced" = "true" ]; then
     enforce="yes"
   fi
+  if [ -z "$tpaths" ]; then
+    no_tpaths="yes"
+  elif [ -z "$tool_hit" ]; then
+    tool_hit=$(printf '%s\n' "$staged" | awk -v tp="$tpaths" '
+      BEGIN { n = split(tp, a, ",") }
+      { for (i = 1; i <= n; i++) {
+          p = a[i]
+          if (p == "") continue
+          if (substr(p, length(p)) == "/") { if (index($0, p) == 1) { print "yes"; exit } }
+          else if ($0 == p) { print "yes"; exit }
+      } }')
+  fi
 done < "$SURFACES"
 
 [ -n "$touched" ] || exit 0
 
 # Trailer must be qualified: "OKF-TOGAF#119", never a bare "#119".
 # 08-DT2 §3: the repository qualifier is mandatory even while it is constant.
-if grep -Eq '^Work-Item:[[:space:]]*[A-Za-z0-9_.-]+#[0-9]+[[:space:]]*$' "$MSG_FILE"; then
-  exit 0
+WI_RE='^Work-Item:[[:space:]]*[A-Za-z0-9_.-]+#[0-9]+[[:space:]]*$'
+# The mark, exactly. 10-DT2 section 1 item 1.
+DM_RE='^Work-Item:[[:space:]]*de-minimis[[:space:]]*$'
+
+# THE FIRST 2048 BYTES, as the deploy gate will see them (header, THE 2048
+# RULE). Longer than that, the last line of the cut is dropped: it may be
+# partial, and a partial trailer can still match with the wrong number.
+msg_bytes=$(wc -c < "$MSG_FILE" | tr -d ' ')
+if [ "$msg_bytes" -gt 2048 ]; then
+  first2048=$(head -c 2048 "$MSG_FILE" | sed '$d')
+else
+  first2048=$(cat "$MSG_FILE")
+fi
+has_wi=""; grep -Eq "$WI_RE" "$MSG_FILE" && has_wi="yes"
+has_dm=""; grep -Eq "$DM_RE" "$MSG_FILE" && has_dm="yes"
+wi_in=""; printf '%s\n' "$first2048" | grep -Eq "$WI_RE" && wi_in="yes"
+dm_in=""; printf '%s\n' "$first2048" | grep -Eq "$DM_RE" && dm_in="yes"
+
+# WHAT IS WRONG, IF ANYTHING. A qualified Work-Item line wins over the mark.
+#   none     -- neither a Work-Item line nor the mark (the original case)
+#   late     -- the line or the mark lies past the first 2048 bytes
+#   tooling  -- the mark, on a commit touching this surface's tooling
+#   unknown  -- the mark, and the projection cannot say what tooling is
+reason=""
+if [ -n "$has_wi" ]; then
+  [ -n "$wi_in" ] && exit 0
+  reason="late"
+elif [ -n "$has_dm" ]; then
+  if [ -n "$tool_hit" ]; then
+    reason="tooling"
+  elif [ -n "$no_tpaths" ]; then
+    reason="unknown"
+  elif [ -z "$dm_in" ]; then
+    reason="late"
+  else
+    exit 0
+  fi
+else
+  reason="none"
 fi
 
 # THE MODE IS STATED ON EVERY WARNING, ruled by DT2 in 27-DT2 section 4.
 # It is read from the projection for THIS surface, never written here, and
 # it carries no date: the old text named a warn period that had already
 # expired while the hook went on printing it.
+case "$reason" in
+  none)    wi_what="carries no Work-Item trailer" ;;
+  late)    wi_what="carries its Work-Item line past the first 2048 bytes of the message" ;;
+  tooling) wi_what="carries the de-minimis mark and touches this surface's tooling" ;;
+  unknown) wi_what="carries the de-minimis mark, and this surface's projection does not say what its tooling is" ;;
+esac
 if [ -n "$enforce" ]; then
-  wi_headline="WORK ITEM SOP -- REFUSED. This commit touches an ENFORCED public surface and carries no Work-Item trailer."
+  wi_headline="WORK ITEM SOP -- REFUSED. This commit touches an ENFORCED public surface and $wi_what."
   wi_mode_a="  MODE: STAGE 4 -- REFUSING on this surface. This commit was NOT created."
   wi_mode_b="  Enforcement is declared per surface in corpus/catalog_applications.md"
   wi_mode_c="  (work_item_enforced) and reaches this hook through the projection below."
 else
-  wi_headline="WORK ITEM SOP -- this commit touches a declared public surface and carries no Work-Item trailer."
+  wi_headline="WORK ITEM SOP -- this commit touches a declared public surface and $wi_what."
   wi_mode_a="  MODE: STAGE 3 -- WARNING on this surface. Nothing is refused."
   wi_mode_b="  Enforcement is declared per surface in corpus/catalog_applications.md"
   wi_mode_c="  (work_item_enforced) and is not set for this one."
@@ -199,9 +303,28 @@ echo "$wi_mode_a" >&2
 echo "$wi_mode_b" >&2
 echo "$wi_mode_c" >&2
 echo "" >&2
-echo "  Add a trailer to the commit message, qualified:" >&2
+case "$reason" in
+  late)
+    echo "  Vercel passes the deploy gate only the first 2048 bytes of a commit message;" >&2
+    echo "  move the Work-Item line near the top. This message is $msg_bytes bytes." >&2
+    ;;
+  tooling)
+    echo "  Tooling is never de minimis (SPEC-DISPATCH-SOP v1.4) -- this commit needs a Work Item." >&2
+    echo "  Tooling paths for this surface are the fifth field of the projection below." >&2
+    ;;
+  unknown)
+    echo "  The projection below has no fifth field, so tooling cannot be told apart." >&2
+    echo "  Regenerate it (node tools/gen-surface-projection.js --write in OKF-TOGAF)," >&2
+    echo "  or use a Work Item." >&2
+    ;;
+esac
+echo "  Add a trailer to the commit message, qualified, near the top:" >&2
 echo "" >&2
 echo "      Work-Item: OKF-TOGAF#NNN" >&2
+echo "" >&2
+echo "  Too small for one, and not tooling? The owner's de minimis mark:" >&2
+echo "" >&2
+echo "      Work-Item: de-minimis" >&2
 echo "" >&2
 echo "  No Work Item yet? Create one from the governed repo:" >&2
 echo "      node tools/type-issue.js create --repo superdtf-0882/OKF-TOGAF \\" >&2
@@ -266,7 +389,9 @@ log_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null | head -n 1)
 [ -n "$log_branch" ] || log_branch="?"
 log_files=$(printf '%s' "$staged" | tr '\n' ',')
 if [ -n "$enforce" ]; then log_mode="REFUSED"; else log_mode="WARNED"; fi
-printf '%s\t%s\t%s\t%s\n' "$log_when" "$log_branch" "$log_files" "$log_mode" >> "$LOG" 2>/dev/null || true
+# A FIFTH FIELD, 2026-10-02: the reason -- none, late, tooling or unknown.
+# Appended, as the fourth was; nothing parses this file positionally.
+printf '%s\t%s\t%s\t%s\t%s\n' "$log_when" "$log_branch" "$log_files" "$log_mode" "$reason" >> "$LOG" 2>/dev/null || true
 
 # STAGE 3 WARNS; STAGE 4 REFUSES. WHICH ONE IS NOT DECIDED HERE -- it came
 # from work_item_enforced in the projection, for the surface this commit
