@@ -138,6 +138,14 @@
 #   #14), so a message longer than 2048 bytes is read with its last, possibly
 #   partial, line dropped. The line may sit anywhere in the message -- near the
 #   top is the simplest way to pass.
+#
+#   THE CUT IS 1024 BYTES, NOT 2048 -- MEASURED, AND MOVED 2026-10-02. The
+#   paragraph above is kept as true of its moment. 2048 was Vercel's
+#   documented figure; on aimaturitymodels aad84af the gate read the variable
+#   at exactly 1024 bytes for a 1371-byte message, while 815- and 843-byte
+#   messages were read whole (12-CC section 5.2). Signed "Ring 3: the hook and
+#   the gate use 1024 bytes, as measured (12-CC §5.2) -- David Facer
+#   10/2/2026". The figure lives in CUT below and nowhere else in this file.
 
 MSG_FILE="$1"
 [ -n "$MSG_FILE" ] && [ -f "$MSG_FILE" ] || exit 0
@@ -237,23 +245,25 @@ WI_RE='^Work-Item:[[:space:]]*[A-Za-z0-9_.-]+#[0-9]+[[:space:]]*$'
 # The mark, exactly. 10-DT2 section 1 item 1.
 DM_RE='^Work-Item:[[:space:]]*de-minimis[[:space:]]*$'
 
-# THE FIRST 2048 BYTES, as the deploy gate will see them (header, THE 2048
-# RULE). Longer than that, the last line of the cut is dropped: it may be
-# partial, and a partial trailer can still match with the wrong number.
+# THE FIRST $CUT BYTES, as the deploy gate will see them (header, THE 2048
+# RULE, and the 1024 line beneath it). Longer than that, the last line of the
+# cut is dropped: it may be partial, and a partial trailer can still match with
+# the wrong number.
+CUT=1024
 msg_bytes=$(wc -c < "$MSG_FILE" | tr -d ' ')
-if [ "$msg_bytes" -gt 2048 ]; then
-  first2048=$(head -c 2048 "$MSG_FILE" | sed '$d')
+if [ "$msg_bytes" -gt "$CUT" ]; then
+  firstcut=$(head -c "$CUT" "$MSG_FILE" | sed '$d')
 else
-  first2048=$(cat "$MSG_FILE")
+  firstcut=$(cat "$MSG_FILE")
 fi
 has_wi=""; grep -Eq "$WI_RE" "$MSG_FILE" && has_wi="yes"
 has_dm=""; grep -Eq "$DM_RE" "$MSG_FILE" && has_dm="yes"
-wi_in=""; printf '%s\n' "$first2048" | grep -Eq "$WI_RE" && wi_in="yes"
-dm_in=""; printf '%s\n' "$first2048" | grep -Eq "$DM_RE" && dm_in="yes"
+wi_in=""; printf '%s\n' "$firstcut" | grep -Eq "$WI_RE" && wi_in="yes"
+dm_in=""; printf '%s\n' "$firstcut" | grep -Eq "$DM_RE" && dm_in="yes"
 
 # WHAT IS WRONG, IF ANYTHING. A qualified Work-Item line wins over the mark.
 #   none     -- neither a Work-Item line nor the mark (the original case)
-#   late     -- the line or the mark lies past the first 2048 bytes
+#   late     -- the line or the mark lies past the first $CUT bytes
 #   tooling  -- the mark, on a commit touching this surface's tooling
 #   unknown  -- the mark, and the projection cannot say what tooling is
 reason=""
@@ -280,7 +290,7 @@ fi
 # expired while the hook went on printing it.
 case "$reason" in
   none)    wi_what="carries no Work-Item trailer" ;;
-  late)    wi_what="carries its Work-Item line past the first 2048 bytes of the message" ;;
+  late)    wi_what="carries its Work-Item line past the first $CUT bytes of the message" ;;
   tooling) wi_what="carries the de-minimis mark and touches this surface's tooling" ;;
   unknown) wi_what="carries the de-minimis mark, and this surface's projection does not say what its tooling is" ;;
 esac
@@ -305,7 +315,7 @@ echo "$wi_mode_c" >&2
 echo "" >&2
 case "$reason" in
   late)
-    echo "  Vercel passes the deploy gate only the first 2048 bytes of a commit message;" >&2
+    echo "  Vercel passes the deploy gate only the first $CUT bytes of a commit message;" >&2
     echo "  move the Work-Item line near the top. This message is $msg_bytes bytes." >&2
     ;;
   tooling)

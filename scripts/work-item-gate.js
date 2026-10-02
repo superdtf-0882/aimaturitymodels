@@ -39,6 +39,14 @@
 // The hook holds the same line wholly inside the first 2048 bytes, so a commit
 // that passed ring 2 on an enforced surface always passes here.
 //
+// THE CUT IS 1024 BYTES, NOT 2048 -- MEASURED, AND MOVED 2026-10-02. The
+// paragraph above is kept as true of its moment. This gate's own log on
+// aimaturitymodels aad84af read the variable at exactly 1024 bytes for a
+// 1371-byte message, while 815- and 843-byte messages were read whole (12-CC
+// section 5.2). Signed "Ring 3: the hook and the gate use 1024 bytes, as
+// measured (12-CC §5.2) -- David Facer 10/2/2026". LIMIT below is the one home
+// of the figure here, and the hook's CUT is the other; both move together.
+//
 // TWO MODES, chosen by an ARGUMENT in the surface's package.json and never by
 // the environment:
 //   --report   STAGE 1. Prints the four facts and exits 0. Run on a preview
@@ -71,7 +79,7 @@
 
 'use strict';
 
-const LIMIT = 2048;
+const LIMIT = 1024;
 const SLACK = 4;
 const WI_RE = /^Work-Item:[ \t]*[A-Za-z0-9_.-]+#[0-9]+[ \t\r]*$/m;
 const DM_RE = /^Work-Item:[ \t]*de-minimis[ \t\r]*$/m;
@@ -112,9 +120,12 @@ function selfTest() {
     ['a bare #120, unqualified', 'subject\n\nWork-Item: #120', false],
     ['absent', undefined, false],
     ['empty', '', false],
-    ['cut at 2048, the line past the cut', cutAt('subject\n\n' + pad(2300) + '\nWork-Item: OKF-TOGAF#141'), false],
-    ['cut at 2048, the line near the top', cutAt('subject\n\nWork-Item: OKF-TOGAF#141\n\n' + pad(2300)), true],
-    ['cut mid-trailer: a partial line must not pass', cutAt('subject\n\n' + 'x'.repeat(2025) + '\nWork-Item: OKF-TOGAF#141'), false],
+    [`cut at ${LIMIT}, the line past the cut`, cutAt('subject\n\n' + pad(LIMIT + 300) + '\nWork-Item: OKF-TOGAF#141'), false],
+    [`cut at ${LIMIT}, the line near the top`, cutAt('subject\n\nWork-Item: OKF-TOGAF#141\n\n' + pad(LIMIT + 300)), true],
+    // THE 2026-10-02 CASE: a line inside 2048 bytes but past 1024 -- what the
+    // documented figure would have let through, and the measured cut hides.
+    [`the line between ${LIMIT} and 2048 bytes: past the cut, refused`, cutAt('subject\n\n' + pad(LIMIT + 200) + '\nWork-Item: OKF-TOGAF#141\n' + pad(600)), false],
+    ['cut mid-trailer: a partial line must not pass', cutAt('subject\n\n' + 'x'.repeat(LIMIT - 23) + '\nWork-Item: OKF-TOGAF#141'), false],
     ['CRLF message with a qualified line', 'subject\r\n\r\nWork-Item: OKF-TOGAF#141\r\n', true],
   ];
   let failed = 0;
