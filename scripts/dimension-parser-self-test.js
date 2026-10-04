@@ -130,7 +130,7 @@ console.log("--- the SDLC and PDLC assembly keep the shared layer's sustainment 
     "SDLC's assembly keeps D1's sustainment", JSON.stringify(sdlc.sustainment));
   say(sdlc.transitions["B-C"] && sdlc.transitions["B-C"].verification === "B to C is verified by this.",
     "SDLC's assembly keeps a verification clause", JSON.stringify(sdlc.transitions["B-C"]));
-  const pdlc = normalizeSharedDimension(JSON.parse(JSON.stringify(d1)), { keepSustainment: true });
+  const pdlc = normalizeSharedDimension(JSON.parse(JSON.stringify(d1)));
   say(pdlc.sustainment === "Sustainment prose, first line. Second line.",
     "PDLC's assembly keeps D1's sustainment", JSON.stringify(pdlc.sustainment));
   const legacy = normalizeSharedDimension({ transitions: { "A-B": "plain" } });

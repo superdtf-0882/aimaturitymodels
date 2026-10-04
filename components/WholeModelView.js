@@ -181,6 +181,11 @@ function CellDetail({ dim, level, deepDiveBasePath, geometry }) {
 // (28/22 before EA. Both figures recomputed by parsing all four models, not
 // by adding nine to the old number -- EA's descriptions needed a parser fix
 // to be captured at all, so the arithmetic would have been wrong.)
+// [2026-10-03, OKF-TOGAF#142, recomputed the same way, from the built pages'
+// data: 38 dimensions across the four models (EA now has ten), with `desc`
+// on all 38 and `sustainment` on all 38 -- D1-D3 of SDLC and PDLC were the
+// six without, because the parser dropped them. The not-yet-drafted line
+// stays for any model that lacks one.]
 function DimensionBand({ dim }) {
   return (
     <section className="wmv-band" aria-live="polite">
