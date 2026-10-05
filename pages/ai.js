@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Link from "next/link";
 import Layout from "../components/Layout";
 import { buildDigest } from "../lib/aiDigestCore";
 
@@ -31,7 +30,7 @@ export default function Ai({ digest }) {
   return (
     <Layout
       title="Feed This to Your AI"
-      crumb={<><Link href="/">davidfacer.com</Link> / aimaturitymodels.com / Feed This to Your AI</>}
+      crumb={<><a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com / Feed This to Your AI</>}
     >
       <h1>Feed This to Your AI</h1>
       <p className="dek">

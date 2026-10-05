@@ -7,7 +7,7 @@ export default function SoftwareEngineeringFunctionModelPage() {
   return (
     <Layout
       title={softwareEngineeringFunctionModel.title}
-      crumb={<><Link href="/">davidfacer.com</Link> / aimaturitymodels.com / <Link href="/functionmodels">Function Models</Link> / {softwareEngineeringFunctionModel.title}</>}
+      crumb={<><a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com / <Link href="/functionmodels">Function Models</Link> / {softwareEngineeringFunctionModel.title}</>}
     >
       <FunctionModel data={softwareEngineeringFunctionModel} />
     </Layout>

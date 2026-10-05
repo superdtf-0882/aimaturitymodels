@@ -152,7 +152,7 @@ export default function Assessment({
       title={`${modelName} — Assessment`}
       crumb={
         <>
-          <Link href="/">davidfacer.com</Link> / aimaturitymodels.com /{" "}
+          <a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com /{" "}
           <Link href="/assessments">Maturity Model Assessments</Link> / {modelName}
         </>
       }

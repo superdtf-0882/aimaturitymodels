@@ -26,7 +26,7 @@ export default function DeepDive({
       title={`${modelLabel} — ${title}`}
       crumb={
         <>
-          <Link href="/">davidfacer.com</Link> / aimaturitymodels.com /{" "}
+          <a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com /{" "}
           <Link href="/models">AI-Native Maturity Models</Link> /{" "}
           <Link href={wmvHref}>{wmvLabel}</Link> / {id}
         </>

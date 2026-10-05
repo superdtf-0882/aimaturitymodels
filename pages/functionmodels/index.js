@@ -5,7 +5,7 @@ export default function FunctionModelsIndex() {
   return (
     <Layout
       title="Function Models"
-      crumb={<><Link href="/">davidfacer.com</Link> / aimaturitymodels.com / Function Models</>}
+      crumb={<><a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com / Function Models</>}
     >
       <h1>Function Models</h1>
       <p className="dek">

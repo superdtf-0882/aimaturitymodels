@@ -20,7 +20,7 @@ export default function StrategicValueMatrixPage({ frameHtml, sample, sourceComm
       wide
       crumb={
         <>
-          <Link href="/">davidfacer.com</Link> / aimaturitymodels.com /{" "}
+          <a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com /{" "}
           <Link href="/models">AI-Native Maturity Models</Link> /{" "}
           <Link href="/models/prioritization/whole-model-view">Product Prioritization</Link> / Strategic Value Matrix
         </>

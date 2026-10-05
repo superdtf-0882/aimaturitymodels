@@ -5,7 +5,7 @@ export default function AssessmentsIndex() {
   return (
     <Layout
       title="Maturity Model Assessments"
-      crumb={<><Link href="/">davidfacer.com</Link> / aimaturitymodels.com / Maturity Model Assessments</>}
+      crumb={<><a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com / Maturity Model Assessments</>}
     >
       <h1>Maturity Model Assessments</h1>
       <p className="dek">

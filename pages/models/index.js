@@ -5,7 +5,7 @@ export default function ModelsIndex() {
   return (
     <Layout
       title="The Family"
-      crumb={<><Link href="/">davidfacer.com</Link> / aimaturitymodels.com / AI-Native Maturity Models</>}
+      crumb={<><a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com / AI-Native Maturity Models</>}
     >
       <h1>AI-Native Maturity Models</h1>
       <p className="dek">

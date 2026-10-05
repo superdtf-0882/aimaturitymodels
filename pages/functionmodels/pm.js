@@ -7,7 +7,7 @@ export default function PmFunctionModelPage() {
   return (
     <Layout
       title={pmFunctionModel.title}
-      crumb={<><Link href="/">davidfacer.com</Link> / aimaturitymodels.com / <Link href="/functionmodels">Function Models</Link> / {pmFunctionModel.title}</>}
+      crumb={<><a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com / <Link href="/functionmodels">Function Models</Link> / {pmFunctionModel.title}</>}
     >
       <FunctionModel data={pmFunctionModel} />
     </Layout>

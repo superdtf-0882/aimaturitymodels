@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Link from "next/link";
 import Layout from "../components/Layout";
 import { STRATA } from "../lib/strataData";
 
@@ -33,7 +32,7 @@ export default function Strata() {
   }
 
   return (
-    <Layout title="Strata" crumb={<><Link href="/">davidfacer.com</Link> / aimaturitymodels.com / Strata</>}>
+    <Layout title="Strata" crumb={<><a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com / Strata</>}>
       <h1>Strata</h1>
       <p className="stratum-kicker">S0&ndash;S7 Governed-World Model</p>
       <p className="dek">

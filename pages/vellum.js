@@ -5,7 +5,7 @@ export default function Vellum() {
   return (
     <Layout
       title="Vellum & Seminum"
-      crumb={<><Link href="/">davidfacer.com</Link> / aimaturitymodels.com / Vellum & Seminum</>}
+      crumb={<><a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com / Vellum & Seminum</>}
     >
       <h1>Vellum &amp; Seminum</h1>
       <p className="dek">

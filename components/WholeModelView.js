@@ -318,7 +318,7 @@ export default function WholeModelView({
       wide
       crumb={
         <>
-          <Link href="/">davidfacer.com</Link> / aimaturitymodels.com /{" "}
+          <a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com /{" "}
           <Link href="/models">AI-Native Maturity Models</Link> /{" "}
           <Link href={crumbHref}>{crumbLabel}</Link> / Whole-Model View
         </>

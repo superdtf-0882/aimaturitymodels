@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { marked } from "marked";
 import Layout from "../components/Layout";
 import { EAOKF_INTRO, EAOKF_BODY_MARKDOWN } from "../lib/eaokfContent";
@@ -9,7 +8,7 @@ export default function EaOkf() {
   return (
     <Layout
       title="Enterprise Architecture OKF"
-      crumb={<><Link href="/">davidfacer.com</Link> / aimaturitymodels.com / Enterprise Architecture OKF</>}
+      crumb={<><a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com / Enterprise Architecture OKF</>}
     >
       <h1>Enterprise Architecture OKF</h1>
       <p className="dek">{EAOKF_INTRO}</p>
