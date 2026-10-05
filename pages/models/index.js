@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Layout from "../../components/Layout";
+import { MODELS_LEAD, MODELS_HOWTO } from "../../lib/intros";
 
 export default function ModelsIndex() {
   return (
@@ -8,13 +9,9 @@ export default function ModelsIndex() {
       crumb={<><a href="https://davidfacer.com">davidfacer.com</a> / aimaturitymodels.com / AI-Native Maturity Models</>}
     >
       <h1>AI-Native Maturity Models</h1>
-      <p className="dek">
-        Capability models for understanding how AI-nativity changes software
-        delivery, product management, and the enterprise itself. These models
-        don&rsquo;t ask how much AI an organization uses &mdash; they ask what
-        its operating systems are actually capable of doing, and what
-        realistically adjacent capability comes next.
-      </p>
+      {/* OKF-TOGAF#157: the owner's paragraph above the list, and "How to read
+          these models" below it, as 96-DT2 carries them (lib/intros.js). */}
+      <p className="dek">{MODELS_LEAD}</p>
 
       <div className="model-list">
         <Link href="/models/sdlc/whole-model-view" className="model-row">
@@ -68,6 +65,14 @@ export default function ModelsIndex() {
           <span className="pill live">Live</span>
         </Link>
       </div>
+      <h2>How to read these models</h2>
+      <p>{MODELS_HOWTO.states}</p>
+      <p>
+        {MODELS_HOWTO.rule.before}
+        <Link href={MODELS_HOWTO.rule.href}>{MODELS_HOWTO.rule.link}</Link>
+        {MODELS_HOWTO.rule.after}
+      </p>
+
       {/* OKF-TOGAF#131. This sentence described hover-then-click, from before
           move 2 (2026-09-11) replaced it with the always-open rail -- so it
           contradicted all four pages it describes, each of which says "Select

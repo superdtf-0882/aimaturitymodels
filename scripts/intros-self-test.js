@@ -42,7 +42,9 @@ const PRACTICE_MD = EXPECTED.practice.replace(/^\*\*(AI-Native Enterprise Operat
 // heading marks dropped, whitespace collapsed.
 const ENT = { amp: "&", lt: "<", gt: ">", quot: '"', rsquo: "’", lsquo: "‘", rdquo: "”", ldquo: "“", mdash: "—", ndash: "–", nbsp: " ", "#39": "'", "#x27": "'" };
 const seen = (s) => s
-  .replace(/<!--[\s\S]*?-->/g, " ")
+  .replace(/<!--[\s\S]*?-->/g, "")
+  // Inline tags join their text ("read by <a>one rule</a>:"); others break it.
+  .replace(/<\/?(a|strong|em|b|i|span|code)\b[^>]*>/gi, "")
   .replace(/<[^>]+>/g, " ")
   .replace(/&([#a-z0-9]+);/gi, (m, e) => (e.toLowerCase() in ENT ? ENT[e.toLowerCase()] : m))
   .replace(/\*\*/g, "")
