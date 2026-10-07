@@ -75,7 +75,9 @@ console.log("--- the buttons (source check) ---");
   // -- the buttons keep their size; the labels shorten. The stored score stays
   // "Pre-AI" / "Exempt"; screen readers and the tooltip get the full name.]
   const comp = require("fs").readFileSync(require("path").join(__dirname, "..", "components", "Assessment.js"), "utf8");
-  say(/<>Pre<br \/>AI<\/>/.test(comp) && /"Exempt": "Exmt"|Exempt: "Exmt"/.test(comp), "the labels read Pre/AI (two lines) and Exmt");
+  // [Changed on the owner's word: "Xmpt is better, more phonetic, and I think
+  // will avoid confusion better."]
+  say(/<>Pre<br \/>AI<\/>/.test(comp) && /"Exempt": "Xmpt"|Exempt: "Xmpt"/.test(comp), "the labels read Pre/AI (two lines) and Xmpt");
   say(/aria-label=\{st\}/.test(comp) && /title=\{st\}/.test(comp), "each button carries its full name for screen readers and on hover");
   say(/onClick=\{\(\) => selectLevel\(st\)\}/.test(comp), "the score stored is still the full state name");
   // [Added on the owner's word: "Please fix the padding/centering on 'Exmt'."
@@ -83,7 +85,8 @@ console.log("--- the buttons (source check) ---");
   // and type size change, so the label centres.]
   const css = require("fs").readFileSync(require("path").join(__dirname, "..", "styles", "globals.css"), "utf8");
   const rule = (css.match(/\.assess-state-btn\s*\{([^}]*)\}/) || [])[1] || "";
-  say(/padding:\s*0/.test(rule) && /font-size:\s*12px/.test(rule) && !/width|height/.test(rule), "the state buttons centre their label at the same size");
+  // [Corrected in commit 2: the first form refused any "height", line-height included.]
+  say(/padding:\s*0/.test(rule) && /font-size:\s*12px/.test(rule) && !/(^|[;\s{])(width|height)\s*:/.test(rule), "the state buttons centre their label at the same size");
 }
 
 process.exitCode = bad;
