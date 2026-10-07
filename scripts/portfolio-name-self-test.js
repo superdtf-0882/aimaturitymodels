@@ -92,5 +92,21 @@ const cl = at("CHANGELOG.md");
 say(/^## v1\.4\.0 — 2026-10-07$/m.test(cl), "CHANGELOG: a v1.4.0 entry");
 say(cl.includes("Scores against v1.3.0 remain comparable: no level's substance changed; D1 and D3 now name the portfolio, product and internal work alike, which the model always meant."), "CHANGELOG: the comparability line as ruled");
 
+// --- the sibling models (2026-10-07, "Update the PDLC and EA mentions under
+// #167 -- David Facer, to CC in session"): the PDLC model's notes and two
+// deep-dives, read at the pin the site loads; the EA model's README, at its
+// release tag (the site does not load READMEs, so EA's pin does not move).
+console.log("--- the sibling models ---");
+const gitIn = (dir, args) => { try { return execSync("git " + args, { cwd: path.join(root, "..", dir), encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).replace(/\r\n/g, "\n"); } catch { return ""; } };
+const pdlcPin = (read("lib/pins.js").match(/const PDLC_PINNED_COMMIT = "([0-9a-f]{40})"/) || [])[1];
+const pdlcTag = gitIn("ai-native-pdlc-maturity-model", "rev-list -n 1 v1.2.1").trim();
+say(!!pdlcPin && pdlcTag === pdlcPin, "the PDLC pin is its v1.2.1 tag", (pdlcPin || "").slice(0, 7) + " / " + pdlcTag.slice(0, 7));
+for (const f of ["ai_native_pdlc_maturity_model.md", "deep_dives/d5.md", "deep_dives/d11.md"]) {
+  const s = gitIn("ai-native-pdlc-maturity-model", `show ${pdlcPin}:${f}`);
+  say(!!s && !OLD.test(s) && s.includes(NEW_MODEL), "PDLC " + f + " names the new model");
+}
+const eaReadme = gitIn("ai-native-ea-maturity-model", "show v1.1.2:README.md");
+say(!!eaReadme && !OLD.test(eaReadme) && eaReadme.includes(NEW_MODEL), "EA README at v1.1.2 names the new model");
+
 console.log(bad ? "PORTFOLIO NAME SELF-TEST FAIL" : "PORTFOLIO NAME SELF-TEST PASS");
 process.exit(bad);
