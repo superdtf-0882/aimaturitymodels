@@ -11,6 +11,9 @@
 //
 // Reads the two page sources and compares the order of their model-name
 // cells. Offline; exit 1 on a failing case.
+// [2026-10-07, OKF-TOGAF#167: the fourth model is Portfolio Prioritization, on
+// "Rename to Portfolio Prioritization as 118-DT2 rules; repository name kept;
+// signed texts updated to match -- David Facer 10/7/2026".]
 "use strict";
 
 const fs = require("fs");
@@ -25,7 +28,7 @@ const say = (ok, name, shown) => {
 };
 
 // The family, in the owner's order. Each page names a model by its own noun.
-const ORDER = ["AI-Native EA", "AI-Native SDLC", "AI-Native PDLC", "Product Prioritization", "Product Marketing Lifecycle"];
+const ORDER = ["AI-Native EA", "AI-Native SDLC", "AI-Native PDLC", "Portfolio Prioritization", "Product Marketing Lifecycle"];
 const names = (src) => [...src.matchAll(/<div className="model-name">([^<]+)<\/div>/g)].map((m) => m[1].trim());
 const family = (list) => list.map((n) => ORDER.find((o) => n.startsWith(o + " ")) || "?" + n);
 
