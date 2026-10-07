@@ -59,6 +59,7 @@ console.log("--- the meanings, read from the model ---");
   const matrix = "## How to read\n\n### Pre-AI — The Threshold State\n\n**Pre-AI** designates a dimension\nwith no AI practice.\n\nMore text.\n\n---\n\n### Exempt — The Governed Stance\n\n**Exempt** designates a dimension excluded by policy.\n\n**An Exempt designation is valid only when it cites a governing constraint.** Sources follow.\n\n---\n";
   const t = md && md.readThresholdStates(matrix);
   say(!!t && t.preAi === "Pre-AI designates a dimension with no AI practice." && /excluded by policy\. An Exempt designation is valid only when it cites a governing constraint\./.test(t.exempt), "both meanings read from the model's own sections");
+  say(!!t && t.exempt.endsWith("cites a governing constraint.") && !/Sources follow/.test(t.exempt), "the Exempt meaning stops at that sentence, not the list after it");
   say(!!md && md.readThresholdStates("## D1. A model with no threshold sections\n") === null, "a model defining neither gets none (PDLC, Prioritization)");
 }
 
