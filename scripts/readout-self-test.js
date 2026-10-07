@@ -82,7 +82,10 @@ say(!!t1 && !!t2 && rest.replace(/\n{3,}/g, "\n\n") === t1.replace(/\n{3,}/g, "\
 say(t1 !== null && !/max_tokens|gpt-/.test(t1), "the approved V1 file is untouched (control)");
 
 console.log("--- nothing preview-only ---");
-say(!/\bea:\s*\{/.test(api) && !/ea-executive-readout/.test(api), "no EA readout until its prompt is approved (#145)");
+// [Until the EA prompt's approval this read "no EA readout until its prompt is
+// approved (#145)". Approved 2026-10-07; scripts/ea-assessment-self-test.js
+// holds the prompt to the draft. Here: EA imports the approved file only.]
+say(/from "\.\.\/\.\.\/lib\/prompts\/ea-executive-readout-v1";/.test(api) && !/ea-executive-readout-v1-draft/.test(api), "EA's readout uses its approved prompt, not the draft");
 say(!exists("lib/prompts/ea-executive-readout-v1-draft.js") && !exists("lib/prompts/executive-readout-v2-candidate.js"), "neither the EA draft nor the candidate file remains");
 say(!/PREVIEW BRANCH|TEST ONLY|NEVER MERGED/.test(api), "the route carries no preview-branch notes");
 
