@@ -625,6 +625,9 @@ table.wmv tbody tr.is-selected td.dim { background: var(--paper); }
 }
 .assess-level-btn:hover { border-color: var(--orange); color: var(--ink); }
 .assess-level-btn.is-selected { border-color: var(--orange); background: var(--orange-soft); color: var(--ink); }
+/* OKF-TOGAF#161: the Pre-AI and Exempt buttons keep the level buttons' size;
+   no side padding and smaller type so "Xmpt" and the two-line "Pre / AI" centre. */
+.assess-state-btn { padding: 0; font-size: 12px; line-height: 1.15; letter-spacing: 0; }
 
 .assess-level-def {
   background: var(--paper); border-radius: 10px; border: 1px solid var(--line);

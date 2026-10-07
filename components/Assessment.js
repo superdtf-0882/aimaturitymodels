@@ -31,10 +31,11 @@ ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 // LEVELS and buildAssessmentMd moved to lib/assessment-md.js (OKF-TOGAF#161).
 
 // The threshold-state buttons keep the level buttons' size, so their labels
-// are short, on the owner's word ("How about Pre AI wrapped and Exmt?"). The
-// score stored, written to the file and read by the readout stays the full
-// name; screen readers and the hover tooltip get it too.
-const STATE_LABELS = { "Pre-AI": <>Pre<br />AI</>, "Exempt": "Exmt" };
+// are short, on the owner's word ("How about Pre AI wrapped and Exmt?", then
+// "Xmpt is better, more phonetic"). The score stored, written to the file and
+// read by the readout stays the full name; screen readers and the hover
+// tooltip get it too.
+const STATE_LABELS = { "Pre-AI": <>Pre<br />AI</>, "Exempt": "Xmpt" };
 
 const READOUT_MESSAGES = [
   "calculating dimensions", "mapping investment concentration", "measuring adjacent maturities",
