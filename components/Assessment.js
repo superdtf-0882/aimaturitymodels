@@ -10,6 +10,10 @@ import {
   Tooltip,
 } from "chart.js";
 import Layout from "./Layout";
+// OKF-TOGAF#161: the file builder and the grading rule live in plain CommonJS
+// libraries so scripts/threshold-states-self-test.js can load them.
+const { LEVELS, buildAssessmentMd } = require("../lib/assessment-md");
+const { isGraded } = require("../lib/score-vector");
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 
@@ -24,47 +28,7 @@ ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 // the API looks up dimension count and prompt from it server-side, so this
 // component never needs to know those itself beyond `dimensions.length`.
 
-const LEVELS = ["A", "B", "C", "D", "E"];
-
-function buildAssessmentMd({ modelTitle, modelFullName, repoUrl, dimensions, scores }) {
-  const scored = Object.keys(scores).length;
-  const date = new Date().toISOString().split("T")[0];
-
-  let md = "";
-  md += `# ${modelTitle}\n\n`;
-  md += `**Framework:** ${modelFullName} — David Facer (CC BY 4.0)\n`;
-  md += `**Model reference:** ${repoUrl}\n`;
-  md += `**Generated:** ${date}\n\n`;
-  md += `> Each dimension is scored A through E. A given level is only merited when **everything** in its definition is true. `;
-  md += `Dimensions are independently scored — an organisation can be advanced in one and nascent in another.\n\n`;
-  md += `---\n\n`;
-
-  md += `## Scores\n\n`;
-  md += `| Dimension | Name | Level |\n`;
-  md += `|---|---|---|\n`;
-  dimensions.forEach((d) => {
-    md += `| ${d.id} | ${d.name} | ${scores[d.id] || "—"} |\n`;
-  });
-  md += `\n*${scored} of ${dimensions.length} dimensions graded.* No averaged score is computed above — dimensions are independently scored, and collapsing ordinal A–E judgments into a single mean would lend false interval precision to a profile that is only meaningful dimension by dimension.\n\n`;
-  md += `---\n\n`;
-
-  md += `## Full maturity definitions\n\n`;
-  md += `*All five levels shown for each dimension. Your scored level is marked with ◀.*\n\n`;
-  dimensions.forEach((d) => {
-    md += `### ${d.id}. ${d.name}\n\n`;
-    md += `*${d.desc}*\n\n`;
-    LEVELS.forEach((lv) => {
-      const marker = scores[d.id] === lv ? " — your score ◀" : "";
-      md += `**Level ${lv}${marker}**\n\n`;
-      md += `${d.levels[lv]}\n\n`;
-    });
-    md += `---\n\n`;
-  });
-
-  md += `*${modelFullName} © 2026 David Facer — [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)*\n`;
-  md += `*Full model: ${repoUrl}*\n`;
-  return md;
-}
+// LEVELS and buildAssessmentMd moved to lib/assessment-md.js (OKF-TOGAF#161).
 
 const READOUT_MESSAGES = [
   "calculating dimensions", "mapping investment concentration", "measuring adjacent maturities",
@@ -83,6 +47,10 @@ export default function Assessment({
   repoUrl,
   executiveReadoutHref, // e.g. "/models/pdlc/executivereadout"
   downloadFilename, // e.g. "pdlc-maturity-assessment.md"
+  // OKF-TOGAF#161: { preAi, exempt } -- the two threshold states' meanings,
+  // read from the model's own text at its pin -- or absent for a model that
+  // defines neither (PDLC and Prioritization today): A to E only.
+  thresholdStates = null,
 }) {
   // Issue #29: D1 starts pre-graded at level A so a first-time visitor
   // sees what a graded cell looks like before doing anything themselves --
@@ -92,9 +60,12 @@ export default function Assessment({
   const [generating, setGenerating] = useState(false);
   const [readoutMsgIndex, setReadoutMsgIndex] = useState(0);
   const [error, setError] = useState(null);
+  const [exemptReasons, setExemptReasons] = useState({});
 
   const dim = dimensions.find((d) => d.id === selectedDim);
-  const gradedCount = Object.keys(scores).length;
+  // Exempt counts only with its reason: the models say an exemption without a
+  // citable constraint is not Exempt.
+  const gradedCount = dimensions.filter((d) => isGraded(scores[d.id], exemptReasons[d.id])).length;
   const allGraded = gradedCount === dimensions.length;
   const pct = (gradedCount / dimensions.length) * 100;
 
@@ -108,7 +79,7 @@ export default function Assessment({
   }
 
   function downloadMd() {
-    const md = buildAssessmentMd({ modelTitle, modelFullName, repoUrl, dimensions, scores });
+    const md = buildAssessmentMd({ modelTitle, modelFullName, repoUrl, dimensions, scores, exemptReasons });
     const a = Object.assign(document.createElement("a"), {
       href: URL.createObjectURL(new Blob([md], { type: "text/markdown" })),
       download: downloadFilename,
@@ -130,7 +101,7 @@ export default function Assessment({
       const res = await fetch("/api/diagnostic", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: modelSlug, md: buildAssessmentMd({ modelTitle, modelFullName, repoUrl, dimensions, scores }) }),
+        body: JSON.stringify({ model: modelSlug, md: buildAssessmentMd({ modelTitle, modelFullName, repoUrl, dimensions, scores, exemptReasons }) }),
       });
       const data = await res.json();
       clearInterval(timer);
@@ -169,12 +140,15 @@ export default function Assessment({
           organization&rsquo;s maturity — for each level, everything in the definition must be
           true to merit that level. The Executive Readout unlocks once all {dimensions.length}{" "}
           dimensions are graded.
+          {thresholdStates && (
+            <> Pre-AI and Exempt sit outside the A–E scale; an Exempt dimension needs the constraint it rests on.</>
+          )}
         </div>
 
         <div className="assess-body">
           <div className="assess-left">
             {dimensions.map((d) => {
-              const grade = scores[d.id];
+              const grade = isGraded(scores[d.id], exemptReasons[d.id]) ? scores[d.id] : null;
               const isSelected = selectedDim === d.id;
               return (
                 <button
@@ -210,9 +184,39 @@ export default function Assessment({
                   {l}
                 </button>
               ))}
+              {thresholdStates &&
+                ["Pre-AI", "Exempt"].map((st) => (
+                  <button
+                    key={st}
+                    className={`assess-level-btn assess-state-btn${scores[dim.id] === st ? " is-selected" : ""}`}
+                    onClick={() => selectLevel(st)}
+                  >
+                    {st}
+                  </button>
+                ))}
             </div>
 
-            {scores[dim.id] ? (
+            {scores[dim.id] === "Pre-AI" || scores[dim.id] === "Exempt" ? (
+              <div className="assess-level-def">
+                <div className="assess-level-def-label">{scores[dim.id]} — outside the A–E scale</div>
+                <p>{scores[dim.id] === "Pre-AI" ? thresholdStates.preAi : thresholdStates.exempt}</p>
+                {scores[dim.id] === "Exempt" && (
+                  <label className="assess-exempt-reason">
+                    <span>The constraint this rests on (regulatory, contractual, or corporate policy):</span>
+                    <input
+                      type="text"
+                      maxLength={200}
+                      value={exemptReasons[dim.id] || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setExemptReasons((prev) => ({ ...prev, [dim.id]: v }));
+                      }}
+                      placeholder="e.g. Regulatory: a sector rule restricts AI use in this activity"
+                    />
+                  </label>
+                )}
+              </div>
+            ) : scores[dim.id] ? (
               <div className="assess-level-def">
                 <div className="assess-level-def-label">Level {scores[dim.id]} — definition</div>
                 <p>{dim.levels[scores[dim.id]]}</p>
@@ -230,7 +234,7 @@ export default function Assessment({
                       labels: dimensions.map((d) => d.id),
                       datasets: [
                         {
-                          data: dimensions.map((d) => (scores[d.id] ? LEVELS.indexOf(scores[d.id]) + 1 : 0)),
+                          data: dimensions.map((d) => (LEVELS.includes(scores[d.id]) ? LEVELS.indexOf(scores[d.id]) + 1 : 0)),
                           backgroundColor: "rgba(146,99,24,0.15)",
                           borderColor: "var(--orange, #926318)",
                           pointBackgroundColor: "#926318",

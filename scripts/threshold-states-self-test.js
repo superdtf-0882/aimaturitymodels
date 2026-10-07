@@ -53,6 +53,15 @@ console.log("--- the readout's parser ---");
   say(!!sv && k1 !== k2 && sv.vectorKey(["A", "B"], {}) === "AB", "the cache key carries the reason; A-E keys are unchanged");
 }
 
+console.log("--- the meanings, read from the model ---");
+{
+  // [Added in commit 2: readThresholdStates was designed while building.]
+  const matrix = "## How to read\n\n### Pre-AI — The Threshold State\n\n**Pre-AI** designates a dimension\nwith no AI practice.\n\nMore text.\n\n---\n\n### Exempt — The Governed Stance\n\n**Exempt** designates a dimension excluded by policy.\n\n**An Exempt designation is valid only when it cites a governing constraint.** Sources follow.\n\n---\n";
+  const t = md && md.readThresholdStates(matrix);
+  say(!!t && t.preAi === "Pre-AI designates a dimension with no AI practice." && /excluded by policy\. An Exempt designation is valid only when it cites a governing constraint\./.test(t.exempt), "both meanings read from the model's own sections");
+  say(!!md && md.readThresholdStates("## D1. A model with no threshold sections\n") === null, "a model defining neither gets none (PDLC, Prioritization)");
+}
+
 console.log("--- grading ---");
 {
   say(!!sv && sv.isGraded("Exempt", "") === false && sv.isGraded("Exempt", "   ") === false, "Exempt without a reason does not count as graded");

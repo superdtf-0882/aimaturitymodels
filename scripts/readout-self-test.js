@@ -40,7 +40,8 @@ say(/reasoning_effort:\s*effort/.test(api), "the reasoning effort is set on the 
 console.log("--- the cache key ---");
 const hv = api.match(/function hashVector\(([^)]*)\)\s*\{([\s\S]*?)\n\}/);
 say(!!hv && /readoutModel/.test(hv[1]) && /effort/.test(hv[1]) && /promptVersion/.test(hv[1]), "hashVector takes the AI model, effort and prompt version", hv ? hv[1] : "");
-say(/hashVector\(body\.model, scoreVector, READOUT_MODEL, effort, modelConfig\.promptVersion\)/.test(api), "the handler passes all three");
+// [OKF-TOGAF#161 adds a trailing argument, the Exempt reasons; the three stay.]
+say(/hashVector\(body\.model, scoreVector, READOUT_MODEL, effort, modelConfig\.promptVersion[,)]/.test(api), "the handler passes all three");
 
 console.log("--- the SDLC candidate prompt ---");
 const v1 = read("lib/prompts/executive-readout-v1.js");
@@ -51,7 +52,13 @@ const S1 = "The highest-value investment is not necessarily the lowest score.";
 const S2 = "Refer to capabilities by what they do for the business, not by dimension number or level letter;";
 say(!!t2 && t2.includes(S1) && t2.includes(S2), "the candidate carries DTOG's two sentences");
 let rest = t2 || "";
-for (const s of [S1, S2]) { const i = rest.indexOf(s); if (i >= 0) { const e = rest.indexOf("\n", i); rest = rest.slice(0, i).replace(/\n\n$/, "\n") + rest.slice(e < 0 ? rest.length : e + 1); } }
+// [OKF-TOGAF#161: the candidate also carries four Pre-AI/Exempt lines from the
+// EA draft. Two are added lines, removed here like S1 and S2; two extend a V1
+// line, restored here to V1's wording. Nothing else may differ.]
+const ADDED = [S1, S2, "Treat Exempt as a stance, not a gap.", "Never recommend moving every Pre-AI dimension off Pre-AI."];
+for (const s of ADDED) { const i = rest.indexOf(s); if (i >= 0) { const e = rest.indexOf("\n", i); rest = rest.slice(0, i).replace(/\n\n$/, "\n") + rest.slice(e < 0 ? rest.length : e + 1); } }
+rest = rest.replace(/^- the organization's current scores, which may include .*$/m, "- the organization's current scores")
+  .replace("at the organization's current stage, including dimensions that should remain Pre-AI for now.", "at the organization's current stage.");
 say(!!t1 && !!t2 && rest.replace(/\n{3,}/g, "\n\n") === t1.replace(/\n{3,}/g, "\n\n"), "and nothing else differs from the approved V1");
 say(t1 !== null && !/max_tokens|gpt-/.test(t1), "the approved V1 file is untouched (control)");
 

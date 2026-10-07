@@ -23,6 +23,8 @@ import { PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/pr
 import { EXECUTIVE_READOUT_PROMPT_V2_CANDIDATE } from "../../lib/prompts/executive-readout-v2-candidate";
 import { EA_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/ea-executive-readout-v1-draft";
 import crypto from "crypto";
+// OKF-TOGAF#161: the score reading moved to lib/score-vector.js.
+const { extractScores, vectorKey } = require("../../lib/score-vector");
 import OpenAI from "openai";
 
 const RATE_LIMIT_PER_HOUR = 5;
@@ -38,33 +40,19 @@ const EFFORTS = ["low", "medium"]; // TEST ONLY: production fixes one
 // promptVersion is part of the cache key, so a readout written under one
 // prompt is never served for another.
 const MODEL_CONFIG = {
-  sdlc: { dimensionCount: 13, prompt: EXECUTIVE_READOUT_PROMPT_V2_CANDIDATE, promptVersion: "sdlc-v2-candidate" },
+  sdlc: { dimensionCount: 13, prompt: EXECUTIVE_READOUT_PROMPT_V2_CANDIDATE, promptVersion: "sdlc-v2-candidate", thresholdStates: true },
   pdlc: { dimensionCount: 12, prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "pdlc-v1" },
   prioritization: { dimensionCount: 3, prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "prioritization-v1" },
-  ea: { dimensionCount: 10, prompt: EA_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "ea-v1-draft" },
+  ea: { dimensionCount: 10, prompt: EA_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "ea-v1-draft", thresholdStates: true },
 };
 
 // A reasoning model answers more slowly than gpt-4o did; this raises the
 // function's time limit (Vercel's own limit for the plan applies above it).
 export const config = { maxDuration: 300 };
 
-// Parses rows like "| D1 | Market Discovery | C | Defined |" out of the
-// assessment .md's scores table and returns the dimensionCount level
-// letters in D1..Dn order, or null if any dimension is missing/ungraded.
-function extractScoreVector(md, dimensionCount) {
-  const re = /^\|\s*D(\d{1,2})\s*\|[^|]*\|\s*([A-E])\s*\|/gm;
-  const found = new Map();
-  let m;
-  while ((m = re.exec(md)) !== null) {
-    found.set(Number(m[1]), m[2]);
-  }
-  const vector = [];
-  for (let i = 1; i <= dimensionCount; i++) {
-    if (!found.has(i)) return null;
-    vector.push(found.get(i));
-  }
-  return vector;
-}
+// extractScoreVector became extractScores in lib/score-vector.js (OKF-TOGAF#161):
+// A to E everywhere; Pre-AI and Exempt, with the Exempt reason, only where the
+// model defines them (thresholdStates in MODEL_CONFIG).
 
 // Includes `model` in what's hashed, not just the vector -- Prioritization's
 // 3-letter vectors and a same-length slice of any other model's vector would
@@ -75,8 +63,8 @@ function extractScoreVector(md, dimensionCount) {
 // effort and the prompt version. Preview and production share one store
 // (lib/kv.js), so without them a preview test would write into production's
 // cache, and a switched model would serve the old model's readouts.]
-function hashVector(model, vector, readoutModel, effort, promptVersion) {
-  return crypto.createHash("sha256").update(`${model}:${vector.join("")}:${readoutModel}:${effort}:${promptVersion}`).digest("hex");
+function hashVector(model, vector, readoutModel, effort, promptVersion, reasons) {
+  return crypto.createHash("sha256").update(`${model}:${vectorKey(vector, reasons)}:${readoutModel}:${effort}:${promptVersion}`).digest("hex");
 }
 
 function getClientIp(req) {
@@ -126,14 +114,17 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: rateLimit.message });
   }
 
-  const scoreVector = extractScoreVector(body.md, modelConfig.dimensionCount);
-  if (!scoreVector) {
+  const parsed = extractScores(body.md, modelConfig.dimensionCount, { thresholdStates: !!modelConfig.thresholdStates });
+  if (!parsed) {
     return res
       .status(400)
-      .json({ error: `Assessment content is incomplete -- all ${modelConfig.dimensionCount} dimensions must be scored.` });
+      .json({ error: modelConfig.thresholdStates
+        ? `Assessment content is incomplete -- all ${modelConfig.dimensionCount} dimensions must be scored, and every Exempt dimension needs its reason.`
+        : `Assessment content is incomplete -- all ${modelConfig.dimensionCount} dimensions must be scored A to E.` });
   }
+  const scoreVector = parsed.vector;
   const effort = EFFORTS.includes(body.effort) ? body.effort : "medium";
-  const hash = hashVector(body.model, scoreVector, READOUT_MODEL, effort, modelConfig.promptVersion);
+  const hash = hashVector(body.model, scoreVector, READOUT_MODEL, effort, modelConfig.promptVersion, parsed.reasons);
   const cacheKey = `diag_cache:${hash}`;
 
   const cached = await kvGet(cacheKey);
