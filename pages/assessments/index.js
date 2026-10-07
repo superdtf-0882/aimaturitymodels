@@ -45,6 +45,16 @@ export default function AssessmentsIndex() {
           </div>
           <span className="pill live">Live</span>
         </Link>
+        <Link href="/models/ea/assessment" className="model-row">
+          <div>
+            <div className="model-name">AI-Native EA Maturity Assessment</div>
+            <div className="model-desc">
+              Ten dimensions, scored A through E or marked Pre-AI or Exempt,
+              with an AI-generated Executive Readout.
+            </div>
+          </div>
+          <span className="pill live">Live</span>
+        </Link>
         <div className="model-row">
           <div>
             <div className="model-name">Product Marketing Lifecycle Maturity Assessment</div>
@@ -54,23 +64,13 @@ export default function AssessmentsIndex() {
           </div>
           <span className="pill coming">Coming</span>
         </div>
-        <div className="model-row">
-          <div>
-            <div className="model-name">AI-Native EA Maturity Assessment</div>
-            <div className="model-desc">
-              The model is published; its assessment and Executive Readout
-              are next.
-            </div>
-          </div>
-          <span className="pill coming">Coming</span>
-        </div>
       </div>
       <p className="footnote">
-        All three live assessments share the same instrument shape &mdash; self-score
+        All four live assessments share the same instrument shape &mdash; self-score
         each dimension, download a summary, or generate an AI-assisted
         Executive Readout. Formal instrument-scored assessment (the
-        SPEC-D6-SCORE equivalent) now exists for all three &mdash;
-        SPEC-D6-SCORE for SDLC, and SPEC-D6-SCORE-PDLC and
+        SPEC-D6-SCORE equivalent) exists for SDLC, PDLC and Prioritization
+        &mdash; SPEC-D6-SCORE for SDLC, and SPEC-D6-SCORE-PDLC and
         SPEC-D6-SCORE-PRIORITIZATION for the other two. Their criteria text
         lives in a private governance corpus rather than in these public
         repositories, so the formal instruments themselves aren&rsquo;t

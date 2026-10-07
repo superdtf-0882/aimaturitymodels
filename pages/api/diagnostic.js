@@ -6,7 +6,7 @@
 // Generalized for issue #25 to serve all three models that have a
 // diagnostic, not just SDLC (the family is four models as of 2026-09-12;
 // EA has no diagnostic yet, so "three" here is a count of THIS surface
-// and not of the family):
+// and not of the family) [EA added 2026-10-07, OKF-TOGAF#145: all four]:
 // dimension count and prompt are looked up per `body.model` rather than
 // hardcoded to 13. `model` is required, not defaulted -- every caller
 // (including the SDLC assessment page) now sends it explicitly, so there's
@@ -17,10 +17,12 @@ import { kvGet, kvSet, kvIncr, kvExpire } from "../../lib/kv";
 // under #145, tested with DTOG's two sentences on a preview first" and
 // "Medium reasoning; the SDLC readout prompt as tested, with DTOG's two
 // sentences and the four Pre-AI and Exempt lines" (David Facer, 10/7/2026).
-// EA gets a readout when its own prompt is approved under #145.
+// EA's readout, on "The EA readout prompt as DTOG drafted it, with a stronger
+// Pre-AI line -- David Facer 10/7/2026", under #145.
 import { PDLC_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/pdlc-executive-readout-v1";
 import { PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/prioritization-executive-readout-v1";
 import { EXECUTIVE_READOUT_PROMPT_V2 } from "../../lib/prompts/executive-readout-v2";
+import { EA_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/ea-executive-readout-v1";
 import crypto from "crypto";
 // OKF-TOGAF#161: the score reading moved to lib/score-vector.js.
 const { extractScores, vectorKey } = require("../../lib/score-vector");
@@ -43,6 +45,7 @@ const MODEL_CONFIG = {
   sdlc: { dimensionCount: 13, prompt: EXECUTIVE_READOUT_PROMPT_V2, promptVersion: "sdlc-v2", thresholdStates: true },
   pdlc: { dimensionCount: 12, prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "pdlc-v1" },
   prioritization: { dimensionCount: 3, prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "prioritization-v1" },
+  ea: { dimensionCount: 10, prompt: EA_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "ea-v1", thresholdStates: true },
 };
 
 // A reasoning model answers more slowly than gpt-4o did; this raises the
