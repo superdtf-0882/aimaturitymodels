@@ -46,6 +46,12 @@ console.log("--- /assessments, the EA row ---");
   const models = read("lib/models.js");
   const fn = (models.match(/export async function getEaAssessmentDimensions\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
   say(/getEaFullModel\(\)/.test(fn) && /thresholdStates:\s*readThresholdStates\(/.test(fn), "its loader reads the EA model at its pin, with Pre-AI and Exempt");
+  // [Added after the first preview: D10 read "Shared language (*Vocabula*)",
+  // markdown asterisks and all, because the names came from the matrix's
+  // headings. The whole-model view takes its titles from the model's short
+  // form, which spells it "Shared language (Vocabula)"; the assessment now
+  // does the same, so the two pages name each dimension identically.]
+  say(/getEaShortForm\(\)/.test(fn) && /\.title/.test(fn), "dimension names are the short form's titles, as on the whole-model view");
   const page = read("pages/models/ea/assessment.js");
   say(/getEaAssessmentDimensions/.test(page) && /thresholdStates=\{thresholdStates\}/.test(page), "the page passes the two states to the shared component");
   say(/modelSlug="ea"/.test(page) && /executiveReadoutHref="\/models\/ea\/executivereadout"/.test(page) && /downloadFilename="ea-maturity-assessment\.md"/.test(page), "it is wired as EA, to EA's readout");
