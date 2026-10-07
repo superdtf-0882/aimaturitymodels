@@ -61,7 +61,10 @@ const v1 = read("lib/prompts/executive-readout-v1.js");
 const v2 = read("lib/prompts/executive-readout-v2.js");
 const body = (s, name) => { const m = s.match(new RegExp("export const " + name + " = `([\\s\\S]*?)`;")); return m ? m[1] : null; };
 const t1 = body(v1, "EXECUTIVE_READOUT_PROMPT_V1"), t2 = body(v2, "EXECUTIVE_READOUT_PROMPT_V2");
-say(/sdlc: \{[^}]*prompt: EXECUTIVE_READOUT_PROMPT_V2,[^}]*promptVersion: "sdlc-v2"/.test(api), "SDLC readouts use V2, under its own prompt version");
+// [Until the length change this read "SDLC readouts use V2". V3 is V2 plus
+// the length rule, held by scripts/readout-length-self-test.js, which also
+// checks the route; V2's text stays checked here as V3's base.]
+say(/import \{ EXECUTIVE_READOUT_PROMPT_V3 \} from "\.\.\/\.\.\/lib\/prompts\/executive-readout-v3";/.test(api), "SDLC readouts use V3, built on V2 (readout-length-self-test)");
 // The candidate's text at 7b41f6e, the commit the preview ran when the owner
 // approved it; its sha256 is taken from that file, not retyped.
 const TESTED = "aa9c3f98dfb8e9e917ac37d39175b29e7f168ea641f357cd72d86e4cd664c19e";
@@ -85,7 +88,8 @@ console.log("--- nothing preview-only ---");
 // [Until the EA prompt's approval this read "no EA readout until its prompt is
 // approved (#145)". Approved 2026-10-07; scripts/ea-assessment-self-test.js
 // holds the prompt to the draft. Here: EA imports the approved file only.]
-say(/from "\.\.\/\.\.\/lib\/prompts\/ea-executive-readout-v1";/.test(api) && !/ea-executive-readout-v1-draft/.test(api), "EA's readout uses its approved prompt, not the draft");
+// [ea-executive-readout-v1 until the length change; V2 is V1 plus the rule.]
+say(/from "\.\.\/\.\.\/lib\/prompts\/ea-executive-readout-v2";/.test(api) && !/ea-executive-readout-v1-draft/.test(api), "EA's readout uses its approved prompt, not the draft");
 say(!exists("lib/prompts/ea-executive-readout-v1-draft.js") && !exists("lib/prompts/executive-readout-v2-candidate.js"), "neither the EA draft nor the candidate file remains");
 say(!/PREVIEW BRANCH|TEST ONLY|NEVER MERGED/.test(api), "the route carries no preview-branch notes");
 

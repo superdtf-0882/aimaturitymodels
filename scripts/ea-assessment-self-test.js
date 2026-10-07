@@ -60,7 +60,9 @@ console.log("--- /assessments, the EA row ---");
   const ro = read("pages/models/ea/executivereadout.js");
   say(/assessmentHref="\/models\/ea\/assessment"/.test(ro) && /diag_cache:\$\{hash\}/.test(ro), "the readout page reads the cache and links back to EA's assessment");
   const api = read("pages/api/diagnostic.js");
-  say(/ea: \{ dimensionCount: 10, prompt: EA_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "ea-v1", thresholdStates: true \}/.test(api), "the route serves EA: ten dimensions, the approved prompt, both states");
+  // [EA_EXECUTIVE_READOUT_PROMPT_V1 / "ea-v1" until the length change: V2 is
+  // V1 plus the length rule (scripts/readout-length-self-test.js).]
+  say(/ea: \{ dimensionCount: 10, prompt: EA_EXECUTIVE_READOUT_PROMPT_V2, promptVersion: "ea-v2", thresholdStates: true \}/.test(api), "the route serves EA: ten dimensions, the approved prompt, both states");
 
   console.log("--- the EA prompt ---");
   const p = read("lib/prompts/ea-executive-readout-v1.js");
