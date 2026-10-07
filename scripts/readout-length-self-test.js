@@ -103,7 +103,8 @@ console.log("--- the route ---");
   say(/sdlc: \{[^}]*prompt: EXECUTIVE_READOUT_PROMPT_V3,[^}]*promptVersion: "sdlc-v3"/.test(api), "SDLC readouts use V3, under its own prompt version");
   say(/ea: \{[^}]*prompt: EA_EXECUTIVE_READOUT_PROMPT_V2,[^}]*promptVersion: "ea-v2"/.test(api), "EA readouts use V2, under its own prompt version");
   say(/pdlc: \{[^}]*prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V2,[^}]*promptVersion: "pdlc-v2"/.test(api), "PDLC readouts use V2, under its own prompt version");
-  say(/prioritization: \{[^}]*prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V2,[^}]*promptVersion: "prioritization-v2"/.test(api), "Prioritization readouts use V2, under its own prompt version");
+  // 2026-10-07, OKF-TOGAF#167: V3 is V2 renamed (scripts/portfolio-name-self-test.js).
+  say(/prioritization: \{[^}]*prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V3,[^}]*promptVersion: "prioritization-v3"/.test(api), "Prioritization readouts use V3, under its own prompt version");
   say(!/TEST ONLY|body\.fresh/.test(api), "no preview-only test option in the route");
 }
 

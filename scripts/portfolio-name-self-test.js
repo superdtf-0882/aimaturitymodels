@@ -74,7 +74,8 @@ console.log("--- the model release the site pins ---");
 const pin = (read("lib/pins.js").match(/const PRIORITIZATION_PINNED_COMMIT = "([0-9a-f]{40})"/) || [])[1];
 const clone = path.join(root, "..", "ai-native-product-prioritization-maturity-model");
 const at = (file) => { try { return execSync(`git show ${pin}:${file}`, { cwd: clone, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).replace(/\r\n/g, "\n"); } catch { return ""; } };
-const tagged = (() => { try { return execSync("git rev-parse v1.4.0^{commit}", { cwd: clone, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim(); } catch { return ""; } })();
+// rev-list, not rev-parse v1.4.0^{commit}: Windows' shell strips the caret.
+const tagged = (() => { try { return execSync("git rev-list -n 1 v1.4.0", { cwd: clone, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim(); } catch { return ""; } })();
 say(!!pin && tagged === pin, "the pin is the model's v1.4.0 tag", (pin || "").slice(0, 7) + " / " + tagged.slice(0, 7));
 const m = at("ai_native_product_prioritization_maturity_model.md");
 const lines = m.split("\n");

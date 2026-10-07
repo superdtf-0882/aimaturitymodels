@@ -14,8 +14,8 @@ export default function PrioritizationExecutiveReadout({ readout, hash }) {
       readout={readout}
       hash={hash}
       assessmentHref="/models/prioritization/assessment"
-      assessmentLabel="Product Prioritization Assessment"
-      modelTitle="AI-Native Product Prioritization Maturity Model"
+      assessmentLabel="Portfolio Prioritization Assessment"
+      modelTitle="AI-Native Portfolio Prioritization Maturity Model"
       repoUrl="https://github.com/superdtf-0882/ai-native-product-prioritization-maturity-model"
       downloadFilename="prioritization-executive-readout.md"
     />

@@ -50,7 +50,7 @@ export default function AssessmentsIndex() {
         </Link>
         <Link href="/models/prioritization/assessment" className="model-row">
           <div>
-            <div className="model-name">Product Prioritization Maturity Assessment</div>
+            <div className="model-name">Portfolio Prioritization Maturity Assessment</div>
             <div className="model-desc">
               Same instrument shape, applied to the Prioritization model&rsquo;s
               dimensions.

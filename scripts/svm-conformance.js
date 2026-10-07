@@ -2,7 +2,7 @@
 // Prebuild step: the Strategic Value Matrix's calculator must pass the
 // frame's own conformance cases, or this build stops.
 //
-// It fetches svm_conformance.yml from the Product Prioritization model's
+// It fetches svm_conformance.yml from the Portfolio Prioritization model's
 // repository AT THE PINNED COMMIT (lib/pins.js), runs every case through
 // lib/svmCore.js -- the same core the page's calculator uses -- and exits 1
 // on any disagreement, including a one-step control that PASSES (a case that

@@ -29,10 +29,10 @@ export default function PrioritizationDeepDive({ id, title, flag, html }) {
       html={html}
       dimensionOrder={PRIORITIZATION_DIMENSION_ORDER}
       basePath="/models/prioritization/deep-dive"
-      modelLabel="Product Prioritization"
+      modelLabel="Portfolio Prioritization"
       wmvHref="/models/prioritization/whole-model-view"
-      wmvLabel="Product Prioritization"
-      provenanceText="Drafted from the Product Prioritization model’s real locked content."
+      wmvLabel="Portfolio Prioritization"
+      provenanceText="Drafted from the Portfolio Prioritization model’s real locked content."
     />
   );
 }

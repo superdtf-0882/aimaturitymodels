@@ -49,7 +49,7 @@ export default function ModelsIndex() {
         </Link>
         <Link href="/models/prioritization/whole-model-view" className="model-row">
           <div>
-            <div className="model-name">Product Prioritization Maturity Model</div>
+            <div className="model-name">Portfolio Prioritization Maturity Model</div>
             <div className="model-desc">
               How organizations move from personal advocacy to coherent,
               governed portfolio decisions.

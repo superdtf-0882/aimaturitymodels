@@ -12,9 +12,9 @@ export default function PrioritizationAssessment({ dimensions, sourceCommit }) {
       dimensions={dimensions}
       sourceCommit={sourceCommit}
       modelSlug="prioritization"
-      modelName="Product Prioritization"
-      modelTitle="Product Prioritization Maturity Assessment"
-      modelFullName="AI-Native Product Prioritization Maturity Model"
+      modelName="Portfolio Prioritization"
+      modelTitle="Portfolio Prioritization Maturity Assessment"
+      modelFullName="AI-Native Portfolio Prioritization Maturity Model"
       repoUrl="https://github.com/superdtf-0882/ai-native-product-prioritization-maturity-model"
       executiveReadoutHref="/models/prioritization/executivereadout"
       downloadFilename="prioritization-maturity-assessment.md"

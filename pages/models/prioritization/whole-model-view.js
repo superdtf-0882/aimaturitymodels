@@ -21,10 +21,10 @@ export default function PrioritizationWholeModelView({ dimensions, sourceCommit,
       dimensions={dimensions}
       sourceCommit={sourceCommit}
       currencyBasis={currencyBasis}
-      modelLabel="Product Prioritization"
+      modelLabel="Portfolio Prioritization"
       dimensionCountLabel="Three dimensions"
       deepDiveBasePath="/models/prioritization/deep-dive"
-      crumbLabel="Product Prioritization"
+      crumbLabel="Portfolio Prioritization"
       crumbHref="/models/prioritization/whole-model-view"
       note={
         <>
