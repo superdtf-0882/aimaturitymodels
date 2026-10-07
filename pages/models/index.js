@@ -13,7 +13,20 @@ export default function ModelsIndex() {
           these models" below it, as 96-DT2 carries them (lib/intros.js). */}
       <p className="dek">{MODELS_LEAD}</p>
 
+      {/* OKF-TOGAF#166: the family in the owner's order -- EA, SDLC, PDLC,
+          Prioritization, Product Marketing -- and /assessments in the same
+          order (scripts/family-order-self-test.js). */}
       <div className="model-list">
+        <Link href="/models/ea/whole-model-view" className="model-row">
+          <div>
+            <div className="model-name">AI-Native EA Maturity Model</div>
+            <div className="model-desc">
+              How enterprise architecture itself adapts to a practice where
+              governed cognition isn&rsquo;t exclusively human.
+            </div>
+          </div>
+          <span className="pill live">Live</span>
+        </Link>
         <Link href="/models/sdlc/whole-model-view" className="model-row">
           <div>
             <div className="model-name">AI-Native SDLC Maturity Model</div>
@@ -54,16 +67,6 @@ export default function ModelsIndex() {
           </div>
           <span className="pill coming">Coming</span>
         </div>
-        <Link href="/models/ea/whole-model-view" className="model-row">
-          <div>
-            <div className="model-name">AI-Native EA Maturity Model</div>
-            <div className="model-desc">
-              How enterprise architecture itself adapts to a practice where
-              governed cognition isn&rsquo;t exclusively human.
-            </div>
-          </div>
-          <span className="pill live">Live</span>
-        </Link>
       </div>
       <h2>How to read these models</h2>
       <p>{MODELS_HOWTO.states}</p>

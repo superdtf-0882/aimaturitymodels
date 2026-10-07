@@ -14,13 +14,26 @@ export default function AssessmentsIndex() {
         plain-language interpretation of where you actually stand.
       </p>
 
+      {/* OKF-TOGAF#166: the same order as /models -- EA, SDLC, PDLC,
+          Prioritization, Product Marketing; the SDLC description names Pre-AI
+          and Exempt, as EA's does (scripts/family-order-self-test.js). */}
       <div className="model-list">
+        <Link href="/models/ea/assessment" className="model-row">
+          <div>
+            <div className="model-name">AI-Native EA Maturity Assessment</div>
+            <div className="model-desc">
+              Ten dimensions, scored A through E or marked Pre-AI or Exempt,
+              with an AI-generated Executive Readout.
+            </div>
+          </div>
+          <span className="pill live">Live</span>
+        </Link>
         <Link href="/models/sdlc/assessment" className="model-row">
           <div>
             <div className="model-name">AI-Native SDLC Maturity Assessment</div>
             <div className="model-desc">
-              Thirteen dimensions, scored A through E, with an AI-generated
-              Executive Readout.
+              Thirteen dimensions, scored A through E or marked Pre-AI or
+              Exempt, with an AI-generated Executive Readout.
             </div>
           </div>
           <span className="pill live">Live</span>
@@ -41,16 +54,6 @@ export default function AssessmentsIndex() {
             <div className="model-desc">
               Same instrument shape, applied to the Prioritization model&rsquo;s
               dimensions.
-            </div>
-          </div>
-          <span className="pill live">Live</span>
-        </Link>
-        <Link href="/models/ea/assessment" className="model-row">
-          <div>
-            <div className="model-name">AI-Native EA Maturity Assessment</div>
-            <div className="model-desc">
-              Ten dimensions, scored A through E or marked Pre-AI or Exempt,
-              with an AI-generated Executive Readout.
             </div>
           </div>
           <span className="pill live">Live</span>
