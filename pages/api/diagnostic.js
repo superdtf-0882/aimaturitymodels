@@ -130,7 +130,9 @@ export default async function handler(req, res) {
   const hash = hashVector(body.model, scoreVector, READOUT_MODEL, READOUT_EFFORT, modelConfig.promptVersion, parsed.reasons);
   const cacheKey = `diag_cache:${hash}`;
 
-  const cached = await kvGet(cacheKey);
+  // TEST ONLY, branch readout-length-test, NEVER MERGED: body.fresh skips the
+  // cache read so one score set can be run three times (111-DT2 section 3).
+  const cached = body.fresh === true ? null : await kvGet(cacheKey);
   if (cached) {
     return res.status(200).json({ readout: cached, hash });
   }
