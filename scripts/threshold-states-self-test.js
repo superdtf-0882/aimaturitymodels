@@ -78,6 +78,12 @@ console.log("--- the buttons (source check) ---");
   say(/<>Pre<br \/>AI<\/>/.test(comp) && /"Exempt": "Exmt"|Exempt: "Exmt"/.test(comp), "the labels read Pre/AI (two lines) and Exmt");
   say(/aria-label=\{st\}/.test(comp) && /title=\{st\}/.test(comp), "each button carries its full name for screen readers and on hover");
   say(/onClick=\{\(\) => selectLevel\(st\)\}/.test(comp), "the score stored is still the full state name");
+  // [Added on the owner's word: "Please fix the padding/centering on 'Exmt'."
+  // The state buttons keep the level buttons' 40px size; only their padding
+  // and type size change, so the label centres.]
+  const css = require("fs").readFileSync(require("path").join(__dirname, "..", "styles", "globals.css"), "utf8");
+  const rule = (css.match(/\.assess-state-btn\s*\{([^}]*)\}/) || [])[1] || "";
+  say(/padding:\s*0/.test(rule) && /font-size:\s*12px/.test(rule) && !/width|height/.test(rule), "the state buttons centre their label at the same size");
 }
 
 process.exitCode = bad;
