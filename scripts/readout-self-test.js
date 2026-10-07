@@ -35,7 +35,10 @@ const say = (ok, name, shown) => {
   if (!ok) bad = 1;
 };
 const root = path.join(__dirname, "..");
-const read = (p) => { try { return fs.readFileSync(path.join(root, p), "utf8"); } catch { return ""; } };
+// Line endings as Git stores them (LF), which is what Vercel builds from: a
+// Windows checkout with core.autocrlf rewrites the working copy with CRLF,
+// and the byte-for-byte check then fails on a file that is correct.
+const read = (p) => { try { return fs.readFileSync(path.join(root, p), "utf8").replace(/\r\n/g, "\n"); } catch { return ""; } };
 const exists = (p) => fs.existsSync(path.join(root, p));
 const api = read("pages/api/diagnostic.js");
 
