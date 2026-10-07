@@ -69,4 +69,15 @@ console.log("--- grading ---");
   say(!!sv && sv.isGraded("Exempt", "Corporate policy: ref 12") && sv.isGraded("Pre-AI") && sv.isGraded("C"), "Exempt with a reason, Pre-AI and a letter count");
 }
 
+console.log("--- the buttons (source check) ---");
+{
+  // [Added 2026-10-07 on the owner's word: "How about Pre AI wrapped and Exmt?"
+  // -- the buttons keep their size; the labels shorten. The stored score stays
+  // "Pre-AI" / "Exempt"; screen readers and the tooltip get the full name.]
+  const comp = require("fs").readFileSync(require("path").join(__dirname, "..", "components", "Assessment.js"), "utf8");
+  say(/<>Pre<br \/>AI<\/>/.test(comp) && /"Exempt": "Exmt"|Exempt: "Exmt"/.test(comp), "the labels read Pre/AI (two lines) and Exmt");
+  say(/aria-label=\{st\}/.test(comp) && /title=\{st\}/.test(comp), "each button carries its full name for screen readers and on hover");
+  say(/onClick=\{\(\) => selectLevel\(st\)\}/.test(comp), "the score stored is still the full state name");
+}
+
 process.exitCode = bad;
