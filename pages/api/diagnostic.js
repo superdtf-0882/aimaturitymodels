@@ -21,8 +21,8 @@ import { kvGet, kvSet, kvIncr, kvExpire } from "../../lib/kv";
 // Pre-AI line -- David Facer 10/7/2026", under #145. Both SDLC (V3) and EA (V2)
 // carry the length rule, on "Readout length: 900-word ceiling with section
 // budgets, as 111-DT2 proposes, tested on the preview -- David Facer 10/7/2026".
-import { PDLC_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/pdlc-executive-readout-v1";
-import { PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/prioritization-executive-readout-v1";
+import { PDLC_EXECUTIVE_READOUT_PROMPT_V2 } from "../../lib/prompts/pdlc-executive-readout-v2";
+import { PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V2 } from "../../lib/prompts/prioritization-executive-readout-v2";
 import { EXECUTIVE_READOUT_PROMPT_V3 } from "../../lib/prompts/executive-readout-v3";
 import { EA_EXECUTIVE_READOUT_PROMPT_V2 } from "../../lib/prompts/ea-executive-readout-v2";
 import crypto from "crypto";
@@ -45,8 +45,8 @@ const READOUT_EFFORT = "medium";
 // prompt is never served for another.
 const MODEL_CONFIG = {
   sdlc: { dimensionCount: 13, prompt: EXECUTIVE_READOUT_PROMPT_V3, promptVersion: "sdlc-v3", thresholdStates: true },
-  pdlc: { dimensionCount: 12, prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "pdlc-v1" },
-  prioritization: { dimensionCount: 3, prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "prioritization-v1" },
+  pdlc: { dimensionCount: 12, prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V2, promptVersion: "pdlc-v2" },
+  prioritization: { dimensionCount: 3, prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V2, promptVersion: "prioritization-v2" },
   ea: { dimensionCount: 10, prompt: EA_EXECUTIVE_READOUT_PROMPT_V2, promptVersion: "ea-v2", thresholdStates: true },
 };
 
