@@ -59,11 +59,51 @@ for (const [label, prevFile, prevName, nextFile, nextName] of CASES) {
   say(!!next && !next.includes(OLD_STYLE), "no 800–1200 line remains to contradict the ceiling");
 }
 
+// [PDLC and Prioritization, 2026-10-07, on "The PDLC and Prioritization
+// prompts as DTOG relays: V2 with the two sentences and the length rule,
+// preview first -- David Facer 10/7/2026". Their V1 lines are approved as
+// written; each V2 is V1 plus DTOG's two sentences, placed where SDLC V2 has
+// them (after "Never recommend improving every low-scoring dimension." and
+// after "Do not describe every dimension individually."), plus the length
+// rule above. V1's text stays as it is; only its header comment loses
+// "pending David's own review".]
+const S1 = "The highest-value investment is not necessarily the lowest score. Consider whether deepening an existing strength, or reconciling two scores that contradict each other, would return more than raising the weakest dimension, and say so when it would.";
+const S2 = "Refer to capabilities by what they do for the business, not by dimension number or level letter; a dimension number may appear once, in parentheses, on first mention. Do not walk the reader through the dimensions one by one.";
+const A1 = "Never recommend improving every low-scoring dimension.\n";
+const A2 = "Do not describe every dimension individually.\n";
+const withTwoSentences = (prev) => {
+  if (!prev || prev.split(A1).length !== 2 || prev.split(A2).length !== 2) return null;
+  return prev.replace(A1, A1 + "\n" + S1 + "\n").replace(A2, A2 + "\n" + S2 + "\n");
+};
+{
+  // The sentences as SDLC V2 carries them, so the family holds one wording.
+  const sdlc = body(read("lib/prompts/executive-readout-v2.js"), "EXECUTIVE_READOUT_PROMPT_V2") || "";
+  say(sdlc.includes(A1 + "\n" + S1 + "\n") && sdlc.includes(A2 + "\n" + S2 + "\n"), "SDLC V2 carries both sentences in these places (the control)");
+}
+const FAMILY = [
+  ["PDLC", "lib/prompts/pdlc-executive-readout-v1.js", "PDLC_EXECUTIVE_READOUT_PROMPT_V1", "lib/prompts/pdlc-executive-readout-v2.js", "PDLC_EXECUTIVE_READOUT_PROMPT_V2", "60680778bf24"],
+  ["Prioritization", "lib/prompts/prioritization-executive-readout-v1.js", "PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1", "lib/prompts/prioritization-executive-readout-v2.js", "PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V2", "b723a682b292"],
+];
+for (const [label, prevFile, prevName, nextFile, nextName, v1sha] of FAMILY) {
+  console.log("--- " + label + " ---");
+  const src = read(prevFile);
+  const prev = body(src, prevName);
+  const next = body(read(nextFile), nextName);
+  const want = withLengthRule(withTwoSentences(prev));
+  say(!!want, "V1 carries every anchor exactly once");
+  say(!!next && next === want, "V2 is V1 plus the two sentences and the length rule, nothing else");
+  const got = prev ? require("crypto").createHash("sha256").update(prev).digest("hex").slice(0, 12) : "";
+  say(got === v1sha, "V1's prompt text is unchanged", got);
+  say(!!src && !/pending David's own\s*(\/\/\s*)?review/.test(src), "V1's header no longer says it is pending review");
+}
+
 console.log("--- the route ---");
 {
   const api = read("pages/api/diagnostic.js");
   say(/sdlc: \{[^}]*prompt: EXECUTIVE_READOUT_PROMPT_V3,[^}]*promptVersion: "sdlc-v3"/.test(api), "SDLC readouts use V3, under its own prompt version");
   say(/ea: \{[^}]*prompt: EA_EXECUTIVE_READOUT_PROMPT_V2,[^}]*promptVersion: "ea-v2"/.test(api), "EA readouts use V2, under its own prompt version");
+  say(/pdlc: \{[^}]*prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V2,[^}]*promptVersion: "pdlc-v2"/.test(api), "PDLC readouts use V2, under its own prompt version");
+  say(/prioritization: \{[^}]*prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V2,[^}]*promptVersion: "prioritization-v2"/.test(api), "Prioritization readouts use V2, under its own prompt version");
   say(!/TEST ONLY|body\.fresh/.test(api), "no preview-only test option in the route");
 }
 
