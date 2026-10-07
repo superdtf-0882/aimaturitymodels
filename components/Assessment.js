@@ -30,6 +30,12 @@ ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 
 // LEVELS and buildAssessmentMd moved to lib/assessment-md.js (OKF-TOGAF#161).
 
+// The threshold-state buttons keep the level buttons' size, so their labels
+// are short, on the owner's word ("How about Pre AI wrapped and Exmt?"). The
+// score stored, written to the file and read by the readout stays the full
+// name; screen readers and the hover tooltip get it too.
+const STATE_LABELS = { "Pre-AI": <>Pre<br />AI</>, "Exempt": "Exmt" };
+
 const READOUT_MESSAGES = [
   "calculating dimensions", "mapping investment concentration", "measuring adjacent maturities",
   "relationships between dimensions", "estimating organizational stage", "identifying strategic priorities",
@@ -190,8 +196,10 @@ export default function Assessment({
                     key={st}
                     className={`assess-level-btn assess-state-btn${scores[dim.id] === st ? " is-selected" : ""}`}
                     onClick={() => selectLevel(st)}
+                    aria-label={st}
+                    title={st}
                   >
-                    {st}
+                    {STATE_LABELS[st]}
                   </button>
                 ))}
             </div>
