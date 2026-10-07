@@ -58,7 +58,8 @@ export default function AssessmentsIndex() {
           <div>
             <div className="model-name">AI-Native EA Maturity Assessment</div>
             <div className="model-desc">
-              Waiting on the model itself, not just its assessment instrument.
+              The model is published; its assessment and Executive Readout
+              are next.
             </div>
           </div>
           <span className="pill coming">Coming</span>
