@@ -12,20 +12,41 @@
 // (including the SDLC assessment page) now sends it explicitly, so there's
 // no silent "whichever model forgets to pass it gets treated as SDLC" path.
 import { kvGet, kvSet, kvIncr, kvExpire } from "../../lib/kv";
-import { EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/executive-readout-v1";
+// PREVIEW BRANCH readout-gpt-5-5 (OKF-TOGAF#145, 2026-10-07): a test harness for
+// the switch to gpt-5.5, on "Switch the readout to the 5.5 model under #145,
+// tested with DTOG's two sentences on a preview first -- David Facer 10/7/2026".
+// NEVER MERGED AS IS. Three things here are for the test only and come out
+// before production: the SDLC candidate prompt and the EA draft (both
+// unapproved), and the caller's choice of reasoning effort (body.effort).
 import { PDLC_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/pdlc-executive-readout-v1";
 import { PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/prioritization-executive-readout-v1";
+import { EXECUTIVE_READOUT_PROMPT_V2_CANDIDATE } from "../../lib/prompts/executive-readout-v2-candidate";
+import { EA_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/ea-executive-readout-v1-draft";
 import crypto from "crypto";
 import OpenAI from "openai";
 
 const RATE_LIMIT_PER_HOUR = 5;
 const DAILY_CAP = 120;
 
+// The AI model behind every readout, in one place (110-DT2 section 3). gpt-5.5
+// is a reasoning model: its hidden reasoning is billed as output and counts
+// against the output limit, so the limit is max_completion_tokens at the
+// 25,000 OpenAI recommends reserving; only what is used is billed (113-CC).
+const READOUT_MODEL = "gpt-5.5";
+const EFFORTS = ["low", "medium"]; // TEST ONLY: production fixes one
+
+// promptVersion is part of the cache key, so a readout written under one
+// prompt is never served for another.
 const MODEL_CONFIG = {
-  sdlc: { dimensionCount: 13, prompt: EXECUTIVE_READOUT_PROMPT_V1 },
-  pdlc: { dimensionCount: 12, prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V1 },
-  prioritization: { dimensionCount: 3, prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1 },
+  sdlc: { dimensionCount: 13, prompt: EXECUTIVE_READOUT_PROMPT_V2_CANDIDATE, promptVersion: "sdlc-v2-candidate" },
+  pdlc: { dimensionCount: 12, prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "pdlc-v1" },
+  prioritization: { dimensionCount: 3, prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "prioritization-v1" },
+  ea: { dimensionCount: 10, prompt: EA_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "ea-v1-draft" },
 };
+
+// A reasoning model answers more slowly than gpt-4o did; this raises the
+// function's time limit (Vercel's own limit for the plan applies above it).
+export const config = { maxDuration: 300 };
 
 // Parses rows like "| D1 | Market Discovery | C | Defined |" out of the
 // assessment .md's scores table and returns the dimensionCount level
@@ -50,8 +71,12 @@ function extractScoreVector(md, dimensionCount) {
 // otherwise share a cache namespace with nothing distinguishing them. Cheap
 // to get right now, while there are still few enough models to reason about
 // by hand; expensive to notice later as a wrong-readout-served bug.
-function hashVector(model, vector) {
-  return crypto.createHash("sha256").update(`${model}:${vector.join("")}`).digest("hex");
+// [2026-10-07, OKF-TOGAF#145: the key also carries the AI model, the reasoning
+// effort and the prompt version. Preview and production share one store
+// (lib/kv.js), so without them a preview test would write into production's
+// cache, and a switched model would serve the old model's readouts.]
+function hashVector(model, vector, readoutModel, effort, promptVersion) {
+  return crypto.createHash("sha256").update(`${model}:${vector.join("")}:${readoutModel}:${effort}:${promptVersion}`).digest("hex");
 }
 
 function getClientIp(req) {
@@ -107,7 +132,8 @@ export default async function handler(req, res) {
       .status(400)
       .json({ error: `Assessment content is incomplete -- all ${modelConfig.dimensionCount} dimensions must be scored.` });
   }
-  const hash = hashVector(body.model, scoreVector);
+  const effort = EFFORTS.includes(body.effort) ? body.effort : "medium";
+  const hash = hashVector(body.model, scoreVector, READOUT_MODEL, effort, modelConfig.promptVersion);
   const cacheKey = `diag_cache:${hash}`;
 
   const cached = await kvGet(cacheKey);
@@ -123,8 +149,9 @@ export default async function handler(req, res) {
   try {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      max_tokens: 2000,
+      model: READOUT_MODEL,
+      max_completion_tokens: 25000,
+      reasoning_effort: effort,
       messages: [
         { role: "system", content: modelConfig.prompt },
         { role: "user", content: body.md },
