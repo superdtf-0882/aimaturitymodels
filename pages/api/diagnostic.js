@@ -12,16 +12,15 @@
 // (including the SDLC assessment page) now sends it explicitly, so there's
 // no silent "whichever model forgets to pass it gets treated as SDLC" path.
 import { kvGet, kvSet, kvIncr, kvExpire } from "../../lib/kv";
-// PREVIEW BRANCH readout-gpt-5-5 (OKF-TOGAF#145, 2026-10-07): a test harness for
-// the switch to gpt-5.5, on "Switch the readout to the 5.5 model under #145,
-// tested with DTOG's two sentences on a preview first -- David Facer 10/7/2026".
-// NEVER MERGED AS IS. Three things here are for the test only and come out
-// before production: the SDLC candidate prompt and the EA draft (both
-// unapproved), and the caller's choice of reasoning effort (body.effort).
+// OKF-TOGAF#145, 2026-10-07: every readout is written by gpt-5.5 at medium
+// reasoning, and SDLC's by prompt V2, on "Switch the readout to the 5.5 model
+// under #145, tested with DTOG's two sentences on a preview first" and
+// "Medium reasoning; the SDLC readout prompt as tested, with DTOG's two
+// sentences and the four Pre-AI and Exempt lines" (David Facer, 10/7/2026).
+// EA gets a readout when its own prompt is approved under #145.
 import { PDLC_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/pdlc-executive-readout-v1";
 import { PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/prioritization-executive-readout-v1";
-import { EXECUTIVE_READOUT_PROMPT_V2_CANDIDATE } from "../../lib/prompts/executive-readout-v2-candidate";
-import { EA_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/ea-executive-readout-v1-draft";
+import { EXECUTIVE_READOUT_PROMPT_V2 } from "../../lib/prompts/executive-readout-v2";
 import crypto from "crypto";
 // OKF-TOGAF#161: the score reading moved to lib/score-vector.js.
 const { extractScores, vectorKey } = require("../../lib/score-vector");
@@ -35,15 +34,15 @@ const DAILY_CAP = 120;
 // against the output limit, so the limit is max_completion_tokens at the
 // 25,000 OpenAI recommends reserving; only what is used is billed (113-CC).
 const READOUT_MODEL = "gpt-5.5";
-const EFFORTS = ["low", "medium"]; // TEST ONLY: production fixes one
+// Medium, the owner's choice after the preview tested low and medium (114-CC).
+const READOUT_EFFORT = "medium";
 
 // promptVersion is part of the cache key, so a readout written under one
 // prompt is never served for another.
 const MODEL_CONFIG = {
-  sdlc: { dimensionCount: 13, prompt: EXECUTIVE_READOUT_PROMPT_V2_CANDIDATE, promptVersion: "sdlc-v2-candidate", thresholdStates: true },
+  sdlc: { dimensionCount: 13, prompt: EXECUTIVE_READOUT_PROMPT_V2, promptVersion: "sdlc-v2", thresholdStates: true },
   pdlc: { dimensionCount: 12, prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "pdlc-v1" },
   prioritization: { dimensionCount: 3, prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "prioritization-v1" },
-  ea: { dimensionCount: 10, prompt: EA_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "ea-v1-draft", thresholdStates: true },
 };
 
 // A reasoning model answers more slowly than gpt-4o did; this raises the
@@ -123,8 +122,7 @@ export default async function handler(req, res) {
         : `Assessment content is incomplete -- all ${modelConfig.dimensionCount} dimensions must be scored A to E.` });
   }
   const scoreVector = parsed.vector;
-  const effort = EFFORTS.includes(body.effort) ? body.effort : "medium";
-  const hash = hashVector(body.model, scoreVector, READOUT_MODEL, effort, modelConfig.promptVersion, parsed.reasons);
+  const hash = hashVector(body.model, scoreVector, READOUT_MODEL, READOUT_EFFORT, modelConfig.promptVersion, parsed.reasons);
   const cacheKey = `diag_cache:${hash}`;
 
   const cached = await kvGet(cacheKey);
@@ -142,7 +140,7 @@ export default async function handler(req, res) {
     const completion = await openai.chat.completions.create({
       model: READOUT_MODEL,
       max_completion_tokens: 25000,
-      reasoning_effort: effort,
+      reasoning_effort: READOUT_EFFORT,
       messages: [
         { role: "system", content: modelConfig.prompt },
         { role: "user", content: body.md },
