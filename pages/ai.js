@@ -37,7 +37,8 @@ export default function Ai({ digest }) {
         One markdown file: the AI-Native Maturity Model family, Strata
         (the architectural governance plane), the Enterprise Architecture OKF
         explainer, and the site's Function Models. Copy it into your own AI
-        assistant, or point it at <a href="/llms.txt">/llms.txt</a> directly.
+        assistant, or point it at <a href="/ai/full-context.md">/ai/full-context.md</a> directly.
+        An AI agent can also start at the site's map, <a href="/llms.txt">/llms.txt</a>.
       </p>
       <div className="ai-digest-actions">
         <button type="button" className="assess-btn assess-btn-blue" onClick={handleCopy}>

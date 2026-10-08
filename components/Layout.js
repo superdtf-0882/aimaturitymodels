@@ -1,16 +1,24 @@
 import Link from "next/link";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { copyFor, mapFor, normalize } from "../lib/mapRoutes";
 
 // DS-004 (breadcrumb + back-link), DS-005 (no new tabs, all Link-based),
 // C-007 attribution pattern (portfolio-wide variant, DS-008b) applied to
 // this domain's own identity rather than aisdlc's.
 
 export default function Layout({ title, crumb, wide, children }) {
+  // OKF-TOGAF#158: every page names the map that describes it, and a page
+  // with a Markdown copy names that too (lib/mapRoutes.js holds the rules).
+  const route = normalize(useRouter().asPath);
+  const copy = copyFor(route);
   return (
     <>
       <Head>
         <title>{title ? `${title} — AI-Native Maturity Models` : "AI-Native Maturity Models"}</title>
         <meta name="description" content="Capability models for understanding how AI-nativity changes software delivery, product management, and the enterprise itself." />
+        <link rel="describedby" href={mapFor(route)} />
+        {copy && <link rel="alternate" type="text/markdown" href={copy} />}
       </Head>
       <div className="shell">
         <aside className="rail">
@@ -48,6 +56,8 @@ export default function Layout({ title, crumb, wide, children }) {
         <main className={`stage${wide ? " stage--wide" : ""}`}>
           {crumb && <p className="crumb">{crumb}</p>}
           {children}
+          {/* OKF-TOGAF#158: the footer line 100-DT2 section 4 asks for. */}
+          <p className="footnote">For AI readers: <a href="/llms.txt">/llms.txt</a>.</p>
         </main>
       </div>
       {/* Issue #15, corrected same day: this started as a left-rail

@@ -2,7 +2,8 @@
 // Postbuild step (OKF-TOGAF#159, in tandem with #158, 122-DT2 of OKF TOGAF
 // briefs/2026-10-01-svm-tranche-3/): writes public/sitemap.xml from the
 // site's own page list -- the build's .next manifests, so a page added to the
-// site is listed with no edit here -- plus every map file in lib/mapFiles.js.
+// site is listed with no edit here -- plus every map file lib/mapFiles.js
+// lists from what #158's step wrote under public/ (it runs first).
 // Then THE BUILD CHECK: public/robots.txt must name the sitemap, or this step
 // exits 1 and the build fails. robots.txt itself is the owner's text, static,
 // word for word (100-DT2 section 8A); no Disallow line (101-CC section 2).
@@ -45,7 +46,8 @@ function main() {
   const root = path.join(__dirname, "..");
   const readJson = (p) => JSON.parse(fs.readFileSync(path.join(root, p), "utf8"));
   const pages = pageList(readJson(".next/server/pages-manifest.json"), readJson(".next/prerender-manifest.json"));
-  const { MAP_FILES } = require("../lib/mapFiles");
+  const { listMapFiles } = require("../lib/mapFiles");
+  const MAP_FILES = listMapFiles(path.join(root, "public"));
   const out = path.join(root, "public", "sitemap.xml");
   fs.writeFileSync(out, sitemapXml([...pages, ...MAP_FILES]));
   console.log(`Wrote ${out} (${pages.length} pages, ${MAP_FILES.length} map file(s))`);

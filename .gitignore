@@ -10,3 +10,11 @@ node_modules/
 public/llms.txt
 # Generated after each build by scripts/generate-sitemap.js (postbuild) -- OKF-TOGAF#159
 public/sitemap.xml
+# Generated after each build by scripts/generate-llms-txt.js (postbuild) -- OKF-TOGAF#158, the AI-reader map
+public/llms-full.txt
+public/ai/
+public/models/
+public/functionmodels/
+public/strata/
+public/eaokf/
+public/*.md

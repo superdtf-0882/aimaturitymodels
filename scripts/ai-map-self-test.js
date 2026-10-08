@@ -131,8 +131,12 @@ if (process.argv.includes("--built")) {
   // The two tags and the footer line in every page's HTML.
   const htmlFor = (p) => read(".next/server/pages" + (p === "/" ? "/index" : p.replace(/\/$/, "")) + ".html");
   const tagMiss = [];
+  const live = [];
   for (const p of pages) {
-    const html = htmlFor(p) || "";
+    // A page rendered per request (the executive readouts, getServerSideProps)
+    // has no HTML at build time: it uses the same layout, and is read live.
+    const html = htmlFor(p);
+    if (html === null) { live.push(p); continue; }
     const c = routes.copyFor(p), m = routes.mapFor(p);
     if (!html.includes(`<link rel="describedby" href="${m}"`)) tagMiss.push(p + " describedby");
     if (c && !html.includes(`<link rel="alternate" type="text/markdown" href="${c}"`)) tagMiss.push(p + " alternate");
@@ -140,6 +144,7 @@ if (process.argv.includes("--built")) {
     if (!/For AI readers/.test(html)) tagMiss.push(p + " footer");
   }
   say(tagMiss.length === 0, "every page: describedby, alternate where it has a copy, footer", tagMiss.slice(0, 4).join("; "));
+  console.log("  NOTE  rendered per request, so checked live, not here: " + (live.join(" ") || "none"));
 }
 
 console.log(bad ? "AI MAP SELF-TEST FAIL" : "AI MAP SELF-TEST PASS");
