@@ -34,8 +34,8 @@ export default function Ai({ digest }) {
     >
       <h1>Feed This to Your AI</h1>
       <p className="dek">
-        One markdown file: the AI-Native Maturity Model family, the
-        Strata governance-layer model, the Enterprise Architecture OKF
+        One markdown file: the AI-Native Maturity Model family, Strata
+        (the architectural governance plane), the Enterprise Architecture OKF
         explainer, and the site's Function Models. Copy it into your own AI
         assistant, or point it at <a href="/llms.txt">/llms.txt</a> directly.
       </p>
