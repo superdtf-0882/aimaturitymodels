@@ -39,7 +39,9 @@ console.log("--- the site's text ---");
 // 2026-10-07 word for word, and a quotation is not edited. Everything else
 // under pages/, lib/ and scripts/ uses the new name.
 const FROZEN = new Set(["lib/prompts/prioritization-executive-readout-v1.js", "lib/prompts/prioritization-executive-readout-v2.js",
-  "scripts/portfolio-name-self-test.js", "scripts/family-order-self-test.js"]);
+  "scripts/portfolio-name-self-test.js", "scripts/family-order-self-test.js",
+  // OKF-TOGAF#169: names the old model only to check it is absent.
+  "scripts/digest-consistency-self-test.js"]);
 const walk = (dir) => fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap((d) =>
   d.isDirectory() ? walk(path.join(dir, d.name)) : /\.js$/.test(d.name) ? [path.join(dir, d.name).replace(/\\/g, "/")] : []);
 const left = ["pages", "lib", "scripts"].flatMap(walk).filter((f) => !FROZEN.has(f) && OLD.test(read(f)));
