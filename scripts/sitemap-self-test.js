@@ -71,7 +71,9 @@ if (process.argv.includes("--built")) {
   try {
     pages = gen.pageList(JSON.parse(read(".next/server/pages-manifest.json")), JSON.parse(read(".next/prerender-manifest.json")));
   } catch { /* fails below */ }
-  const maps = (() => { try { return require("../lib/mapFiles").MAP_FILES; } catch { return []; } })();
+  // Step 3 (2026-10-08): the map files are whatever #158 wrote under public/,
+  // listed by lib/mapFiles.js -- the one list both items read.
+  const maps = (() => { try { return require("../lib/mapFiles").listMapFiles(path.join(root, "public")); } catch { return []; } })();
   const want = [...pages, ...maps];
   const missing = want.filter((u) => !locs.has(u));
   const extra = [...locs].filter((u) => !want.includes(u));

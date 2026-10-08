@@ -34,10 +34,11 @@ const ai = read("pages/ai.js");
 console.log("--- the model count ---");
 // The model sections the digest builds: its "## AI-Native ... Maturity Model" headings.
 const sections = (core.match(/^## AI-Native [^\n]* Maturity Model$/gm) || []).length;
-const claim = (core.match(/\*\*What's included:\*\* (\w+) of the (\w+) live models/) || []);
+// 2026-10-08, step 3: the digest renders all four, so the claim may read "all four live models".
+const claim = (core.match(/\*\*What's included:\*\* (?:all )?(\w+)(?: of the \w+)? live models/) || []);
 say(sections > 0, "the digest builds model sections", String(sections));
 say(claim[1] === WORDS[sections], "\"What's included\" names the number it holds", (claim[1] || "no count") + " / " + sections);
-say(!/all four live models in the AI-Native Maturity Model family/.test(core), "the false sentence is gone");
+say(sections === 4 || !/all four live models in the AI-Native Maturity Model family/.test(core), "no \"all four\" unless all four are held");
 const prov = (core.match(/\* The (\w+) maturity models — /) || [])[1];
 say(prov === WORDS[sections], "the provenance line agrees", (prov || "none") + " / " + sections);
 
@@ -52,10 +53,11 @@ say(/the machine-readable representation contract for the architecture corpus/.t
 
 if (process.argv.includes("--built")) {
   console.log("--- the built /llms.txt ---");
-  const built = read("public/llms.txt");
+  // Step 3 (2026-10-08): the full digest is /llms-full.txt; /llms.txt is the map.
+  const built = read("public/llms-full.txt") || "";
   const n = (built.match(/^## AI-Native [^\n]* Maturity Model$/gm) || []).length;
-  say(!!built, "public/llms.txt exists");
-  say(new RegExp("\\*\\*What's included:\\*\\* " + WORDS[n] + " of the").test(built), "the built digest's count matches its sections", String(n));
+  say(!!built, "public/llms-full.txt exists");
+  say(new RegExp("\\*\\*What's included:\\*\\* (all )?" + WORDS[n] + "( of the \\w+)? live models").test(built), "the built digest's count matches its sections", String(n));
   say(!/governance-layer model/.test(built), "the built digest has no \"governance-layer model\"");
 }
 
