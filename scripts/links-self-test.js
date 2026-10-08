@@ -26,7 +26,7 @@ const say = (ok, name, shown) => {
   if (!ok) bad = 1;
 };
 
-const BASE = "https://github.com/superdtf-0882/ai-native-product-prioritization-maturity-model/blob/e7422a516db19a738ef0a52c29e982afe2262654";
+const BASE = "https://github.com/superdtf-0882/ai-native-product-prioritization-maturity-model/blob/5edc31d631b1807263dffadcff123b39704e7752";
 
 console.log("--- B. the digest's relative links ---");
 {

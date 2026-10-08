@@ -75,8 +75,9 @@ const pin = (read("lib/pins.js").match(/const PRIORITIZATION_PINNED_COMMIT = "([
 const clone = path.join(root, "..", "ai-native-product-prioritization-maturity-model");
 const at = (file) => { try { return execSync(`git show ${pin}:${file}`, { cwd: clone, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).replace(/\r\n/g, "\n"); } catch { return ""; } };
 // rev-list, not rev-parse v1.4.0^{commit}: Windows' shell strips the caret.
-const tagged = (() => { try { return execSync("git rev-list -n 1 v1.4.0", { cwd: clone, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim(); } catch { return ""; } })();
-say(!!pin && tagged === pin, "the pin is the model's v1.4.0 tag", (pin || "").slice(0, 7) + " / " + tagged.slice(0, 7));
+// 2026-10-08 (OKF-TOGAF#169): the pin may move to a later patch of v1.4.
+const tagged = (() => { try { return execSync("git describe --tags --abbrev=0 " + pin, { cwd: clone, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim(); } catch { return ""; } })();
+say(!!pin && /^v1\.4\.\d+$/.test(tagged), "the pin is the model's v1.4.0 or a later v1.4 patch", (pin || "").slice(0, 7) + " / " + tagged);
 const m = at("ai_native_product_prioritization_maturity_model.md");
 const lines = m.split("\n");
 say(lines[0] === "# " + NEW_MODEL + " — Matrix", "the matrix's title", lines[0]);
@@ -99,8 +100,8 @@ say(cl.includes("Scores against v1.3.0 remain comparable: no level's substance c
 console.log("--- the sibling models ---");
 const gitIn = (dir, args) => { try { return execSync("git " + args, { cwd: path.join(root, "..", dir), encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).replace(/\r\n/g, "\n"); } catch { return ""; } };
 const pdlcPin = (read("lib/pins.js").match(/const PDLC_PINNED_COMMIT = "([0-9a-f]{40})"/) || [])[1];
-const pdlcTag = gitIn("ai-native-pdlc-maturity-model", "rev-list -n 1 v1.2.1").trim();
-say(!!pdlcPin && pdlcTag === pdlcPin, "the PDLC pin is its v1.2.1 tag", (pdlcPin || "").slice(0, 7) + " / " + pdlcTag.slice(0, 7));
+const pdlcTag = gitIn("ai-native-pdlc-maturity-model", "describe --tags --abbrev=0 " + pdlcPin).trim();
+say(!!pdlcPin && /^v1\.2\.([1-9]\d*)$/.test(pdlcTag), "the PDLC pin is v1.2.1 or a later v1.2 patch", (pdlcPin || "").slice(0, 7) + " / " + pdlcTag);
 for (const f of ["ai_native_pdlc_maturity_model.md", "deep_dives/d5.md", "deep_dives/d11.md"]) {
   const s = gitIn("ai-native-pdlc-maturity-model", `show ${pdlcPin}:${f}`);
   say(!!s && !OLD.test(s) && s.includes(NEW_MODEL), "PDLC " + f + " names the new model");
