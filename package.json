@@ -7,8 +7,8 @@
     "dev": "next dev",
     "prebuild": "node scripts/work-item-gate.js && node scripts/svm-conformance.js",
     "build": "next build",
-    "postbuild": "node scripts/generate-llms-txt.js",
-    "build:local": "node scripts/svm-conformance.js && next build && node scripts/generate-llms-txt.js",
+    "postbuild": "node scripts/generate-llms-txt.js && node scripts/generate-sitemap.js",
+    "build:local": "node scripts/svm-conformance.js && next build && node scripts/generate-llms-txt.js && node scripts/generate-sitemap.js",
     "start": "next start"
   },
   "dependencies": {

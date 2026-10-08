@@ -1,0 +1,28 @@
+User-agent: Googlebot
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: *
+Allow: /
+
+Sitemap: https://aimaturitymodels.com/sitemap.xml

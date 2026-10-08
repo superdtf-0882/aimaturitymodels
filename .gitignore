@@ -8,3 +8,5 @@ node_modules/
 # Generated at build time by scripts/generate-llms-txt.js (postbuild) --
 # not a source file, same treatment as .next/.
 public/llms.txt
+# Generated after each build by scripts/generate-sitemap.js (postbuild) -- OKF-TOGAF#159
+public/sitemap.xml
