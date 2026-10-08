@@ -61,6 +61,15 @@ console.log("--- 2. the SDLC matrix cites the shared layer's own version ---");
 console.log("--- 3. the level names, family-wide, name all four models ---");
 say(/every model in this family \(SDLC, PDLC, Portfolio Prioritization, and Enterprise Architecture\)/.test(text["Portfolio Prioritization"]),
   "Portfolio Prioritization's level-names line");
+// Added the same day: PDLC carried the same line, missing EA, and the outside
+// reading did not name it; CC found it in the built full file. Every model
+// that lists the family in this line must list all four.
+for (const [label] of MODELS) {
+  const m = text[label].match(/every model in this family \(([^)]*)\)/);
+  if (!m) continue;
+  say(/Enterprise Architecture/.test(m[1]) && /Prioritization/.test(m[1]) && !/Product Prioritization/.test(m[1]),
+    label + ": its family list names all four", "(" + m[1] + ")");
+}
 
 console.log("--- 4. the digest's instructions count four models ---");
 const core = read("lib/aiDigestCore.js");
