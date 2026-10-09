@@ -2,6 +2,7 @@ import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { copyFor, mapFor, normalize } from "../lib/mapRoutes";
+import { PRACTICE_LEAD } from "../lib/intros";
 
 // DS-004 (breadcrumb + back-link), DS-005 (no new tabs, all Link-based),
 // C-007 attribution pattern (portfolio-wide variant, DS-008b) applied to
@@ -16,7 +17,9 @@ export default function Layout({ title, crumb, wide, children }) {
     <>
       <Head>
         <title>{title ? `${title} — AI-Native Maturity Models` : "AI-Native Maturity Models"}</title>
-        <meta name="description" content="Capability models for understanding how AI-nativity changes software delivery, product management, and the enterprise itself." />
+        {/* OKF-TOGAF#172: the search description is the practice
+            introduction's opening line, as the home page's is. */}
+        <meta name="description" content={PRACTICE_LEAD} />
         <link rel="describedby" href={mapFor(route)} />
         {copy && <link rel="alternate" type="text/markdown" href={copy} />}
       </Head>

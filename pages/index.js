@@ -1,5 +1,11 @@
 import Link from "next/link";
 import Layout from "../components/Layout";
+import { PRACTICE_HEADING, PRACTICE_LEAD } from "../lib/intros";
+
+// 2026-10-08, OKF-TOGAF#172 (126-DT2): the heading and opening line are the
+// practice introduction's own first heading and paragraph, read from
+// lib/intros.js -- the owner's words, as everything below them is. The
+// left-hand navigation keeps "AI-Native Maturity Models".
 
 // THE WHEEL IS RETIRED (2026-09-21). It was five entry points on a
 // drag-spun circle (issues #9, #31, #37). What retired it is not taste:
@@ -37,11 +43,8 @@ import Layout from "../components/Layout";
 export default function Home() {
   return (
     <Layout title="Home">
-      <h1>AI-Native Maturity Models</h1>
-      <p className="dek">
-        A family of models, assessments, and governance artifacts for
-        understanding and building AI-native practice.
-      </p>
+      <h1>{PRACTICE_HEADING}</h1>
+      <p className="dek">{PRACTICE_LEAD}</p>
 
       <section className="thesis" aria-labelledby="thesis-heading">
         <h2 className="question" id="thesis-heading">
