@@ -696,11 +696,17 @@ table.wmv tbody tr.is-selected td.dim { background: var(--paper); }
    link -- see the comment in components/Layout.js for why. Orange
    accent (not the muted --ink-soft/--muted the rail's own "Foundation"
    links use) specifically so it doesn't repeat the mistake of blending
-   into a list of similarly-styled things; it's the only fixed element
+   into a list of similarly-styled things; it's the only element
    in this corner on any page, so consistent position does real work
-   for discoverability across the whole site, not just one page. */
+   for discoverability across the whole site, not just one page.
+   OKF-TOGAF#15 reopened, 2026-10-08 (125-DT2): it was fixed to the
+   window, and text scrolled under it at narrow and middle widths. It now
+   sits in the page's own top-right corner and scrolls away with the top
+   of the page -- where #15 put it ("a discreet link in the upper-right
+   corner"), covering nothing. At the top of every page the room it needs
+   was already reserved (the rail title's padding below). */
 .ai-feed-badge {
-  position: fixed; top: 16px; right: 16px; z-index: 50;
+  position: absolute; top: 16px; right: 16px; z-index: 50;
   display: inline-flex; align-items: center;
   padding: 7px 14px; border-radius: 100px;
   border: 1px solid var(--orange); background: var(--paper-raised);
