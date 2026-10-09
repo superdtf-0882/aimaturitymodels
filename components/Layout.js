@@ -56,8 +56,16 @@ export default function Layout({ title, crumb, wide, children }) {
         <main className={`stage${wide ? " stage--wide" : ""}`}>
           {crumb && <p className="crumb">{crumb}</p>}
           {children}
-          {/* OKF-TOGAF#158: the footer line 100-DT2 section 4 asks for. */}
-          <p className="footnote">For AI readers: <a href="/llms.txt">/llms.txt</a>.</p>
+          {/* OKF-TOGAF#158: the footer line 100-DT2 section 4 asks for.
+              OKF-TOGAF#170 (a bug): the attribution joins it, on the right.
+              It was fixed to the window's corner with a solid background and
+              covered whatever text scrolled under it. In the page's flow it
+              is still bottom-right on every page (DS-008b, C-007) and covers
+              nothing. */}
+          <footer className="page-foot">
+            <p className="footnote">For AI readers: <a href="/llms.txt">/llms.txt</a>.</p>
+            <a className="attribution" href="https://davidfacer.com">© 2026 David Facer</a>
+          </footer>
         </main>
       </div>
       {/* Issue #15, corrected same day: this started as a left-rail
@@ -71,7 +79,6 @@ export default function Layout({ title, crumb, wide, children }) {
       <Link href="/ai" className="ai-feed-badge" aria-label="Feed This to Your AI">
         <span className="ai-feed-badge-text">Feed This to Your AI</span>
       </Link>
-      <a className="attribution" href="https://davidfacer.com">© 2026 David Facer</a>
     </>
   );
 }

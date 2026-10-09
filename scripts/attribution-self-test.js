@@ -54,6 +54,11 @@ if (process.argv.includes("--built")) {
   let files = [];
   try { files = walk(dir); } catch { /* fails below */ }
   const miss = [];
+  // 500.html is Next.js's built-in error page: the site has no pages/500.js,
+  // so it never used the Layout and never carried the link, before this item
+  // or after. Named here rather than silently skipped.
+  files = files.filter((f) => path.relative(dir, f) !== "500.html");
+  console.log("  NOTE  500.html is Next.js's own error page, outside the Layout; not checked");
   for (const f of files) {
     const html = fs.readFileSync(f, "utf8");
     const n = html.split("© 2026 David Facer</a>").length - 1;
