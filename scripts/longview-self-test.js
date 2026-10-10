@@ -45,7 +45,10 @@ const want = ["cio", "cto", "head-of-product", "enterprise-architect", "transfor
 say(entries.map((e) => e.id).join(",") === want.join(","), "one per buyer persona, in the corpus's order", entries.map((e) => e.id).join(","));
 say(entries.every((e) => e.role && e.objective && e.opening && e.understood && Array.isArray(e.proof) && e.proof.length >= 2), "each: role, objective, opening, what understood means, two proofs or more");
 const ea = entries.find((e) => e.id === "enterprise-architect") || {};
-say(/stale/.test(ea.opening || "") && /single source of truth/.test(ea.opening || ""), "the EA entry says its pain plainly: stale records, no single source of truth");
+// [2026-10-10: the owner's rewrite says "a current, relevant source of truth"
+// where 133-DT2 and CC's draft said "single source of truth"; the case follows
+// his words.]
+say(/stale/.test(ea.opening || "") && /source of truth/.test(ea.opening || ""), "the EA entry says its pain plainly: architecture gone stale, no source of truth");
 
 console.log("--- no supplier text ---");
 const all = JSON.stringify(lv);
