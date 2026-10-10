@@ -21,11 +21,15 @@ export default function useAddressState(codec) {
   const stateRef = useRef(state);
 
   useEffect(() => {
+    // This page's own path and query. A Back or Forward that lands anywhere
+    // else belongs to the page arriving, and traverseTo leaves it alone.
+    const pagePath = window.location.pathname + window.location.search;
     const next = restore(window, codecRef.current, stateRef.current);
     stateRef.current = next;
     setState(next);
     function onPopState(e) {
-      const moved = traverseTo(window, e, codecRef.current, stateRef.current);
+      const moved = traverseTo(window, e, codecRef.current, stateRef.current, pagePath);
+      if (moved === null) return;
       stateRef.current = moved;
       setState(moved);
     }
