@@ -1,5 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import useAddressState from "./useAddressState";
 import { composites, rank } from "../lib/svmCore";
+
+const { valueMatrix } = require("../lib/address-codecs");
 
 // The Strategic Value Matrix calculator. Every rule it applies is in
 // lib/svmCore.js, which the build tests against the frame's conformance
@@ -12,12 +15,15 @@ const LIN = [1, 2, 3, 4];
 
 export default function StrategicValueMatrix({ sample }) {
   const { criteria, initiatives, edges, r5_terms: r5Terms } = sample;
-  const [scores, setScores] = useState(() =>
-    Object.fromEntries(initiatives.map((i) => [i.id, { ...i.scores }]))
-  );
+  // OKF-TOGAF#130: the scale and any changed score live in the address
+  // (#scale=linear&scores=id:criterion:27). Both are answers, so they only
+  // update the address: Back leaves the page, and a reload or a return
+  // restores them. Only scores that differ from the sample are written.
+  const codec = useMemo(() => valueMatrix(initiatives, criteria.map((c) => c.key)), [initiatives, criteria]);
+  const [{ scores, geometric }, commit] = useAddressState(codec);
   // Rule 1's contrast, kept from the demonstrator: the same rungs read as a
   // 1-to-4 scale. The frame argues against it; the toggle shows why.
-  const [geometric, setGeometric] = useState(true);
+  const setGeometric = (g) => commit((prev) => ({ ...prev, geometric: g }));
   const valueOf = (s) => (geometric ? s : LIN[Math.max(0, GEO.indexOf(s))]);
 
   const names = useMemo(() => Object.fromEntries(initiatives.map((i) => [i.id, i.name])), [initiatives]);
@@ -34,8 +40,9 @@ export default function StrategicValueMatrix({ sample }) {
 
   const valueCrit = criteria.filter((c) => c.half === "value");
   const easeCrit = criteria.filter((c) => c.half !== "value");
-  const setScore = (id, key, val) => setScores((s) => ({ ...s, [id]: { ...s[id], [key]: Number(val) } }));
-  const reset = () => setScores(Object.fromEntries(initiatives.map((i) => [i.id, { ...i.scores }])));
+  const setScore = (id, key, val) =>
+    commit((prev) => ({ ...prev, scores: { ...prev.scores, [id]: { ...prev.scores[id], [key]: Number(val) } } }));
+  const reset = () => commit((prev) => ({ ...prev, scores: codec.initial().scores }));
 
   return (
     <div className="svm">

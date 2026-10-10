@@ -1,7 +1,10 @@
-import { useState, useEffect, useRef, useCallback, useLayoutEffect } from "react";
+import { useState, useEffect, useRef, useCallback, useLayoutEffect, useMemo } from "react";
 import Link from "next/link";
 import Layout from "./Layout";
+import useAddressState from "./useAddressState";
 import { LEVEL_NAMES } from "../lib/levelVocabulary";
+
+const { matrix } = require("../lib/address-codecs");
 
 // Shared by all four models' Whole-Model Views (SDLC, PDLC,
 // Prioritization, EA) -- originally built for SDLC alone
@@ -218,7 +221,15 @@ export default function WholeModelView({
 
   // Rule 2: NEVER EMPTY. The page opens on a real cell, so there is no null
   // state to render around and no "nothing selected" branch anywhere below.
-  const [sel, setSel] = useState({ dimId: dimensions[0].id, level: "A" });
+  // (The opening cell is the codec's initial state.)
+  //
+  // OKF-TOGAF#130: the cell lives in the address as #cell=d3-c, and the old
+  // form #d3-c still resolves. A CLICK on a cell is a view and adds a history
+  // step, so Back returns to the cell before; an ARROW KEY only updates the
+  // address -- move 2's own reason, kept: arrowing across a 65-cell grid must
+  // not bury the Back button under 65 entries.
+  const codec = useMemo(() => matrix(dimensions.map((d) => d.id)), [dimensions]);
+  const [sel, commit] = useAddressState(codec);
   const [railOffset, setRailOffset] = useState(0);
 
   const wrapRef = useRef(null);
@@ -228,31 +239,13 @@ export default function WholeModelView({
 
   const activeDim = dimensions.find((d) => d.id === sel.dimId) || dimensions[0];
 
+  // Rule 7: every cell addressable. A click adds a step; the keyboard
+  // (opts.focus) only updates the address. Deep links in -- a shared link, a
+  // reload, a return -- are read by useAddressState on arrival.
   const select = useCallback((dimId, level, opts = {}) => {
-    setSel({ dimId, level });
     if (opts.focus) shouldFocusRef.current = true;
-    if (typeof window !== "undefined") {
-      // Rule 7: every cell addressable. replaceState, not pushState -- arrowing
-      // across a 65-cell grid must not bury the back button under 65 entries.
-      window.history.replaceState(null, "", `#${dimId.toLowerCase()}-${level.toLowerCase()}`);
-    }
-  }, []);
-
-  // Deep links in, both directions. The hash format (#d7-c) predates move 2
-  // and is kept verbatim so every link already shared still resolves.
-  useEffect(() => {
-    function openFromHash() {
-      const m = window.location.hash.replace("#", "").match(/^d(\d+)-([a-e])$/i);
-      if (!m) return;
-      const dimId = `D${m[1]}`;
-      const level = m[2].toUpperCase();
-      if (!dimensions.some((d) => d.id === dimId)) return;
-      setSel({ dimId, level });
-    }
-    openFromHash();
-    window.addEventListener("hashchange", openFromHash);
-    return () => window.removeEventListener("hashchange", openFromHash);
-  }, [dimensions]);
+    commit({ dimId, level }, { step: !opts.focus });
+  }, [commit]);
 
   // "...and the title follows" (02-DTOG rule 7).
   useEffect(() => {

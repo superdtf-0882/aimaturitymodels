@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Radar } from "react-chartjs-2";
 import {
@@ -10,10 +10,12 @@ import {
   Tooltip,
 } from "chart.js";
 import Layout from "./Layout";
+import useAddressState from "./useAddressState";
 // OKF-TOGAF#161: the file builder and the grading rule live in plain CommonJS
 // libraries so scripts/threshold-states-self-test.js can load them.
 const { LEVELS, buildAssessmentMd } = require("../lib/assessment-md");
 const { isGraded } = require("../lib/score-vector");
+const { assessment } = require("../lib/address-codecs");
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 
@@ -62,12 +64,24 @@ export default function Assessment({
   // Issue #29: D1 starts pre-graded at level A so a first-time visitor
   // sees what a graded cell looks like before doing anything themselves --
   // context for how to engage the assessment, not a real default score.
-  const [scores, setScores] = useState({ [dimensions[0].id]: "A" });
-  const [selectedDim, setSelectedDim] = useState(dimensions[0].id);
+  // (The default now lives in the codec's initial state.)
+  //
+  // OKF-TOGAF#130: the dimension in view and the grades live in the address
+  // (#dim=d3&grades=d1-a,d3-c). Choosing a dimension is a view and adds a
+  // history step; a grade is an answer and only updates the address, so Back
+  // walks back through dimensions, never through grades, and a reload or a
+  // return restores every grade. The typed Exempt reasons are never written
+  // to the address, on the owner's ruling: they survive an in-page Back and
+  // are re-entered after a reload or a return.
+  const codec = useMemo(
+    () => assessment(dimensions.map((d) => d.id), { thresholdStates: !!thresholdStates }),
+    [dimensions, thresholdStates]
+  );
+  const [{ dim: selectedDim, scores, exemptReasons }, commit] = useAddressState(codec);
+  const setSelectedDim = (id) => commit((prev) => ({ ...prev, dim: id }), { step: true });
   const [generating, setGenerating] = useState(false);
   const [readoutMsgIndex, setReadoutMsgIndex] = useState(0);
   const [error, setError] = useState(null);
-  const [exemptReasons, setExemptReasons] = useState({});
 
   const dim = dimensions.find((d) => d.id === selectedDim);
   // Exempt counts only with its reason: the models say an exemption without a
@@ -77,11 +91,11 @@ export default function Assessment({
   const pct = (gradedCount / dimensions.length) * 100;
 
   function selectLevel(letter) {
-    setScores((prev) => {
-      const next = { ...prev };
-      if (next[selectedDim] === letter) delete next[selectedDim];
-      else next[selectedDim] = letter;
-      return next;
+    commit((prev) => {
+      const next = { ...prev.scores };
+      if (next[prev.dim] === letter) delete next[prev.dim];
+      else next[prev.dim] = letter;
+      return { ...prev, scores: next };
     });
   }
 
@@ -218,7 +232,9 @@ export default function Assessment({
                       value={exemptReasons[dim.id] || ""}
                       onChange={(e) => {
                         const v = e.target.value;
-                        setExemptReasons((prev) => ({ ...prev, [dim.id]: v }));
+                        // The reason changes only the page's own state; the
+                        // address it writes is unchanged, so nothing is added.
+                        commit((prev) => ({ ...prev, exemptReasons: { ...prev.exemptReasons, [dim.id]: v } }));
                       }}
                       placeholder="e.g. Regulatory: a sector rule restricts AI use in this activity"
                     />

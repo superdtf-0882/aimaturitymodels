@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Layout from "../components/Layout";
+import useAddressState from "../components/useAddressState";
 import { STRATA } from "../lib/strataData";
+
+const { strata } = require("../lib/address-codecs");
 
 // Issue #10: the Stratum model's own Latin/numbered names (S0-S7), not the
 // plain-English translation the rest of this page used before. That's a
@@ -14,7 +17,11 @@ import { STRATA } from "../lib/strataData";
 // digest can consume the same source instead of a hand-kept-in-sync copy.
 
 export default function Strata() {
-  const [open, setOpen] = useState(() => new Set());
+  // OKF-TOGAF#130: the open rows live in the address (#open=s1,s4). Opening
+  // or closing a row is a view, so it adds a history step and Back undoes it;
+  // a reload or a return opens the same rows.
+  const codec = useMemo(() => strata(STRATA.map((s) => s.code)), []);
+  const [{ open }, commit] = useAddressState(codec);
   // Renamed from loopActive with SPEC-STRATA v2.4: hovering S7 no longer
   // lights a fixed S7->S0 pair, because feedback does not return only to
   // Intent. It lights every stratum S7 can address -- the fan-out the
@@ -23,12 +30,12 @@ export default function Strata() {
   const [fanoutActive, setFanoutActive] = useState(false);
 
   function toggle(code) {
-    setOpen((prev) => {
-      const next = new Set(prev);
+    commit((prev) => {
+      const next = new Set(prev.open);
       if (next.has(code)) next.delete(code);
       else next.add(code);
-      return next;
-    });
+      return { open: next };
+    }, { step: true });
   }
 
   return (

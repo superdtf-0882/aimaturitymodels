@@ -17,7 +17,10 @@
 // - `functionStatement` (optional): a one-line governing statement
 //   inside the function box.
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import useAddressState from "./useAddressState";
+
+const { functionModel } = require("../lib/address-codecs");
 
 const OUTPUT_ACCENTS = {
   eng: "var(--blue)",
@@ -75,8 +78,14 @@ function ExplainerModal({ explainer, onClose }) {
   );
 }
 
+// OKF-TOGAF#130: the explainer's open state lives in the address
+// (#explainer=open). Opening or closing it is a view and adds a history step,
+// so Back closes an explainer just opened, and a reload or a return reopens it.
+const EXPLAINER_CODEC = functionModel();
+
 export default function FunctionModel({ data }) {
-  const [explainerOpen, setExplainerOpen] = useState(false);
+  const [{ explainer: explainerOpen }, commit] = useAddressState(EXPLAINER_CODEC);
+  const setExplainerOpen = (open) => commit({ explainer: open }, { step: true });
 
   return (
     <>
