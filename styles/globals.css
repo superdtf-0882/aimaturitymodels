@@ -444,8 +444,8 @@ table.wmv tbody tr.is-selected td.dim { background: var(--paper); }
 
    Motion is optional (133-DT2 section 3.3, condition 2): smooth scrolling to an
    entry, on this page only, and none for a reader who asks for reduced
-   motion. No animation library: the owner's choice between GSAP and the
-   browser's own tools is open (184-CC). */
+   motion. No animation library, the owner's choice ("no library", 2026-10-10,
+   over GSAP + ScrollTrigger, sized in 184-CC). */
 html:has(.longview-sort) { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   html:has(.longview-sort) { scroll-behavior: auto; }
