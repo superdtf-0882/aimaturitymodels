@@ -436,59 +436,63 @@ table.wmv tbody tr.is-selected td.dim { background: var(--paper); }
 .dd-body h2 { font-size: 19px; }
 .provenance { margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); font-style: italic; }
 
-/* THE THESIS BLOCK (2026-09-21) -- what stands where the circular hub
-   used to. The hub's own rules (.hub-circle/.hub-node/.hub-kicker/
-   .hub-title/.hub-desc/.hub-ring/.hub-intro and their 640px media query)
-   were deleted with it rather than left orphaned; `git log -S .hub-node`
-   recovers them. The wheel is retired because its five destinations were
-   a strict subset of the rail's six -- see pages/index.js for the full
-   record and the governing brief.
+/* THE LONG VIEW (2026-10-10, OKF-TOGAF#173, WP-LONGVIEW-01) -- what stands
+   where the thesis block stood (2026-09-21 to 2026-10-10), on "the
+   electric-motor block is replaced" (the owner's word). Its rules were
+   deleted with it; `git log -S .definition` recovers them. The words live in
+   lib/longview.js; see pages/index.js for the record.
 
-   PORTED TO THIS SITE'S OWN TOKENS, not the prototype's. David's source
-   used --bright, --gold and a literal Georgia stack; those map here to
-   --ink, --orange and var(--serif), so the block inherits C-007's palette
-   and the site's type rather than importing a second design system next
-   to the first. The two hard-coded #b7c0c5 greys in the source map to
-   --ink-soft, which is #b7c4d1 -- near-identical and governed. */
-.thesis { margin-top: 52px; max-width: 920px; }
-.question {
-  max-width: 900px; margin: 0 0 38px; color: var(--ink);
-  font: 400 clamp(2rem, 4.3vw, 4.3rem)/1.07 var(--serif);
-  letter-spacing: -0.025em;
+   Motion is optional (133-DT2 section 3.3, condition 2): smooth scrolling to an
+   entry, on this page only, and none for a reader who asks for reduced
+   motion. No animation library: the owner's choice between GSAP and the
+   browser's own tools is open (184-CC). */
+html:has(.longview-sort) { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html:has(.longview-sort) { scroll-behavior: auto; }
 }
-.answer {
-  display: grid; grid-template-columns: 1fr; gap: 28px;
-  padding: 34px 0; border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-.answer p { margin: 0; max-width: 520px; font-size: 1.06rem; }
-.answer .history { color: var(--ink-soft); }
-.answer .claim {
-  color: var(--ink); font-family: var(--serif);
-  font-size: 1.25rem; line-height: 1.45;
-}
-.opportunity { color: var(--orange); }
-.definition { display: grid; grid-template-columns: 1fr; gap: 28px; margin-top: 34px; }
-.definition div { padding-left: 18px; border-left: 2px solid var(--line); }
-/* The AI-native side carries the accent border -- it is the one the
-   whole family is named for, and the asymmetry is the point. */
-.definition div:last-child { border-color: var(--orange); }
-.definition strong {
-  display: block; margin-bottom: 8px; color: var(--ink);
-  font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
-}
-.definition p { margin: 0; color: var(--muted); }
-.system-note { max-width: 760px; margin: 42px 0 0; color: var(--ink-soft); }
-.system-note a { color: var(--orange); text-underline-offset: 4px; }
+.longview-entry { scroll-margin-top: 24px; }
 
-/* Two columns only once there is room, matching the prototype's own
-   breakpoint behaviour: it declared the grid at two columns and collapsed
-   to one in a narrow media query. Stated mobile-first here instead, which
-   is the same result with the cascade running the easy way. */
+.longview-sort { margin: 34px 0 46px; }
+.longview-sort-lead {
+  margin: 0 0 12px; color: var(--muted); font-family: var(--mono);
+  font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.longview-sort ul {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: 1fr; gap: 10px;
+}
+.longview-sort a {
+  display: block; height: 100%; padding: 12px 14px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--paper-raised);
+  text-decoration: none; transition: border-color 0.15s ease;
+}
+.longview-sort a:hover, .longview-sort a:focus-visible { border-color: var(--orange); }
+.longview-sort .role { display: block; color: var(--orange); font-weight: 600; }
+.longview-sort .objective { display: block; color: var(--ink-soft); font-size: 14px; margin-top: 2px; }
+
+.longview-spine { max-width: 760px; padding: 30px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.longview-spine h2, .longview-claims h2 { margin-top: 0; }
+.longview-spine p { color: var(--ink); font-size: 1.06rem; line-height: 1.6; }
+.longview-spine p:first-of-type { font-family: var(--serif); font-size: 1.25rem; line-height: 1.45; }
+
+.longview-entries { margin-top: 42px; }
+.longview-entry { max-width: 760px; padding: 26px 0; border-bottom: 1px solid var(--line); }
+.longview-entry h3 { margin: 0 0 10px; font-family: var(--serif); font-size: 1.3rem; }
+.longview-entry h3 .role { color: var(--orange); }
+.longview-entry .opening { color: var(--ink); font-size: 1.06rem; }
+.longview-entry p { color: var(--ink-soft); }
+.longview-entry .proof { list-style: none; margin: 14px 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.longview-entry .proof a { color: var(--orange); text-underline-offset: 4px; }
+.longview-entry .understood { margin: 14px 0 0; padding-left: 14px; border-left: 2px solid var(--orange); color: var(--ink); }
+.longview-entry .understood span { display: block; color: var(--muted); font-size: 13px; margin-bottom: 2px; }
+
+.longview-claims { max-width: 760px; margin-top: 46px; }
+.longview-claims ul { margin: 0; padding-left: 20px; }
+.longview-claims li { color: var(--ink-soft); margin-bottom: 10px; }
+.longview-claims a { color: var(--orange); white-space: nowrap; text-underline-offset: 4px; }
+
 @media (min-width: 640px) {
-  .thesis { margin-top: 70px; }
-  .answer { grid-template-columns: 1fr 1fr; gap: 54px; }
-  .definition { grid-template-columns: 1fr 1fr; gap: 54px; }
+  .longview-sort ul { grid-template-columns: 1fr 1fr 1fr; }
 }
 
 /* Stratum model (issue #10): a click-to-expand list, S0 at top through

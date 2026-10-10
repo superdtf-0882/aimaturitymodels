@@ -1,11 +1,20 @@
 import Link from "next/link";
 import Layout from "../components/Layout";
 import { PRACTICE_HEADING, PRACTICE_LEAD } from "../lib/intros";
+import { LONGVIEW_THESIS_PARAGRAPHS, LONGVIEW_CLAIMS, LONGVIEW_ENTRIES } from "../lib/longview";
 
 // 2026-10-08, OKF-TOGAF#172 (126-DT2): the heading and opening line are the
 // practice introduction's own first heading and paragraph, read from
-// lib/intros.js -- the owner's words, as everything below them is. The
-// left-hand navigation keeps "AI-Native Maturity Models".
+// lib/intros.js -- the owner's words. The left-hand navigation keeps
+// "AI-Native Maturity Models".
+//
+// 2026-10-10, OKF-TOGAF#173 (WP-LONGVIEW-01, 133-DT2): THE LONG VIEW replaces
+// the thesis block below ("the electric-motor block is replaced", the owner's
+// word). Its spine is the positioning thesis PT-001 2.0 and its claims, the
+// owner's words; its six entries are CC's draft for his approval. All of it
+// lives in lib/longview.js and is rendered as real text, so the AI-reader map,
+// the sitemap and a reader with scripts off all get the whole of it. The
+// record of the thesis block, which itself replaced the wheel, follows.
 
 // THE WHEEL IS RETIRED (2026-09-21). It was five entry points on a
 // drag-spun circle (issues #9, #31, #37). What retired it is not taste:
@@ -46,50 +55,52 @@ export default function Home() {
       <h1>{PRACTICE_HEADING}</h1>
       <p className="dek">{PRACTICE_LEAD}</p>
 
-      <section className="thesis" aria-labelledby="thesis-heading">
-        <h2 className="question" id="thesis-heading">
-          What do the electric motor, the spreadsheet, and the shipping
-          container have in common?
-        </h2>
+      <nav className="longview-sort" aria-label="Find your way in">
+        <p className="longview-sort-lead">Find your way in</p>
+        <ul>
+          {LONGVIEW_ENTRIES.map((e) => (
+            <li key={e.id}>
+              <a href={"#" + e.id}>
+                <span className="role">{e.role}</span>
+                <span className="objective">{e.objective}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-        <div className="answer">
-          <p className="history">
-            Each delivered modest gains when inserted into existing
-            operations. Massive gains were available to organizations that
-            could redesign their processes, capabilities, and structures
-            around them.
-          </p>
-          <p className="claim">
-            <span className="opportunity">AI presents the same opportunity.</span>{" "}
-            Local augmentation can improve individual tasks. System-level
-            returns require the system itself to change.
-          </p>
-        </div>
+      <section className="longview-spine" aria-labelledby="spine-heading">
+        <h2 id="spine-heading">The argument</h2>
+        {LONGVIEW_THESIS_PARAGRAPHS.map((p, i) => (
+          <p key={i}>{p.join(" ")}</p>
+        ))}
+      </section>
 
-        <div className="definition">
-          <div>
-            <strong>AI-enabled</strong>
-            <p>
-              AI is added to work designed around existing organizational
-              constraints.
-            </p>
-          </div>
-          <div>
-            <strong>AI-native</strong>
-            <p>
-              Work, context, authority, and feedback are redesigned around
-              what people and AI can do together.
-            </p>
-          </div>
-        </div>
+      <section className="longview-entries" aria-label="By role">
+        {LONGVIEW_ENTRIES.map((e) => (
+          <article className="longview-entry" id={e.id} key={e.id}>
+            <h3><span className="role">{e.role}</span>: {e.objective}</h3>
+            <p className="opening">{e.opening}</p>
+            <p>{e.body}</p>
+            <ul className="proof">
+              {e.proof.map((p) => (
+                <li key={p.href}>
+                  {/\.(txt|md)$/.test(p.href) ? <a href={p.href}>{p.label} →</a> : <Link href={p.href}>{p.label} →</Link>}
+                </li>
+              ))}
+            </ul>
+            <p className="understood"><span>You have understood it when you can say:</span>{e.understood}</p>
+          </article>
+        ))}
+      </section>
 
-        <p className="system-note">
-          This site contains the <Link href="/models">maturity models</Link>,{" "}
-          <Link href="/assessments">assessments</Link>,{" "}
-          <Link href="/functionmodels">function models</Link>, and{" "}
-          <Link href="/strata">governance structure</Link> for making that
-          redesign explicit and assessable.
-        </p>
+      <section className="longview-claims" aria-labelledby="claims-heading">
+        <h2 id="claims-heading">What the practice holds to</h2>
+        <ul>
+          {LONGVIEW_CLAIMS.map((c) => (
+            <li key={c.id}>{c.title} <Link href={c.href}>{c.proof} →</Link></li>
+          ))}
+        </ul>
       </section>
     </Layout>
   );

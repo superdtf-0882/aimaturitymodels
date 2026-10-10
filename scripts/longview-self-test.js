@@ -51,7 +51,10 @@ console.log("--- no supplier text ---");
 const all = JSON.stringify(lv);
 say(!/ATT-[A-Z]+-[BU]-\d+/.test(all), "no supplier attribute id");
 say(!/\d+\s?%|\d+ (percent|in \d+)/.test(all), "no figure: none is on the page unchecked", (all.match(/\d+\s?%/) || [""])[0]);
-say(!/market intelligence/i.test(all), "nothing of C5 (the practice's own market intelligence)");
+// C5 is the practice running ITS OWN market intelligence; the PDLC model's own
+// description (market intelligence becoming product definition) is not C5.
+// [Narrowed before landing: the first form refused the phrase anywhere.]
+say(!/own market intelligence|PT-001-C5/i.test(all), "nothing of C5 (the practice running its own market intelligence)");
 
 console.log("--- every proof resolves ---");
 const routes = new Set(["/", "/models", "/assessments", "/functionmodels", "/strata", "/eaokf", "/ai", "/vellum"]);
