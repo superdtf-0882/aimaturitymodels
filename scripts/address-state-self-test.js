@@ -120,6 +120,43 @@ if (S && C) {
     S.samePage("/models/", "/strata/#open=s1") === false &&
     S.samePage("/models/sdlc/executivereadout/?hash=a", "/models/sdlc/executivereadout/?hash=b") === false);
 
+  // --- crossing pages (the fourth outside run, 205-CC) ----------------------
+  // When Back or Forward crosses to another page, the page being left is still
+  // listening for a moment. It must not write its state onto the arriving
+  // page's address. The run saw deep-dive pages ending #cell=d1-a and the
+  // home page carrying an assessment's grades.
+  check("crossing pages: the page left writes nothing onto the arriving page's address", () => {
+    const m = C.matrix(DIMS);
+    const w = fakeWindow("/models/");
+    w.history.pushState({ __N: true, url: "/m/", as: "/m/", options: {} }, "", "/m/");   // to the matrix
+    let st = { dimId: "D3", level: "C" };
+    S.write(w, m.toParams(st), { step: true });                                          // a changed state
+    w.history.go(-2);                                                                    // Back to /models/
+    const r = S.traverseTo(w, { state: w.history.state }, m, st, "/m/");
+    return (r === null && w.location.pathname === "/models/" && w.location.hash === "") || JSON.stringify([r, w.location]);
+  });
+  check("crossing pages: a page left in its default state does not wipe the arriving page's saved state", () => {
+    const strata = C.strata(["S0", "S1"]);
+    const m = C.matrix(DIMS);
+    const w = fakeWindow("/strata/");
+    S.write(w, strata.toParams({ open: new Set(["S1"]) }), { step: false });             // Strata's saved state
+    w.history.pushState({ __N: true, url: "/m/", as: "/m/", options: {} }, "", "/m/");   // to the matrix, default
+    w.history.back();                                                                    // Back to Strata
+    const r = S.traverseTo(w, { state: w.history.state }, m, m.initial(), "/m/");
+    return (r === null && w.location.hash === "#open=s1") || JSON.stringify([r, w.location]);
+  });
+  check("crossing pages: a step that stays on the page is still handled", () => {
+    const m = C.matrix(DIMS);
+    const w = fakeWindow("/m/");
+    let st = { dimId: "D2", level: "B" };
+    S.write(w, m.toParams(st), { step: true });
+    st = { dimId: "D4", level: "E" };
+    S.write(w, m.toParams(st), { step: true });
+    w.history.back();
+    const r = S.traverseTo(w, { state: w.history.state }, m, st, "/m/");
+    return (r && r.dimId === "D2" && r.level === "B") || JSON.stringify(r);
+  });
+
   // --- the full sequence on an assessment, through the shared piece --------
   const assess = C.assessment(DIMS, { thresholdStates: true });
   check("assessment: view, answer, Back, Forward, leave, return", () => {
@@ -283,6 +320,10 @@ check("no page or component writes history itself (only lib/address-state.js doe
     walk(dir);
   }
   return offenders.length === 0 || offenders.join(", ");
+});
+check("the hook tells the shared piece which page it is, so a step to another page is left alone", () => {
+  const src = read("components/useAddressState.js");
+  return (/traverseTo\([^)]*pagePath/.test(src) && /pagePath\s*=\s*window\.location\.pathname/.test(src)) || "the hook passes no page path";
 });
 check("pages/_app.js lets the page, not the router, handle an in-page Back", () => {
   const src = read("pages/_app.js");
