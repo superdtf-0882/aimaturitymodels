@@ -325,6 +325,17 @@ check("the hook tells the shared piece which page it is, so a step to another pa
   const src = read("components/useAddressState.js");
   return (/traverseTo\([^)]*pagePath/.test(src) && /pagePath\s*=\s*window\.location\.pathname/.test(src)) || "the hook passes no page path";
 });
+// The fifth outside run (210-CC): arriving back on a page, 11 of 87 snapshots
+// showed the page's default for a frame or two before it restored -- measured
+// at about 10 and 26 ms. The address is read in an effect that runs after the
+// page is drawn. Read it in a layout effect, which runs before, and no reader
+// or snapshot can see the default. (The server cannot do it: the part after
+// # never reaches the server, so a full reload still draws once before the
+// browser's script runs.)
+check("the hook reads the address before the page is drawn (a layout effect)", () => {
+  const src = read("components/useAddressState.js");
+  return /use(?:Iso)?LayoutEffect\(\(\) => \{[\s\S]*?restore\(/.test(src) || "the address is read after the page is drawn";
+});
 check("pages/_app.js lets the page, not the router, handle an in-page Back", () => {
   const src = read("pages/_app.js");
   return (/beforePopState/.test(src) && /samePage/.test(src)) || "not installed";
