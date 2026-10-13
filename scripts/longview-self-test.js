@@ -63,6 +63,11 @@ console.log("--- every proof resolves ---");
 const routes = new Set(["/", "/models", "/assessments", "/functionmodels", "/strata", "/eaokf", "/ai", "/vellum"]);
 for (const m of ["sdlc", "pdlc", "prioritization", "ea"]) for (const r of ["whole-model-view", "assessment", "executivereadout"]) routes.add("/models/" + m + "/" + r);
 routes.add("/models/prioritization/strategic-value-matrix");
+routes.add("/scored");
+// OKF-TOGAF#124 (135-DT2 section 3.3): the C-level entry, "how its conclusions were
+// checked and measured", points at the practice's own published score.
+const clevel = entries.find((e) => e.id === "c-level-strategist") || { proof: [] };
+say(clevel.proof.some((p) => p.href === "/scored"), "the C-level entry points at the practice's own score, /scored");
 const files = new Set(["/llms.txt", "/llms-full.txt"]);
 const hrefs = [...entries.flatMap((e) => e.proof.map((p) => p.href)), ...claims.map((c) => c.href)];
 const pageFile = (h) => fs.existsSync(path.join(root, "pages", h === "/" ? "index.js" : h + ".js")) || fs.existsSync(path.join(root, "pages", h, "index.js"));
