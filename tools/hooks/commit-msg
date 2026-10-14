@@ -146,6 +146,38 @@
 #   messages were read whole (12-CC section 5.2). Signed "Ring 3: the hook and
 #   the gate use 1024 bytes, as measured (12-CC §5.2) -- David Facer
 #   10/2/2026". The figure lives in CUT below and nowhere else in this file.
+#
+# ADMISSION, 2026-10-14 -- IS THE NAMED WORK ITEM FIT TO WORK UNDER? Work Item
+# OKF-TOGAF#197 part 4, the third door of 175-DT2. Ruled by DT2 in
+# briefs/2026-10-01-svm-tranche-3/179-DT2 and ratified "#197 part 4 as 179-DT2
+# rules it: the hook reads the record on this machine and says how old it is;
+# this repository under it, warning first; refusing after two clear weeks on my
+# line; a closed item refused unless the commit is a record about it; the desk
+# page's source and test into the repository -- David Facer 10/14/2026".
+#
+#   When a commit's Work-Item line passes, this hook hands the ids it names to
+#   tools/work-item-admission.js IN THE GOVERNED REPOSITORY'S CHECKOUT ON THIS
+#   MACHINE -- this repository itself when it is that one, otherwise the folder
+#   beside this repository named "OKF TOGAF" or "OKF-TOGAF" -- which reads the
+#   record there, offline, and prints a report only when an id was closed
+#   before today, has no typed header, or is no issue, with the record's age.
+#   No checkout, or no node: NOT CHECKED, said, and the commit passes.
+#
+#   REPORTED, NEVER REFUSED, ON EVERY SURFACE, ENFORCED OR NOT, until the
+#   owner's line turns the refusal on after two clear weeks (179-DT2 section
+#   3); that will be a change here, signed, never a field that flips by
+#   itself. A record ABOUT a closed item is not work under it: it carries the
+#   mark and names the item in its subject, so no Work-Item line names it and
+#   nothing is reported (179-DT2 section 4).
+#
+#   HOW THE ADMISSION REPORT CAN BE CROSSED (RULE-10):
+#     a. The record is as current as its last work-item-titles.js --write; an
+#        item opened, typed or closed since reads as it was. The write belongs
+#        in the same act (179-DT2 section 1), and the report prints the age.
+#     b. A governed checkout under any other folder name is not found: NOT
+#        CHECKED. So is a machine with no checkout -- the build server's case.
+#     c. Crossings 1 to 3 above apply unchanged: --no-verify, commits that
+#        never meet a local git client, a clone with no hooks path.
 
 MSG_FILE="$1"
 [ -n "$MSG_FILE" ] && [ -f "$MSG_FILE" ] || exit 0
@@ -266,9 +298,40 @@ dm_in=""; printf '%s\n' "$firstcut" | grep -Eq "$DM_RE" && dm_in="yes"
 #   late     -- the line or the mark lies past the first $CUT bytes
 #   tooling  -- the mark, on a commit touching this surface's tooling
 #   unknown  -- the mark, and the projection cannot say what tooling is
+# THE ADMISSION REPORT (header, ADMISSION). Reports; never changes the exit.
+admission_report() {
+  ids=$(printf '%s\n' "$firstcut" | sed -n 's/^Work-Item:[[:space:]]*\([A-Za-z0-9_.-]*#[0-9]*\)[[:space:]]*$/\1/p')
+  [ -n "$ids" ] || return 0
+  gov=""
+  if [ -f "$repo_root/tools/work-item-admission.js" ] && [ -f "$repo_root/corpus/register_work_items.md" ]; then
+    gov="$repo_root"
+  else
+    common=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)
+    if [ -n "$common" ]; then
+      estate=$(dirname "$(dirname "$common")")
+      for cand in "$estate/OKF TOGAF" "$estate/OKF-TOGAF"; do
+        if [ -f "$cand/tools/work-item-admission.js" ]; then gov="$cand"; break; fi
+      done
+    fi
+  fi
+  if [ -z "$gov" ] || ! command -v node >/dev/null 2>&1; then
+    echo "" >&2
+    echo "WORK ITEM ADMISSION -- NOT CHECKED: the governed record (an OKF-TOGAF checkout beside this" >&2
+    echo "  repository) was not found on this machine, or node is not installed. Nothing refused." >&2
+    echo "" >&2
+    return 0
+  fi
+  # $ids is left unquoted on purpose: one id per word, and an id holds no space.
+  node "$gov/tools/work-item-admission.js" --hook --date "$(date -u +%Y-%m-%d)" $ids >&2 2>/dev/null || true
+  return 0
+}
+
 reason=""
 if [ -n "$has_wi" ]; then
-  [ -n "$wi_in" ] && exit 0
+  if [ -n "$wi_in" ]; then
+    admission_report
+    exit 0
+  fi
   reason="late"
 elif [ -n "$has_dm" ]; then
   if [ -n "$tool_hit" ]; then
