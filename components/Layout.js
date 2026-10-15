@@ -50,6 +50,9 @@ export default function Layout({ title, crumb, wide, children }) {
                 separate abstract "Foundation" heading. */}
             <Link href="/models">AI-Native Maturity Models</Link>
             <Link href="/assessments">Maturity Model Assessments</Link>
+            {/* OKF-TOGAF#189: the taxonomy is the assessments' intake -- name
+                the system, then assess the practices around it. */}
+            <Link href="/taxonomy">AI Architecture Taxonomy</Link>
             <Link href="/functionmodels">Function Models</Link>
             <Link href="/strata">Strata</Link>
             <Link href="/eaokf" className="nav-secondary">Enterprise Architecture OKF</Link>

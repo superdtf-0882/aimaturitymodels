@@ -1,0 +1,2132 @@
+{
+ "examples": [
+  {
+   "id": "W-01",
+   "title": "Amazon Rufus",
+   "source": "Tom's Guide, *Amazon Rufus helps you shop smarter — here's how it works*. https://www.tomsguide.com/ai/amazon-rufus-helps-you-shop-smarter-heres-how-it-works",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A shopper presses the Rufus button on amazon.com or in the app.",
+       "sub": []
+      },
+      {
+       "text": "The shopper types or dictates a question, or picks a suggested one.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** Rufus reads listings, reviews, Q&As and web material and answers: narrows choices, recommends, explains categories, suggests gifts, finds cheaper options.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: shopper]** The shopper asks a follow-up, picks another suggested question, rates the answer, or leaves.",
+       "sub": []
+      },
+      {
+       "text": "Whatever the shopper buys, they buy themselves; the article describes no step where Rufus acts on a cart or an order.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "a shopper pressing the Rufus button. *(Select the Rufus button)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "answers shopping questions, summarises, narrows, recommends. *(How to use; How to get the most out of)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the shopper asks another question or picks a suggested one. *(Step 2)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "every query starts with the shopper; the shopper decides what to buy. *(Step 2; intro)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "What it can reach",
+     "text": "web information in addition to Amazon's own listings and reviews; the article describes no other outside system. *(intro; Ask about a specific product)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "chat history, viewable and clearable by the shopper, removed after 28 days. *(Managing your chats)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "thumbs-up/down ratings, said to help Rufus improve; who reviews them, the source doesn't say. *(intro)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "product listings, customer reviews, community Q&As, web information. *(intro; Ask about a specific product)*"
+    }
+   ],
+   "family": "user"
+  },
+  {
+   "id": "W-02",
+   "title": "Shopify Sidekick with app extensions",
+   "source": "Weaverse, *Shopify Sidekick: agents propose, merchants approve* (June 2026; a third-party summary of Shopify's documentation). https://weaverse.io/blogs/shopify-sidekick-agents-propose-merchants-approve-2026",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A merchant asks Sidekick a question or makes a request in the Shopify admin.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** Sidekick calls an app's read-only data tool to learn the current state, and answers with structured data and links.",
+       "sub": []
+      },
+      {
+       "text": "Branch, by what the merchant asked for:",
+       "sub": [
+        "a. a question → the answer in step 2 is the end.",
+        "b. a place → Sidekick sends the merchant to a page or opens a focused view; no data changes.",
+        "c. a change → **[AI]** Sidekick proposes a specific edit and opens the app's editing screen with the edit staged."
+       ]
+      },
+      {
+       "text": "**[waits: merchant]** The merchant reviews the staged edit and clicks Save, or discards it. The app writes to the live store only after Save.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "a merchant's request or question in Sidekick. *(What Sidekick app extensions actually are; The propose-then-approve model)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "reads app data; proposes a change; stages it in the editor; navigates the merchant. *(The propose-then-approve model)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "after a lookup, an answer; after staging, the merchant reviews; after navigation, the merchant is on the page with nothing changed. *(What Sidekick app extensions actually are; Why this is the right default)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "any committed edit waits for the merchant's Save. *(The propose-then-approve model)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "read-only lookups and navigation. *(Why this is the right default)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "the admin, the app's data, and the live storefront — the last only after a merchant commits. *(The propose-then-approve model)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say, beyond a staged change held until confirmed or discarded."
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "each committed change passes through a human click, giving a record of who approved what; who reads it, the source doesn't say. *(Why this is the right default)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the app's data through data extensions; storefront data such as products, variants, prices. *(What Sidekick app extensions actually are)*"
+    }
+   ],
+   "family": "user"
+  },
+  {
+   "id": "W-03",
+   "title": "An Alexa skill handling a voice request",
+   "source": "Amazon, *What is the Alexa Skills Kit?* https://developer.amazon.com/en-US/docs/ask-overviews/what-is-the-alexa-skills-kit.html",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A user says the wake word and a request to an Alexa device.",
+       "sub": []
+      },
+      {
+       "text": "The device streams the speech to the Alexa cloud service.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The service turns speech into text, works out what the user wants against the skill's declared phrases, and picks the skill.",
+       "sub": []
+      },
+      {
+       "text": "The service sends the skill an HTTPS request with a structured body.",
+       "sub": []
+      },
+      {
+       "text": "The skill's own code — written by its developer — runs its logic and returns a response.",
+       "sub": []
+      },
+      {
+       "text": "Alexa speaks or shows the response.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: user]** If the skill needs more, Alexa asks and waits for the user's spoken answer; then back to step 3.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "the user speaking the wake word and a request. *(How does a user access skill content?)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "recognises the speech, interprets the request, selects the skill. *(How does a user access skill content?)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the request is routed to the skill, whose code processes it and responds; if more is needed, Alexa asks the user. *(How does a user access skill content?; How does a user interact with a skill?)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "the user's spoken reply when Alexa asks a follow-up; before publication, Amazon's certification of the skill. *(How does a user interact with a skill?; Certify and publish your skill)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "the source doesn't say, for a published skill's individual requests."
+    },
+    {
+     "line": "What it can reach",
+     "text": "Alexa-enabled devices including other makers'; AWS Lambda or the developer's own web service; cloud-connected devices such as lights, if the skill controls them. *(How does a user access skill content?; Build your skill; What types of skills)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say, beyond the skill's hosted resources."
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "usage metrics and earnings in the developer console, read by the developer. *(Monitor your skill and metrics)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the interaction model — the words and phrases the developer declared, or a pre-built model. *(How does a user interact with a skill?; About Voice Interaction Models)*"
+    }
+   ],
+   "family": "built-with",
+   "also": [
+    "fixed-logic"
+   ]
+  },
+  {
+   "id": "W-04",
+   "title": "Gmail Smart Compose",
+   "source": "Google Research blog, *Smart Compose: Using Neural Networks to Help Write Emails* (2018). https://www.research.google/blog/smart-compose-using-neural-networks-to-help-write-emails/",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A user types an email.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** On each keystroke, a model conditioned on the text so far, the subject, and the previous message in a reply predicts how the sentence continues.",
+       "sub": []
+      },
+      {
+       "text": "The completion is shown to the user as a suggestion.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: user]** The user keeps typing, or takes the suggestion. The next keystroke starts step 2 again.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "the user's typing; a prediction per keystroke. *(opening section)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "averages embeddings of subject and prior message, feeds them with the typed text to a language model that predicts the next words. *(Finding the Right Model)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the completion is offered to the user; the page describes no further processing. *(Finding the Right Model)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "each prediction waits on the user's next keystroke; whether the user must accept a suggestion, the source doesn't say. *(opening section)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "model training, run separately on TPUs. *(Accelerated Model Training & Serving)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "the source doesn't say; only Google's own infrastructure and Gmail are named."
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say for per-user state; per-user models are listed as future work. *(Future work)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "the source doesn't say; researchers had no access to emails. *(Fairness and Privacy)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "a model trained on billions of phrases and sentences. *(Fairness and Privacy; Accelerated Model Training & Serving)*"
+    }
+   ],
+   "family": "user",
+   "also": [
+    "fixed-logic"
+   ]
+  },
+  {
+   "id": "W-05",
+   "title": "Stripe Radar",
+   "source": "Stripe, *A primer on machine learning for fraud detection* (Radar guide). https://stripe.com/en-gb-us/radar/guide",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A payment arrives through the Stripe API.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** Feature values for the payment are computed in real time; a trained model estimates the probability it is fraudulent, 0 to 1.",
+       "sub": []
+      },
+      {
+       "text": "The score is compared to a policy threshold. Branch:",
+       "sub": [
+        "a. above the threshold → the payment is blocked.",
+        "b. below → the payment is allowed; its outcome (a dispute or not) is observed later.",
+        "c. matches a merchant's own rule → the merchant's chosen action; on the paid tier, a rule can send it to manual review."
+       ]
+      },
+      {
+       "text": "**[waits: merchant's staff]** Payments routed to manual review are decided by the business's own staff in the Dashboard.",
+       "sub": []
+      },
+      {
+       "text": "Separately, on a schedule: models are retrained and checked against block-rate and false-positive guardrails before release.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "every transaction is evaluated. *(Stripe Radar and the Stripe network)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "computes features per payment; a classifier estimates fraud probability; the score is compared to a threshold. *(Machine learning operations; The basics of machine learning; Evaluating machine learning models)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "above threshold, blocked; below, allowed and observed; blocked payments' true outcomes are estimated afterwards. *(Evaluating machine learning models; Stripe Radar and the Stripe network)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "payments a merchant routes to manual review, decided by the merchant's staff; model candidates, reviewed by Stripe engineers before release. *(Improving performance with rules and manual reviews; Machine learning operations)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "scoring every transaction and blocking high-scoring ones. *(Stripe Radar and the Stripe network)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "aggregated data across Stripe's network, card networks and issuers. *(Stripe Radar and the Stripe network)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "up-to-date per-card state such as the IP addresses used with a card; historical features and training data; per-business rules and statistics. *(Machine learning operations; Feature engineering; Improving performance)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "model-candidate dashboards read by Stripe engineers; dispute, false-positive and block-rate metrics read by merchants; historical match statistics shown when a merchant writes a rule. Audit logs, the source doesn't say. *(Machine learning operations; Improving performance)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "historical payments labelled fraudulent or not; features designed by Stripe's data scientists; learned merchant embeddings. *(The basics of machine learning; Feature engineering)*"
+    }
+   ],
+   "family": "fixed-logic"
+  },
+  {
+   "id": "W-06",
+   "title": "Lemonade claims handling (\"AI Jim\")",
+   "source": "Lemonade blog, *The secret behind Lemonade's instant insurance* (2017; a company blog post). https://www.lemonade.com/blog/secret-behind-lemonades-instant-insurance/",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A policyholder files a claim in the app by chatting with the bot.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The algorithms read the claim's nature and severity, check whether the user seems to be in an emergency, estimate fraud likelihood, and log behavioural signals from the interaction.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** One decision: is this claim handled automatically?",
+       "sub": []
+      },
+      {
+       "text": "Branch:",
+       "sub": [
+        "a. yes → the claim is paid at once.",
+        "b. no → **[waits: human claims handler]** a person on Lemonade's claims staff decides."
+       ]
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "the policyholder filing a claim in the app through the bot. *(Self-Served Claims, caption)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "interprets nature and severity; checks for emergency; estimates fraud; monitors signals; decides whether the claim is handled automatically. *(Self-Served Claims, paragraphs 2–4)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "only the final decision's outcome is stated — paid instantly, or handed to the human handler. *(Self-Served Claims, paragraphs 2–4)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "claims the AI does not pay instantly, decided by the human claims handler. *(Self-Served Claims, last paragraph)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "claims the AI decides to handle automatically; the company says it does not pay every claim this way. *(Self-Served Claims; Setting expectations)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "the source doesn't say; reinsurers are named as a financial backstop, not as parties the bot contacts. *(A well-hidden secret)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say, beyond 3.7 million signals tracked in the first month. *(Self-Served Claims)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "the source doesn't say. *(Setting expectations)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "study of how claims staff at traditional insurers work; behavioural-economics research; user data collected in use; regulator-approved policy forms. *(Self-Served Claims; Setting expectations)*"
+    }
+   ],
+   "family": "fixed-logic"
+  },
+  {
+   "id": "W-07",
+   "title": "Klarna's customer-service assistant",
+   "source": "CX Today, *Klarna claims its new AI assistant does the work of 700 full-time agents* (2024; trade press). https://www.cxtoday.com/contact-center/klarna-claims-its-new-ai-assistant-does-the-work-of-700-full-time-agents/",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A customer opens a chat in the Klarna app (implied by the article; not stated as a step).",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The assistant handles the conversation: refunds, returns, payment problems, cancellations, disputes, invoice errors; payment-schedule updates; spending-limit explanations; in 35 languages.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: customer]** The customer may choose a live agent instead at any point.",
+       "sub": []
+      },
+      {
+       "text": "Whether step 2 includes the assistant *executing* a refund or cancellation, or only guiding the customer to one, the article does not say.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "the source doesn't say directly; the assistant lives in the app and handles customer chats. *(opening; Available in the company's app)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "handles the listed customer-service topics and financial-support questions, multilingual. *(24/7 Support; Personal Financial Support; Multilingual Chat Support)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the source doesn't say, except that customers can still reach live agents. *(Going All In on AI a Gamble)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "nothing is described as waiting; the customer may opt for a live agent. *(Going All In on AI a Gamble)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "What it can reach",
+     "text": "the source doesn't say; OpenAI is named as the partner that built it. *(opening)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "the source doesn't say for individual chats; aggregate results are reported (share of chats, resolution time, satisfaction). *(opening)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the source doesn't say beyond GPT-powered, built with OpenAI. *(headline; opening)*"
+    }
+   ],
+   "family": "user",
+   "note": "The source doesn't say what the assistant may do on its own."
+  },
+  {
+   "id": "W-08",
+   "title": "Morgan Stanley \"AI @ Morgan Stanley Assistant\"",
+   "source": "OpenAI customer story, *Morgan Stanley*. https://openai.com/index/morgan-stanley/",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A financial advisor asks a question.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The system retrieves material from the firm's internal document library and generates an answer.",
+       "sub": []
+      },
+      {
+       "text": "The answer is shown to the advisor.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: advisor]** The advisor uses it, or asks again. The system takes no action beyond answering.",
+       "sub": []
+      },
+      {
+       "text": "Separately, daily: a regression suite of sample questions is run and its results reviewed.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "an advisor asking a question. *(intro; Scaling success)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "retrieves from the firm's documents; generates an answer. *(Building a foundation)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the answer goes to the advisor, who uses it in client conversations. *(Building a foundation)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "during development, advisors and prompt engineers graded answers; a review step in live use, the source doesn't say. *(Building a foundation)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "not stated outright; answers are implied to reach advisors directly."
+    },
+    {
+     "line": "What it can reach",
+     "text": "OpenAI's models under a zero-data-retention arrangement; clients only indirectly through advisors. *(Strengthening trust)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say for conversations; the document library is the knowledge base."
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "graded evaluation responses; daily regression results, reviewed by the firm's team with OpenAI. *(Strengthening trust)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the firm's internal corpus of about 100,000 documents. *(intro; Building a foundation)*"
+    }
+   ],
+   "family": "user"
+  },
+  {
+   "id": "W-09",
+   "title": "Morgan Stanley \"Debrief\"",
+   "source": "same page as W-08.",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A client meeting on Zoom is recorded, with the client's consent.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** Speech is transcribed; notes, action items and draft follow-up emails are produced.",
+       "sub": []
+      },
+      {
+       "text": "The notes are added to the CRM automatically.",
+       "sub": []
+      },
+      {
+       "text": "The draft follow-ups are shown to the advisor.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: advisor]** The advisor reviews and edits before anything is sent to the client.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "a recorded client meeting, with consent. *(Scaling success)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "transcribes the meeting; produces notes, action items, draft follow-ups. *(Scaling success)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "notes go into the CRM automatically; drafts go to the advisor. *(Scaling success)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "the follow-ups — the advisor reviews and adjusts before sending. *(Scaling success)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "the CRM entry of the notes; the page describes no review before it. *(Scaling success)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "Zoom, the CRM, clients through the follow-ups, OpenAI's models. *(Scaling success)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say, beyond the notes stored in the CRM."
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "evaluation datasets by meeting type, tested for capturing action items; logs and readers, the source doesn't say. *(Scaling success)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the meeting recording itself. *(Scaling success)*"
+    }
+   ],
+   "family": "fixed-logic",
+   "also": [
+    "user"
+   ]
+  },
+  {
+   "id": "W-10",
+   "title": "JPMorgan \"COIN\" contract review",
+   "source": "ABA Journal, *JPMorgan Chase uses tech to save 360,000 hours of annual work by lawyers and loan officers* (2017; trade press). https://www.abajournal.com/news/article/jpmorgan_chase_uses_tech_to_save_360000_hours_of_annual_work_by_lawyers_and",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A commercial loan agreement arrives for review (about 12,000 a year).",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The software reads the agreement in seconds and interprets its terms.",
+       "sub": []
+      },
+      {
+       "text": "The interpretation is used in loan servicing. Who receives it and what they do with it, the article does not say.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "the source doesn't say; the volume is about 12,000 new contracts a year. *(para. 4)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "reviews commercial loan agreements, reads them quickly, interprets terms; learns patterns from ingested data. *(paras. 2, 3, 5)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the source doesn't say, beyond fewer servicing errors from misread contracts. *(para. 4)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "the source doesn't say. *(para. 3)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "What it can reach",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "data the software ingests. *(para. 5)*"
+    }
+   ],
+   "family": "fixed-logic",
+   "also": [
+    "user"
+   ]
+  },
+  {
+   "id": "W-11",
+   "title": "Intercom Fin",
+   "source": "Intercom, *Conversational AI that resolves customer conversations* (vendor page). https://www.intercom.com/conversational-ai",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A customer starts a conversation on a channel such as chat; it can continue on email.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** Fin interprets the intent and context; keeps track of what has been said; retrieves answers from the company's help centre, docs and past conversations; applies the company's policies and rules to what it may do.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** Fin takes the steps needed to close the request, including actions in connected systems.",
+       "sub": []
+      },
+      {
+       "text": "Branches, when they arise:",
+       "sub": [
+        "a. a high-risk, sensitive or complex step → **[waits: a teammate]** Fin pauses mid-procedure for one decision, then continues.",
+        "b. a conversation that needs a person → **[waits: human agent]** full hand-off, history attached."
+       ]
+      },
+      {
+       "text": "Otherwise Fin resolves the conversation itself.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "a customer conversation on a channel. *(Context that follows across channels)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "interprets; tracks context; retrieves from the company's content; applies business rules; takes actions; hands off when needed. *(Understands, not just detects keywords; Grounded in your content; Bound by your business logic; Built to resolve)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "after an action, the request is closed with no person involved unless escalated; on hand-off, a person takes over; in a human-in-the-loop step, Fin pauses, a teammate decides, Fin continues. Who chooses the path, the source doesn't say. *(Built to resolve; Handoff; Human in the loop)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "an escalated conversation; a mid-procedure decision in high-risk cases. *(Handoff; Human in the loop)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "not stated outright; Fin resolves most conversations itself within the rules set. *(Built to resolve; Bound by your business logic)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "connected systems where it takes action (not named); the customer across channels; human teammates. *(comparison table; Handoff)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "conversation history and context across channels — order numbers, account details, questions already asked. *(Conversations that hold together; Context that follows across channels)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "a shared customer record and conversation history inside Intercom, used by Fin and the team; hand-offs carry the history. Who audits it, the source doesn't say. *(One system, not a bolt-on AI layer; Handoff)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the help centre, docs, past conversations; the company's policies and data. *(Grounded in your content; Bound by your business logic)*"
+    }
+   ],
+   "family": "ai-chooses",
+   "also": [
+    "fixed-logic"
+   ]
+  },
+  {
+   "id": "W-12",
+   "title": "Sierra customer-service agents",
+   "source": "Atlan, *What is Sierra AI?* (a third-party guide). https://atlan.com/know/ai-agent/ai-agent-applications/what-is-sierra-ai/",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A customer inquiry arrives by chat, voice, email or SMS.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The request is routed to a mix of models chosen for the task; the agent reasons over the intent, drawing on a unified record of the customer across systems and sessions.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** A supervisor layer checks each response as it is generated — facts, policy — and lets it through or redirects it before the customer sees it.",
+       "sub": []
+      },
+      {
+       "text": "Branch:",
+       "sub": [
+        "a. within scope → the agent continues, including long-running goals carried over days or weeks.",
+        "b. beyond scope → **[waits: a person]** hand-off, checked by the supervisor."
+       ]
+      },
+      {
+       "text": "How the agent executes a refund or an account change, the article does not describe.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "a customer inquiry on a channel. *(What is Sierra?; Voice as the primary channel)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "routes to models; reasons over intent; draws on unified customer context; a supervisor checks each response. *(The constellation of models; Context Engine; The supervisor architecture)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the supervisor passes or redirects the response; out-of-scope requests are handed off; whether code or a person performs other steps, the source doesn't say. *(The supervisor architecture; comparison table)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "requests beyond scope, handed to a human whose role is not named. *(comparison table; outcome-based pricing)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "the source doesn't say; real-time supervision is described, approval gates are not."
+    },
+    {
+     "line": "What it can reach",
+     "text": "knowledge bases, systems of record and contact centres through 40+ integrations (not named); proprietary systems through an SDK; separate PCI infrastructure for payments; third-party model providers. *(Agent Studio, Agent SDK; What Sierra's own material leaves unchecked; The constellation of models)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "memory and personalisation across sessions and channels; goal state over days or weeks for long-horizon work. *(Context Engine; Horizon)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "the source doesn't say for per-interaction records; certifications and A/B testing are mentioned. *(What Sierra's own material leaves unchecked)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "enterprise systems of record via integrations; unified customer memory; the models' general capability. *(Agent Studio, Agent SDK; Context Engine; The constellation of models)*"
+    }
+   ],
+   "family": "ai-chooses"
+  },
+  {
+   "id": "W-13",
+   "title": "Salesforce Agentforce",
+   "source": "Salesforce, *How Agentforce Works* (vendor page). https://www.salesforce.com/agentforce/how-it-works/",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A data change, an automation, or a person's message starts the agent.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The agent interprets the situation, builds a plan, identifies the tools available to it, and chooses a course of action.",
+       "sub": []
+      },
+      {
+       "text": "The chosen action runs: an existing workflow, a prompt template, code, or an API call.",
+       "sub": []
+      },
+      {
+       "text": "What follows each action, the page does not say. It describes no step where the agent waits for a person, and says agents work without human input.",
+       "sub": []
+      },
+      {
+       "text": "Before deployment, separately: test cases are generated and responses checked against guardrails.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "data changes and automations, or a conversation with a person. *(What is an AI agent?)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "interprets; plans; identifies tools; chooses the course of action. *(How is an AI agent different from a chatbot?)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "after planning, the agent chooses; after choosing, code runs the action — workflows, templates, Apex, APIs; what follows each action, the source doesn't say. *(How is an AI agent different; Can I customize Agentforce workflows?)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "the source doesn't say; the FAQ says agents work without human input. *(FAQ)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "agents act proactively and autonomously; guardrails block off-topic or inappropriate conversations. *(What is an AI agent?; Agent Guardrails)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "internal and external data; Data 360, Slack, MuleSoft; channels including CRM, WhatsApp, Messenger, the website; customers; leads and account executives' calendars. *(What platforms does Agentforce integrate with?; Can I customize; What can an AI agent be used for?)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "session data retained for debugging; zero data retention listed as a protection. *(Monitor, analyze, and optimize; Data Protection)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "session data and analytics for the operating team; an audit trail of agent actions and outputs for compliance; test cases before deployment. Readers not named. *(Monitor, analyze, and optimize; How secure is Agentforce?; Test AI agents thoroughly)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "dynamic grounding in the organisation's data; company knowledge documents and purchase history; internal and external sources. *(Data Protection; What can an AI agent be used for?; What platforms)*"
+    }
+   ],
+   "family": "ai-chooses"
+  },
+  {
+   "id": "W-14",
+   "title": "Cloudflare `workers-oauth-provider`",
+   "source": "the repository README, https://github.com/cloudflare/workers-oauth-provider/ ; Neil Madden, *A look at Cloudflare's AI-coded OAuth library* (an independent review, 2025), https://neilmadden.blog/?p=3982",
+   "flows": [
+    {
+     "heading": "at runtime",
+     "steps": [
+      {
+       "text": "An HTTP request reaches the Worker.",
+       "sub": []
+      },
+      {
+       "text": "Branch: a request to a protected route → the library checks the bearer token (missing, invalid, expired, wrong audience → rejected) and passes app data to the handler. Any other request → the app's own handler.",
+       "sub": []
+      },
+      {
+       "text": "For authorisation requests: the library validates the request; **[waits: the end user, through the app's own login and consent screens — not the library's]**; the library stores the grant and issues tokens; refreshes and revocations are handled on later requests.",
+       "sub": []
+      },
+      {
+       "text": "Scheduled cleanup purges expired records if the app wires it.",
+       "sub": []
+      },
+      {
+       "text": "No step at runtime involves a model.",
+       "sub": []
+      }
+     ]
+    },
+    {
+     "heading": "in construction",
+     "steps": [
+      {
+       "text": "Engineers prompted a model to write the library; the prompts are preserved in the commit messages.",
+       "sub": []
+      },
+      {
+       "text": "Engineers made the design decisions (for example how stored properties are encrypted), caught at least one flaw in the model's output, and had it fixed.",
+       "sub": []
+      },
+      {
+       "text": "The reviewer found 21 first-day commits pushed directly to the main branch by one developer and no sign of code review in the history.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "incoming HTTP requests; an unauthenticated MCP request triggers a 401 challenge; a scheduled event can start cleanup. *(README: Protecting routes; How MCP authorization discovery works; KV storage and cleanup)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "nothing at runtime, as far as either source says. In construction, a model wrote most of the code and schema docs under engineers' prompts. *(Madden: opening quote, intro)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "in construction — engineers reviewed, decided design points, corrected errors; the reviewer saw no code review in the history. *(Madden: opening quote; CORS section; encryption section; token ID section)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "at runtime, login and consent, handled by the application, not the library. *(README: Quick start; Authorization endpoint)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "token checks, issuance, refresh, revocation, client-metadata validation, scheduled purges. *(README: Protecting routes; PKCE and token lifecycle; Dynamic Client Registration; KV storage and cleanup)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "Cloudflare KV; MCP clients; remote client-metadata URLs it fetches; optional external token validation hooks. *(README: Install; How MCP authorization discovery works; Client ID Metadata Documents; Advanced features)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "grants, codes, access and refresh tokens (hashed), client secrets (hashed), encrypted props, in KV; registered clients with or without expiry. *(README: KV storage and cleanup; Client registration)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "grant metadata the app can list and revoke; errors logged as warnings or sent to a handler; in construction, the public commit history with the prompts, read by the reviewer. *(README: KV storage and cleanup; Configuration reference; Madden: opening quote)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the OAuth specifications it implements; client details from registration or metadata documents. *(README: Standards; Pre-registered clients; Client ID Metadata Documents)*"
+    }
+   ],
+   "family": "built-with"
+  },
+  {
+   "id": "W-15",
+   "title": "GitHub Copilot code completions",
+   "source": "GitHub Docs, *Copilot in IDEs*. https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-in-ides",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A developer types or moves the cursor in the editor (or writes a comment describing what they want).",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The model reads the surrounding code and context and predicts the next text — part of a line, a line, a block, or a related edit elsewhere in the file.",
+       "sub": []
+      },
+      {
+       "text": "The prediction appears as dimmed text.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: developer]** The developer takes it or keeps typing; they are responsible for reviewing and testing what they accept.",
+       "sub": []
+      },
+      {
+       "text": "If an unchanged suggestion is accepted, it is compared against an index of public GitHub code and any match is recorded for the developer to see.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "typing, cursor movement, or a natural-language comment. *(Code suggestions)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "reads surrounding code; predicts the next text; predicts the next edit elsewhere. *(Inline suggestions; Next edit suggestions)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the suggestion is shown and the developer decides. *(Code suggestions)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "the developer reviews and tests suggested code before using it. *(Code suggestions)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "suggestions are generated and shown without a request. *(Code suggestions)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "the public-code index, for accepted unchanged suggestions; not private or non-GitHub code. *(References to matching public code)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say, beyond recorded details of public-code matches. *(References to matching public code)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "match details and code references, reviewed by the developer. *(References to matching public code)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the surrounding code and context; the model's training data, the source doesn't say. *(Code suggestions)*"
+    }
+   ],
+   "family": "user"
+  },
+  {
+   "id": "W-16",
+   "title": "GitHub Copilot coding agent",
+   "source": "GitHub Docs, *Using Copilot coding agent*, https://docs.github.com/en/enterprise-cloud@latest/early-access/copilot/coding-agent/using-copilot-coding-agent ; *Troubleshoot coding agent*, https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/use-copilot-agents/coding-agent/troubleshoot-coding-agent",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A task starts from an issue assignment, chat, the CLI, an API, an integration, or an automation on a schedule or event.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The agent works in the background in its own temporary environment, behind a firewall that limits internet access; it can run tests and linters there before pushing.",
+       "sub": []
+      },
+      {
+       "text": "A pull request is opened — automatically from some entry points, otherwise when a person asks.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: a maintainer]** CI workflows do not run on the agent's pushes until a maintainer clicks approve in the pull request.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: people with write access]** The agent responds to comments only from people with write access, only on open pull requests assigned to it.",
+       "sub": []
+      },
+      {
+       "text": "Whether the agent can approve or merge its own pull request, neither page says.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "a person from one of many clients, or an automation on a schedule or event. *(Using: intro, Who can use this feature?)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "works on the task in the background; runs tests and linters in its own environment. *(Using: intro; Troubleshoot: CI checks)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "a pull request is opened automatically or on request; details of the agent's own steps, the source doesn't say. *(Using: intro)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "workflow runs on its pushes wait for a maintainer's approval; retries wait for a person to reassign; a person may have to ask for the PR. *(Troubleshoot: workflows not running; appears stuck)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "automations start sessions on their own; some entry points open a PR automatically. *(Using: intro)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "GitHub, issue trackers and chat tools as clients; the internet only through a default firewall, with blocked requests reported in the PR. *(Using: intro; Troubleshoot: firewall warning)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say, beyond session logs and pull requests. *(Using: intro)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "session logs; PR timeline events; firewall warnings in the PR body or comments. Who reads them, the source doesn't say. *(Troubleshoot: nothing is happening; firewall warning)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the source doesn't say."
+    }
+   ],
+   "family": "ai-chooses"
+  },
+  {
+   "id": "W-17",
+   "title": "Claude Code in Manual mode",
+   "source": "Claude Code docs, *Configure permissions*. https://code.claude.com/docs/en/permissions",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A developer gives Claude Code a task in the terminal.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The agent calls a tool: a file read, a search, a shell command, a file edit or write, a web fetch or search.",
+       "sub": []
+      },
+      {
+       "text": "Branch, by tool:",
+       "sub": [
+        "a. reading or searching inside the working directory, or one of a built-in set of read-only shell commands → runs without asking.",
+        "b. any other shell command, any file edit or write, any web fetch outside preapproved documentation domains, any web search → **[waits: developer]** a prompt shows what is about to happen; the developer says yes, yes-and-don't-ask-again, or no."
+       ]
+      },
+      {
+       "text": "Back to step 2 until the task is done.",
+       "sub": []
+      },
+      {
+       "text": "Other modes change which actions ask; managed settings can fix rules the developer cannot override.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "the developer's task in the terminal. *(Permission system)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "calls tools — reads, searches, shell commands, edits, web fetches and searches. *(Permission system)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "a read-only action runs; an action that needs approval waits for the prompt's answer; then the next tool call. *(Permission system)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "shell commands outside the read-only set; file edits and writes; web fetches outside preapproved domains; web searches. *(Permission system; Read-only commands)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "file reads and searches inside the working directories; the built-in read-only commands. *(Permission system; Working directories; Read-only commands)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "the file system within working directories by default, the shell, the web — each gated as above. *(Permission system; Working directories)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "saved approvals — permanently per repository for commands and domains, until session end for file edits. *(Permission system; \"don't ask again\" behavior)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "the source doesn't say, beyond the saved rules in the settings file the developer can read. *(Manage permissions)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the source doesn't say."
+    }
+   ],
+   "family": "ai-chooses"
+  },
+  {
+   "id": "W-18",
+   "title": "Azure SRE Agent, Review mode",
+   "source": "Microsoft Learn, *Run modes in Azure SRE Agent*, https://learn.microsoft.com/azure/sre-agent/run-modes ; *Execute mitigations*, https://learn.microsoft.com/azure/sre-agent/execute-mitigations",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "An incident alert (for example from PagerDuty) or a schedule starts the agent.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** It investigates: queries monitoring, checks deployment history, recalls similar past incidents.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** It identifies a fix and proposes it in the incident thread.",
+       "sub": []
+      },
+      {
+       "text": "Branch, by the kind of action:",
+       "sub": [
+        "a. an Azure infrastructure write (CLI command, resource change, restart) → **[waits: an SRE Agent Administrator]** Approve or Deny.",
+        "b. anything else — an email, a Teams post, a query to an outside data source → runs on the agent's reasoning and the response plan, with no button."
+       ]
+      },
+      {
+       "text": "After an approved action, **[AI]** verifies the fix worked and reports.",
+       "sub": []
+      },
+      {
+       "text": "If it lacks permission for a resource, it requests temporary access on the user's behalf. **[waits: the user]**",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "incidents trigger response plans; scheduled tasks run on a schedule. *(Run modes: Configure run modes per response plan or task; Mitigations: Example)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "investigates; identifies a fix; proposes; after approval executes and verifies. *(Mitigations: How your agent closes the loop; Example)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "a proposed infrastructure action waits for a person; a non-infrastructure action proceeds on the agent's reasoning; after execution, a report. *(Run modes: Review mode and its note)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "Azure infrastructure writes — only SRE Agent Administrators can approve; temporary-access requests wait for the user. *(Run modes: Review mode; Read-only actions; Write actions)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "read-only actions it has permission for; emails, Teams posts, external queries. *(Run modes: Review mode note; Read-only actions)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "Azure resources through CLI and Resource Manager, within its identity's permissions; Microsoft Entra for temporary access; email, Teams, external data sources; work items in GitHub or Azure DevOps; Key Vault commands are blocked. *(Run modes: How permissions interact; Mitigations: What your agent can do; Alternative response paths; Safety guardrails)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "run-mode settings per plan and task; a knowledge base and memory of past incidents — how stored, the source doesn't say. *(Run modes: Configure run modes; Mitigations: What makes this different from scripts)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "every action logged with identity, action, timestamp, trigger and result, queryable in Application Insights; who reads it, the source doesn't say. *(Mitigations: Audit trail)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "its skills and knowledge base; memory of past incidents; live evidence from the investigation. *(Mitigations: What makes this different from scripts; Example)*"
+    }
+   ],
+   "family": "ai-chooses"
+  },
+  {
+   "id": "W-19",
+   "title": "Azure SRE Agent, Autonomous mode",
+   "source": "as W-18.",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "As W-18, steps 1–3.",
+       "sub": []
+      },
+      {
+       "text": "The action runs at once — infrastructure writes included — and the agent reports afterwards.",
+       "sub": []
+      },
+      {
+       "text": "Verification as W-18 step 5. Permission requests as W-18 step 6 still occur if access is missing.",
+       "sub": []
+      },
+      {
+       "text": "The mode is set per response plan or scheduled task, and Autonomous is the default for both; Microsoft's guidance is Review for production incidents, Autonomous for staging, health checks and cost reports, moving a trigger to Autonomous once its recommendations have been approved consistently for some weeks.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "as W-18. *(Run modes: Configure run modes)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "as W-18, then executes without waiting. *(Run modes: Autonomous mode)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the action runs, then a report of what was done. *(Run modes: Autonomous mode)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "nothing for approval; temporary-access requests still wait for the user. *(Run modes: Autonomous mode; Write actions)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "everything, in this mode. *(Run modes: Autonomous mode)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "as W-18. *(Mitigations: What your agent can do; Safety guardrails)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "as W-18."
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "as W-18 — the audit trail applies in both modes. *(Mitigations: Audit trail)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "as W-18."
+    }
+   ],
+   "family": "ai-chooses",
+   "note": "The same family as W-18: the two differ in what the agent is authorized to do, not in how it is arranged."
+  },
+  {
+   "id": "W-20",
+   "title": "Datadog Watchdog alerts",
+   "source": "Datadog docs, *Watchdog Alerts*. https://docs.datadoghq.com/watchdog/alerts/",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "Telemetry — logs, application metrics, infrastructure metrics — is ingested.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** Seasonal algorithms compare current behaviour against a baseline learned from the customer's own history; low-traffic endpoints are skipped.",
+       "sub": []
+      },
+      {
+       "text": "Branch: an anomaly meets the severity bar → an alert card is created (status, window, graph, affected services, expected bounds, suggested next steps); otherwise nothing is surfaced.",
+       "sub": []
+      },
+      {
+       "text": "The card appears in the Alert Explorer and on service pages.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: users]** People read, triage, follow the suggested steps, or archive. Nothing is remediated by the system. Notification requires a user to build a monitor on top.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "ingestion of logs and metrics; Watchdog looks proactively. *(Overview; Log Management)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "aggregates logs by pattern and tags; scans for rising errors; scans services for error rate, latency, request rate; flags severe anomalies; adds impact and root-cause context when available. *(Log Management; APM; USM; Overview)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "anomalies become insights or alert cards; alerts expire after 48 hours ongoing. *(Log Management; Watchdog Alert details)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "nothing is required of a person; users review, triage and archive. *(Watchdog Alert details; Manage archived alerts)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "detection, alert creation and display. *(Log Management)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "the source doesn't say beyond Datadog's own surfaces and the integrations it reads. *(Infrastructure; Where to find Watchdog Alerts)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "baselines from 24 hours (logs) or two weeks (metrics) of history; six months of alerts; who archived what and when. *(Required data history; Watchdog Alert Explorer; Manage archived alerts)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "the alert cards and archive records; read by users within their role's access. *(Watchdog Alert details; Watchdog Alert Explorer)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the customer's own telemetry as baseline; the same algorithms as Datadog's monitors; team ownership from the Catalog. *(Custom anomaly detection; Watchdog Alert Explorer)*"
+    }
+   ],
+   "family": "fixed-logic",
+   "also": [
+    "none-of-these"
+   ]
+  },
+  {
+   "id": "W-21",
+   "title": "AWS transactional-document pipeline with human review",
+   "source": "AWS Machine Learning Blog, *Automate digitization of transactional documents with human oversight using Amazon Textract and Amazon A2I*. https://aws.amazon.com/blogs/machine-learning/automate-digitization-of-transactional-documents-with-human-oversight-using-amazon-textract-and-amazon-a2i",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A document lands in S3; an event enters a queue; the document is recorded in a tracking table with a priority from its key prefix.",
+       "sub": []
+      },
+      {
+       "text": "The document is converted to PDF.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** Textract performs OCR and extracts text, key-value pairs and tables; the JSON is stored.",
+       "sub": []
+      },
+      {
+       "text": "The transactional tables are selected from the output.",
+       "sub": []
+      },
+      {
+       "text": "Business rules check table type and column validity.",
+       "sub": []
+      },
+      {
+       "text": "Branch: low Textract confidence or a rule flag → **[waits: in-house reviewers]** a person checks the tables in a custom interface showing confidence scores, corrects values, adds what was missed. Otherwise → continue.",
+       "sub": []
+      },
+      {
+       "text": "Approved tables are written to spreadsheets in S3 for downstream business applications.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "an upload to S3, relayed through SQS. *(Acquisition)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "OCR and extraction of text, key-values, tables. *(Extraction)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "results stored and passed to reshaping; rules applied; challenging documents escalated to review, others continue. *(Extraction; Reshaping; Custom business operations; Overview)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "documents flagged for review, by a private in-house workforce (Mechanical Turk and partners are also supported). *(Augmentation)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "acquisition, conversion, extraction, reshaping, rule application; whether high-confidence documents skip review entirely is implied but not stated. *(Overview)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "S3, SQS, DynamoDB, Textract, A2I; optionally outside labelling workforces; downstream business applications. *(Acquisition; Extraction; Augmentation; Cataloging)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "a tracking table of each document's progress; priority by key prefix; the extraction JSON. *(Acquisition; Extraction)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "extraction JSON in S3; the output workbooks, read by business teams and applications; reviewers see confidence scores. Audit logs, the source doesn't say. *(Extraction; Cataloging; Augmentation)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "Textract's pre-built models; the custom business rules; reviewer corrections fed back to fine-tune the models. *(Introduction; Custom business operations; Conclusion)*"
+    }
+   ],
+   "family": "fixed-logic"
+  },
+  {
+   "id": "W-22",
+   "title": "UiPath Document Understanding with Validation Station",
+   "source": "UiPath docs, *Validation Station* (2022.4). https://docs.uipath.com/document-understanding/standalone/2022.4/USER-GUIDE/validation-station",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "An automation picks up a document and its taxonomy (the fields to extract).",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The document is digitised (structure and text) and classified; the fields are extracted automatically. The page does not describe these steps' internals.",
+       "sub": []
+      },
+      {
+       "text": "Branch, by how the automation was built:",
+       "sub": [
+        "a. attended → **[waits: the operator at that machine]** the Validation Station window opens; the person checks extracted values against the document and corrects them.",
+        "b. Action Center → a validation task is created; the robot does not wait; **[waits: a knowledge worker]** picks it up later; the automation resumes when the task completes."
+       ]
+      },
+      {
+       "text": "What happens to the corrected data afterwards, the page does not say.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "an attended workflow presenting the station, or an orchestration process creating a validation action. *(Validation Station as an Attended Activity; Validation Station in Action Center)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "digitisation and data extraction upstream, whose internals the page does not describe. *(Requirements for Document Validation)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "outputs feed the validation window; with no extraction results, the station opens for fully manual processing. *(Requirements for Document Validation)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "validation — the operator in attended mode, knowledge workers in Action Center. *(Validation Station as an Attended Activity; Validation Station in Action Center)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "the automatic extraction before review, implied; otherwise the source doesn't say. *(Requirements for Document Validation)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "Orchestrator and Action Center; the Taxonomy Manager. *(Validation Station in Action Center; Requirements)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "workflow variables — document path, taxonomy, document model, text, extraction results; after the session, the source doesn't say. *(Requirements for Document Validation)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the taxonomy; the extraction results from the extraction scope. *(Requirements for Document Validation)*"
+    }
+   ],
+   "family": "fixed-logic"
+  },
+  {
+   "id": "W-23",
+   "title": "Meta content review",
+   "source": "Meta Transparency Center, *How review teams work*. https://transparency.meta.com/en-us/enforcement/detecting-violations/how-review-teams-work/",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "Content is posted that may violate the Community Standards.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** Automated systems identify violating content and remove it, often before anyone sees it.",
+       "sub": []
+      },
+      {
+       "text": "Branch: what the systems miss or are unsure about → routed to review queues.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: reviewers]** Each reviewer works an assigned queue, one post at a time. Clear-cut cases → a single reviewer. Context-dependent cases → teams with language and subject expertise.",
+       "sub": []
+      },
+      {
+       "text": "**[waits: specialists]** Hard cases escalate to Global Operations or Content Policy experts.",
+       "sub": []
+      },
+      {
+       "text": "The reviewer decides: remove or leave up.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "content against the standards. *(review-process text; the page has no heading above it)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "identifies violating content and removes it; routes what it misses or is unsure of. *(review-process text)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "removal by the system with no described check; or a person reviews, with escalation for harder cases. *(review-process text)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "content the technology missed or was unsure of — thousands of reviewers; experts for complex cases. *(review-process text)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "automated identification and removal. *(review-process text)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "the source doesn't say beyond internal teams."
+    },
+    {
+     "line": "What it keeps",
+     "text": "reviewers' queues; extra context supplied for reported content. *(review-process text)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "the source doesn't say for individual decisions; quarterly enforcement reports exist. *(navigation)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the Community Standards and Guidelines; reviewers' expertise; context supplied for reported content; what the automated tools were trained on, the source doesn't say. *(review-process text)*"
+    }
+   ],
+   "family": "fixed-logic"
+  },
+  {
+   "id": "W-24",
+   "title": "Associated Press automated earnings stories",
+   "source": "Nieman Reports, *Automation in the newsroom* (2015). https://niemanreports.org/?p=121084",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A company releases quarterly earnings.",
+       "sub": []
+      },
+      {
+       "text": "A data vendor's analysts compile verified figures into a feed.",
+       "sub": []
+      },
+      {
+       "text": "**[software]** The software compares results to forecasts and prior year against preset thresholds, picks the lead, chooses verbs from a weighted restricted vocabulary, pulls the company's location and business type from a database, checks flow and swaps synonyms, assembles the story, appends an automation disclosure.",
+       "sub": []
+      },
+      {
+       "text": "Branch:",
+       "sub": [
+        "a. most stories → straight to the wire, no person reads them first.",
+        "b. about 80 companies → **[waits: reporters]** always add reporting.",
+        "c. about 220 more → **[waits: editors]** review and may add context."
+       ]
+      },
+      {
+       "text": "New data for the same company → the dataset is re-evaluated and a new story generated.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "a company's earnings release, then the vendor's data feed. *(How a Robot Learns to Write a Story; Algorithms and Automation)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "the article calls it software and automation, not AI; it analyses data points for the lead; compares to forecasts; picks weighted verbs; pulls descriptors; checks flow; assembles from a fixed vocabulary with thresholds. *(Algorithms and Automation; footnotes 1–7)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "each step feeds the next automatically; the story goes to the wire; a reporter may rewrite it afterwards with an updated disclosure. *(footnotes 6, 8, 9)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "the 80 companies reporters always cover; the 220 editors review. *(Algorithm-assisted Journalism; footnote 4)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "most stories; there is no automatic alert for outliers, which is how a missing stock split produced a wrong story. *(the AP also spent months reviewing drafts; Netflix paragraph)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "the data vendor; wire customers who republish; readers through the disclosure link. *(Algorithms and Automation; Algorithm-assisted Journalism)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "within a story, what it has already written; across stories, the source describes no state beyond rules and vocabulary. *(footnote 6)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "corrections are overseen and the error rate tracked by the AP's standards editor; each story links to an explanation of the automation. *(the AP also spent months; Netflix paragraph)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the AP stylebook and a restricted vocabulary; rules and thresholds set by AP editors and programmers; the vendor's data; a company database. *(Algorithms and Automation; footnotes 1, 5)*"
+    }
+   ],
+   "family": "none-of-these",
+   "also": [
+    "fixed-logic",
+    "built-with"
+   ]
+  },
+  {
+   "id": "W-25",
+   "title": "Netflix personalisation architecture (2013)",
+   "source": "Netflix Tech Blog, *System Architectures for Personalization and Recommendation* (March 2013). https://netflixtechblog.com/system-architectures-for-personalization-and-recommendation-e081aa94b5d8",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "Members' viewing and browsing on client devices generate events.",
+       "sub": []
+      },
+      {
+       "text": "**[AI — offline, on a schedule]** Batch jobs train models and precompute results such as popularity baselines; results are published and subscribers notified.",
+       "sub": []
+      },
+      {
+       "text": "**[AI — nearline, on events]** Computations run in response to a member's event (for example starting a title) and store results for later.",
+       "sub": []
+      },
+      {
+       "text": "**[AI — online, at request time]** When a member's page is requested, precomputed lists are reranked with live signals under a strict time limit; if the limit is missed, a precomputed result is served instead.",
+       "sub": []
+      },
+      {
+       "text": "The page is returned to the member; the member's next actions generate the next events.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "member interaction events, and scheduled jobs. *(Event & Data Distribution; Offline Jobs)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "offline training and precomputation; nearline event-driven refresh; online reranking with current context. *(Offline, Nearline, and Online Computation; Offline Jobs)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "offline results are stored for later or shown; nearline results go to a cache; online results return to the client, with a precomputed fallback. *(Offline Jobs; Offline, Nearline, and Online Computation)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "nothing for approval; the member waits for the page, hence the time limit. *(Offline, Nearline, and Online Computation)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "the source describes no approval step anywhere."
+    },
+    {
+     "line": "What it can reach",
+     "text": "client devices; AWS; Hadoop; S3; Cassandra. *(Event & Data Distribution; Offline Jobs; Recommendation Results)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "model files; results in Cassandra, EVCache, MySQL; nearline caches; event data in Hadoop. *(Offline Jobs; Recommendation Results; Event & Data Distribution)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "monitoring and alerting for errors; event logs; readers, the source doesn't say. *(Offline Jobs; Event & Data Distribution)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "collected data for training; stored metadata and popularity; live signals — recent viewing, session, device, time. *(Offline Jobs; Signals & Models; Event & Data Distribution)*"
+    }
+   ],
+   "family": "fixed-logic",
+   "also": [
+    "none-of-these"
+   ]
+  },
+  {
+   "id": "W-26",
+   "title": "Microsoft 365 Copilot chat (Premium)",
+   "source": "Microsoft Learn, *Microsoft 365 Copilot overview*. https://learn.microsoft.com/en-au/copilot/microsoft-365/microsoft-365-copilot-overview",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A user types a prompt.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** A real-time router picks a model — a fast one for routine questions, a deeper one for complex ones.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The response is grounded automatically in web data and in the organisation's data through Microsoft Graph, limited to what the user may see.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The model generates content; the deeper model checks its work before responding.",
+       "sub": []
+      },
+      {
+       "text": "The response is shown to the user. The page describes no action taken after that, and no step waiting for approval.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "a user's prompt. *(Copilot features in Microsoft 365 apps; Responses grounded in web data)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "routes to a model; grounds in web and organisational data; generates. *(Model selection; Responses grounded in organizational data)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the source doesn't say, beyond the deeper model checking its work. *(Model selection)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "the source doesn't say; the user may pick a model or point at files. *(Model selection; Responses grounded in organizational data)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "automatic grounding and routing; admins can set policies. *(Responses grounded in organizational data; Copilot controls)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "Microsoft Graph, Work IQ, the public web; model processing that can move between regions under load. *(Overview; European Union Data Boundary)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say; prompts and responses are under Enterprise Data Protection. *(Enterprise Data Protection)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "usage reports read by admins; per-prompt audit records, the source doesn't say. *(Track and increase Copilot adoption)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the models; the public web; organisational data the user is permitted to see. *(Overview; Responses grounded in web data; Responses grounded in organizational data)*"
+    }
+   ],
+   "family": "user"
+  },
+  {
+   "id": "W-27",
+   "title": "The Waymo Driver",
+   "source": "Waymo blog, *AI and ML at Waymo* (October 2024). https://waymo.com/blog/2024/10/ai-and-ml-at-waymo/",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "A trip begins (how, the post does not say).",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** The system senses its surroundings with lidar, radar, cameras and audio.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** It predicts how other road users will behave.",
+       "sub": []
+      },
+      {
+       "text": "**[AI]** It plans and carries out the journey in real time.",
+       "sub": []
+      },
+      {
+       "text": "Steps 2–4 repeat continuously. The post describes no step where a person approves a driving action, and does not mention remote assistance.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "What the AI does",
+     "text": "perceives; predicts; plans and navigates. *(stack paragraph)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "What waits for a person",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "the post says the Driver operates autonomously, without saying which actions. *(opening paragraphs)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "riders; other road users. *(opening paragraphs; scale paragraph)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say."
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "comprehensive safety evaluation is described; records and readers, the source doesn't say. *(scale paragraph)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "Waymo's own driving experience; a foundation model combining driving-specific learning with general knowledge from large language and vision-language models; learning from miles driven; closed-loop simulation. *(Waymo Foundation Model paragraph; scale paragraph)*"
+    }
+   ],
+   "family": "ai-chooses",
+   "also": [
+    "none-of-these"
+   ]
+  },
+  {
+   "id": "W-28",
+   "title": "Morgan Stanley's advisor tooling, as a whole",
+   "source": "OpenAI customer story, *Morgan Stanley*. https://openai.com/index/morgan-stanley/",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "One program gives advisors two tools.",
+       "sub": []
+      },
+      {
+       "text": "Tool one: an advisor asks a question → **[AI]** retrieves from the firm's documents and answers → **[waits: advisor]** uses the answer or asks again.",
+       "sub": []
+      },
+      {
+       "text": "Tool two: a client meeting is recorded with consent → **[AI]** transcribes and produces notes, action items and draft follow-ups → notes go into the CRM automatically → **[waits: advisor]** reviews and edits the drafts before anything is sent.",
+       "sub": []
+      },
+      {
+       "text": "The page describes no step where one tool feeds the other.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "an advisor's question; a recorded client meeting. *(intro; Scaling success)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "retrieves and answers; transcribes, summarises, drafts follow-ups. *(Building a foundation; Scaling success)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "the answer goes to the advisor; the notes go into the CRM; the drafts go to the advisor. *(Building a foundation; Scaling success)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "the follow-up emails — the advisor reviews and adjusts before sending. A review step for answers in live use, the source doesn't say. *(Scaling success; Building a foundation)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "the CRM entry of meeting notes. *(Scaling success)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "OpenAI's models under zero data retention; Zoom; the CRM; clients through the follow-ups. *(Strengthening trust; Scaling success)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say, beyond notes stored in the CRM."
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "graded evaluation responses and daily regression results, reviewed by the firm's team with OpenAI; evaluation datasets by meeting type. *(Strengthening trust; Scaling success)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the firm's internal corpus of about 100,000 documents; the meeting recordings. *(intro; Building a foundation; Scaling success)*"
+    }
+   ],
+   "family": "composite"
+  },
+  {
+   "id": "W-29",
+   "title": "GitHub Copilot in the IDE, as a whole",
+   "source": "GitHub Docs, *Copilot in IDEs*. https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-in-ides",
+   "flows": [
+    {
+     "heading": "",
+     "steps": [
+      {
+       "text": "In one editor a developer has three ways to use Copilot, and chooses which at any moment.",
+       "sub": []
+      },
+      {
+       "text": "Completions: the developer types → **[AI]** predicts the next text, shown dimmed → **[waits: developer]** takes it or keeps typing.",
+       "sub": []
+      },
+      {
+       "text": "Chat: the developer asks → **[AI]** answers from project context — an explanation, a fix, tests, a comparison → **[waits: developer]** decides what to do with it.",
+       "sub": []
+      },
+      {
+       "text": "Agent mode: the developer gives a larger task → **[AI]** breaks it into steps, inspects the project, edits multiple files, runs terminal commands, and responds to errors it encounters, in the local environment → **[waits: developer]** reviews the proposed changes and command output before accepting the result. Which actions prompt for permission along the way depends on the IDE and configuration.",
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "facts": [
+    {
+     "line": "What starts it",
+     "text": "typing or cursor movement; a question in chat; a larger task given to agent mode. *(Code suggestions; Chat and agentic experiences; How Copilot helps in your IDE)*"
+    },
+    {
+     "line": "What the AI does",
+     "text": "predicts next text and next edits; answers from project context; in agent mode breaks a task into steps, inspects, edits several files, runs commands, responds to errors. *(Inline suggestions; Next edit suggestions; Chat and agentic experiences)*"
+    },
+    {
+     "line": "What happens after each AI step",
+     "text": "a completion is shown and the developer decides; a chat response appears and the developer decides; in agent mode, code is edited and commands run in the local environment, and the developer reviews changes and output before accepting the result. *(Code suggestions; Chat and agentic experiences)*"
+    },
+    {
+     "line": "What waits for a person",
+     "text": "the developer's acceptance of completions, chat output, and agent-mode results. Which agent-mode actions prompt per action, the source doesn't say beyond \"depends on IDE and configuration\". *(Code suggestions; Chat and agentic experiences; Choosing an entry point)*"
+    },
+    {
+     "line": "What doesn't wait",
+     "text": "completions are generated and shown without a request. For agent mode, the source doesn't say which actions run unprompted; it notes enterprise settings control whether permission checks can be bypassed. *(Code suggestions; Choosing an entry point)*"
+    },
+    {
+     "line": "What it can reach",
+     "text": "the public-code index for accepted unchanged completions and matching chat output; in agent mode the local files and terminal, and MCP servers and plugins administrators allow. *(References to matching public code; Chat and agentic experiences)*"
+    },
+    {
+     "line": "What it keeps",
+     "text": "the source doesn't say, beyond recorded details of public-code matches. *(References to matching public code)*"
+    },
+    {
+     "line": "Evidence kept, and who reads it",
+     "text": "public-code match details, read by the developer; OpenTelemetry monitoring for agents can be configured by administrators, reader not named. *(References to matching public code; Chat and agentic experiences)*"
+    },
+    {
+     "line": "Where its knowledge comes from",
+     "text": "the surrounding code and project context; the local environment in agent mode; the model's training data, the source doesn't say. *(Code suggestions; Chat and agentic experiences)*"
+    }
+   ],
+   "family": "composite"
+  }
+ ],
+ "provenance": {
+  "families": "classified by the taxonomy's author before the families merged, sealed sha256 0b6da3472c8ae0ee2a660e419bdceee2528b601e315ac412f7c371c45bd258c6, mapped to the fourth draft",
+  "verified": false
+ }
+}
