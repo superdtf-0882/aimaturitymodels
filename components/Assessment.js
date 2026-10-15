@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { fromOf } from "../lib/counts";
 import Link from "next/link";
 import { Radar } from "react-chartjs-2";
 import {
@@ -90,7 +91,27 @@ export default function Assessment({
   const allGraded = gradedCount === dimensions.length;
   const pct = (gradedCount / dimensions.length) * 100;
 
+  // OKF-TOGAF#189: an assessment counts as started at the visitor's first
+  // grade on this visit -- D1's pre-grade is not theirs, so opening the page
+  // counts nothing. One anonymous count to the site's own store, with the
+  // model and whether the link came from the taxonomy (?from=taxonomy); no
+  // cookie, nothing kept in the browser, and a failed count changes nothing.
+  const counted = useRef(false);
+  function countStart() {
+    if (counted.current) return;
+    counted.current = true;
+    try {
+      fetch("/api/count", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event: "assessment-started", model: modelSlug, from: fromOf(window.location.search) }),
+        keepalive: true,
+      }).catch(() => {});
+    } catch (e) { /* counting never blocks grading */ }
+  }
+
   function selectLevel(letter) {
+    countStart();
     commit((prev) => {
       const next = { ...prev.scores };
       if (next[prev.dim] === letter) delete next[prev.dim];
