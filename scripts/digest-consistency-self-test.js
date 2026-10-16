@@ -37,6 +37,8 @@ const MODELS = [
   ["PDLC", "PDLC_PINNED_COMMIT", "ai-native-pdlc-maturity-model", "ai_native_pdlc_maturity_model.md"],
   ["Portfolio Prioritization", "PRIORITIZATION_PINNED_COMMIT", "ai-native-product-prioritization-maturity-model", "ai_native_product_prioritization_maturity_model.md"],
   ["EA", "EA_PINNED_COMMIT", "ai-native-ea-maturity-model", "ai_native_ea_maturity_model.md"],
+  // 2026-10-16, OKF-TOGAF#198: the fifth.
+  ["Product Marketing", "PRODUCT_MARKETING_PINNED_COMMIT", "ai-native-product-marketing-maturity-model", "ai_native_product_marketing_maturity_model.md"],
 ];
 
 console.log("--- 1. each matrix names the release that last changed it ---");
@@ -71,15 +73,24 @@ for (const [label] of MODELS) {
     label + ": its family list names all four", "(" + m[1] + ")");
 }
 
-console.log("--- 4. the digest's instructions count four models ---");
+console.log("--- 4. the digest's instructions count five models ---");
 const core = read("lib/aiDigestCore.js");
 const withCol = MODELS.filter(([label]) => /Indicative evidence/.test(text[label])).length;
-say(withCol === 1 && /one model with an Indicative evidence column and three without/.test(core), "G2: one with an Indicative evidence column, three without", withCol + " with");
-say(/thirteen, twelve, three, and ten dimensions/.test(core), "M12: thirteen, twelve, three, and ten dimensions");
+say(withCol === 1 && /one model with an Indicative evidence column and four without/.test(core), "G2: one with an Indicative evidence column, four without", withCol + " with");
+say(/thirteen, twelve, three, ten, and eleven dimensions \(SDLC, PDLC, Portfolio Prioritization, Enterprise Architecture, Product Marketing\)/.test(core), "M12: thirteen, twelve, three, ten, and eleven dimensions");
 
 console.log("--- 5. Strata: feedback returns to the stratum it bears on ---");
 say(!/returns findings to S0 \(Intent\)/.test(core), "no \"returns findings to S0 (Intent)\"");
 say(/returns findings to the stratum they bear on/.test(core), "the digest says the stratum they bear on");
 
+console.log("--- 6. instruments and inheritance, for five models (OKF-TOGAF#198) ---");
+// EA's instrument was ratified 2026-10-10 and its assessment is live; the digest
+// still said it had none. The Product Marketing model has none yet (#202).
+say(/SPEC-D6-SCORE-EA/.test((core.match(/^G3\..*$/m) || [""])[0]), "G3 lists EA's instrument");
+const noInstr = (core.match(/\*\*The ([A-Za-z ]+) model has no scoring instrument yet\*\*/) || [])[1];
+say(noInstr === "Product Marketing", "the one model without an instrument is Product Marketing", noInstr || "none named");
+say(/Formal scoring instruments exist for four of the five models/.test(core), "four of the five models have instruments");
+const m5 = (core.match(/^M5\..*$/m) || [""])[0];
+say(/inherited by SDLC, PDLC and Product Marketing/.test(m5) && /Product Marketing's D10/.test(m5), "M5: D1-D3's three inheritors, and Product Marketing's D10");
 console.log(bad ? "DIGEST CONSISTENCY SELF-TEST FAIL" : "DIGEST CONSISTENCY SELF-TEST PASS");
 process.exit(bad);
