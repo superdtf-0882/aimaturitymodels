@@ -2,6 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
+  // WP-D6-06 (OKF-TOGAF#160): lint reports and refuses nothing. The code gate
+  // in prebuild prints its counts; Next would otherwise lint again and refuse
+  // the build on an error.
+  eslint: { ignoreDuringBuilds: true },
   // Issue #13: /models/** pages are static (getStaticProps) but their
   // content is fetched at build time from a separate repo and changes
   // with every deploy -- Vercel's default edge cache for prerendered
