@@ -57,7 +57,9 @@ async function get(commit, file) {
   say(!!d11 && /attributable/.test(d11.desc) && !/Deferred/i.test(d11.desc) && !d11.desc.includes("*"),
     "#156: D11's definition is the rewrite, plain text, not deferred");
   say(/Version 1\.3\.0/.test(matrix.text), "#156: the matrix declares v1.3.0");
-  say(/^\*\*Version 1\.4\.0/m.test(matrix.text) && matrix.text.includes("(`STD-SHARED-INTELLIGENCE` v1.2)"), "#200: the matrix leads with v1.4.0 and cites the layer at v1.2");
+  say(/^\*\*Version 1\.4\.1/m.test(matrix.text) && matrix.text.includes("(`STD-SHARED-INTELLIGENCE` v1.2)"), "#200: the matrix leads with v1.4.1 and cites the layer at v1.2");
+  say(!/STD-SHARED-INTELLIGENCE v1\.1 as of/.test(matrix.text) && matrix.text.includes("(STD-SHARED-INTELLIGENCE v1.2 as of 2026-10-16)"),
+    "#200 (v1.4.1): the closing status line cites the layer at v1.2, not v1.1");
 
   const ts = await get(SDLC_PINNED_COMMIT, "sdlc_transition_states_d4_d13.md");
   const tsD11 = ts.text.slice(ts.text.indexOf("# D11."), ts.text.indexOf("# D12."));
@@ -73,8 +75,8 @@ async function get(commit, file) {
   let doc = null;
   try { doc = yaml.load(sf.text); } catch { /* reported below */ }
   const cells = doc ? doc.dimensions.D11.levels : {};
-  say(!!doc && !doc.dimensions.D11.flag && doc.source_matrix_version === "1.4.0" && /agent/i.test(cells.A || "") && /telemetry/.test(cells.E || ""),
-    "#156: D11's five cells re-compressed, its flag gone; the short form names v1.4.0", doc ? doc.source_matrix_version : "unparsed");
+  say(!!doc && !doc.dimensions.D11.flag && doc.source_matrix_version === "1.4.1" && /agent/i.test(cells.A || "") && /telemetry/.test(cells.E || ""),
+    "#156: D11's five cells re-compressed, its flag gone; the short form names v1.4.1", doc ? doc.source_matrix_version : "unparsed");
 
   console.log("--- this site's own words ---");
   const core = fs.readFileSync(path.join(__dirname, "..", "lib", "aiDigestCore.js"), "utf8");
