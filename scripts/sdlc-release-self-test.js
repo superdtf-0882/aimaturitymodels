@@ -13,6 +13,11 @@
 // on /models/sdlc/whole-model-view and /models/pdlc/whole-model-view, from the
 // pinned commit. Both pages read the shared layer at SDLC_PINNED_COMMIT.
 //
+// v1.4.0, OKF-TOGAF#200, on "I ratify STD-SHARED-INTELLIGENCE v1.2 as
+// DTOG-200-fixes settles it ... -- David Facer 10/15/2026": the layer at v1.2
+// reads the same from every function's chair, and D1 and D3 at D require that
+// no function keeps its own version; the short form names v1.4.0.
+//
 // Usage: node scripts/sdlc-release-self-test.js   (network; exit 1 on a failing case)
 "use strict";
 
@@ -41,11 +46,18 @@ async function get(commit, file) {
   for (const d of dims) for (const t of Object.values(d.transitions || {})) if (t.verification) v++;
   say(dims.length === 3 && v === 12, "#143: all twelve D1-D3 transitions carry a verification", v + " of 12");
 
+  // #200: STD-SHARED-INTELLIGENCE v1.2 at the pin.
+  say(/STD-SHARED-INTELLIGENCE · v1\.2 ·/.test(shared.text) && shared.text.includes("**Reading from a chair.**"), "#200: the layer is v1.2, with its reading-from-a-chair paragraph");
+  say(shared.text.includes("rather than commissioning separate research or maintaining a version of their own")
+    && shared.text.includes("rather than commissioning separate research or maintaining a feed of their own"),
+    "#200: D1 and D3 at D require that no function keeps its own version");
+
   const matrix = await get(SDLC_PINNED_COMMIT, "ai_native_sdlc_maturity_model.md");
   const d11 = parseDimensionLevels(matrix.text, { captureTransitions: true }).find((d) => d.id === "D11");
   say(!!d11 && /attributable/.test(d11.desc) && !/Deferred/i.test(d11.desc) && !d11.desc.includes("*"),
     "#156: D11's definition is the rewrite, plain text, not deferred");
   say(/Version 1\.3\.0/.test(matrix.text), "#156: the matrix declares v1.3.0");
+  say(/^\*\*Version 1\.4\.0/m.test(matrix.text) && matrix.text.includes("(`STD-SHARED-INTELLIGENCE` v1.2)"), "#200: the matrix leads with v1.4.0 and cites the layer at v1.2");
 
   const ts = await get(SDLC_PINNED_COMMIT, "sdlc_transition_states_d4_d13.md");
   const tsD11 = ts.text.slice(ts.text.indexOf("# D11."), ts.text.indexOf("# D12."));
@@ -61,13 +73,14 @@ async function get(commit, file) {
   let doc = null;
   try { doc = yaml.load(sf.text); } catch { /* reported below */ }
   const cells = doc ? doc.dimensions.D11.levels : {};
-  say(!!doc && !doc.dimensions.D11.flag && doc.source_matrix_version === "1.3.0" && /agent/i.test(cells.A || "") && /telemetry/.test(cells.E || ""),
-    "#156: D11's five cells re-compressed, its flag gone", doc ? doc.version : "unparsed");
+  say(!!doc && !doc.dimensions.D11.flag && doc.source_matrix_version === "1.4.0" && /agent/i.test(cells.A || "") && /telemetry/.test(cells.E || ""),
+    "#156: D11's five cells re-compressed, its flag gone; the short form names v1.4.0", doc ? doc.source_matrix_version : "unparsed");
 
   console.log("--- this site's own words ---");
   const core = fs.readFileSync(path.join(__dirname, "..", "lib", "aiDigestCore.js"), "utf8");
   say(!/without verification statements in that same per-transition form yet/.test(core) && !/D1–D3 in both SDLC and PDLC, inherited by reference from the Shared Intelligence Layer and owned by neither model — say so/.test(core),
     "the AI digest no longer says D1-D3 lack verification");
+  say(/STD-SHARED-INTELLIGENCE v1\.2/.test(core) && !/STD-SHARED-INTELLIGENCE v1\.1/.test(core), "#200: the AI digest names the layer at v1.2");
 
   process.exitCode = bad;
 })();
