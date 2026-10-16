@@ -1176,7 +1176,7 @@
   },
   {
    "id": "W-17",
-   "title": "Claude Code in Manual mode",
+   "title": "Claude Code in its default mode (labelled Manual)",
    "source": "Claude Code docs, *Configure permissions*. https://code.claude.com/docs/en/permissions",
    "flows": [
     {
@@ -1392,7 +1392,7 @@
     }
    ],
    "family": "ai-chooses",
-   "note": "The same family as W-18: the two differ in what the agent is authorized to do, not in how it is arranged."
+   "note": "Same family as W-18; the difference is who may act without approval, not how the system decides — capability and authority are kept separate."
   },
   {
    "id": "W-20",

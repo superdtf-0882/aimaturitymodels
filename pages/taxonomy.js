@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Layout from "../components/Layout";
 const {
-  VERSION, QUESTION, DOMAIN_WORK, FAMILIES, ANSWERS, TESTS, FACT_LINES, EXAMPLES, MODELS,
+  VERSION, QUESTION, DOMAIN_WORK, FAMILIES, ANSWERS, GUIDANCE, TESTS, FACT_LINES, EXAMPLES, MODELS,
   assessmentHref, familyName, decideFor, intakeComplete, cardMarkdown,
 } = require("../lib/taxonomy");
 
@@ -213,14 +213,17 @@ export default function Taxonomy() {
           <div className="tx-result-head">{card.name.trim()}</div>
           <div className="tx-result-family">{familyName(card.answer)}</div>
           {card.answer === "composite" ? (
-            card.parts.filter((p) => p.name.trim()).map((p, i) => (
-              <div key={i} className="tx-result-part">
-                <div className="tx-result-partname">{p.name.trim()}: {familyName(p.family)}</div>
-                <Decide k={p.family} />
-              </div>
-            ))
-          ) : card.answer === "none-of-these" ? (
-            <p>A system that resists the question is a finding, not a mistake. Your sentence is its record.</p>
+            <>
+              {card.parts.filter((p) => p.name.trim()).map((p, i) => (
+                <div key={i} className="tx-result-part">
+                  <div className="tx-result-partname">{p.name.trim()}: {familyName(p.family)}</div>
+                  <Decide k={p.family} />
+                </div>
+              ))}
+              <p className="tx-result-means">{GUIDANCE.composite}</p>
+            </>
+          ) : card.answer === "none-of-these" || card.answer === "unknown" ? (
+            <p className="tx-result-means">{GUIDANCE[card.answer]}</p>
           ) : (
             <>
               <p className="tx-result-means">{(FAMILIES.find((f) => f.key === card.answer) || {}).means}</p>
