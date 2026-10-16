@@ -88,7 +88,7 @@ function scanSecrets(root) {
 }
 const formatSecrets = (hits) => hits.map((h) => "  " + h.file.replace(/\\/g, "/") + ":" + h.line + "  " + h.kind).join("\n");
 const secretExit = (hits) => (hits.length ? 1 : 0);
-const STAGE = 1; // 1: everything reports. 2: a secret refuses the build.
+const STAGE = 2; // 1: everything reports. 2: a secret refuses the build.
 const gateExit = (hits, reportOnly) => (reportOnly || STAGE < 2 ? 0 : secretExit(hits));
 
 // The runners return stdout; a tool that exits non-zero on findings still reports.
