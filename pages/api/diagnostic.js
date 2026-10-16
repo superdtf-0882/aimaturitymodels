@@ -25,6 +25,12 @@ import { PDLC_EXECUTIVE_READOUT_PROMPT_V2 } from "../../lib/prompts/pdlc-executi
 import { PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V3 } from "../../lib/prompts/prioritization-executive-readout-v3";
 import { EXECUTIVE_READOUT_PROMPT_V3 } from "../../lib/prompts/executive-readout-v3";
 import { EA_EXECUTIVE_READOUT_PROMPT_V2 } from "../../lib/prompts/ea-executive-readout-v2";
+// The Product Marketing readout (OKF-TOGAF#202), on "ProdMar readout v1.0: EA v2
+// with DTOG's nine passages replaced and 203-DT2's two changes, which CC applies
+// at landing with the self-test updated, nothing else -- David Facer 10/16/2026".
+// Registered here so the route knows the model; no page asks for it until the
+// model's assessment page exists, which is #202's own work.
+import { PRODMAR_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/prodmar-executive-readout-v1";
 import crypto from "crypto";
 // OKF-TOGAF#161: the score reading moved to lib/score-vector.js.
 const { extractScores, vectorKey } = require("../../lib/score-vector");
@@ -48,6 +54,7 @@ const MODEL_CONFIG = {
   pdlc: { dimensionCount: 12, prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V2, promptVersion: "pdlc-v2" },
   prioritization: { dimensionCount: 3, prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V3, promptVersion: "prioritization-v3" },
   ea: { dimensionCount: 10, prompt: EA_EXECUTIVE_READOUT_PROMPT_V2, promptVersion: "ea-v2", thresholdStates: true },
+  prodmar: { dimensionCount: 11, prompt: PRODMAR_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "prodmar-v1", thresholdStates: true },
 };
 
 // A reasoning model answers more slowly than gpt-4o did; this raises the
