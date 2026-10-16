@@ -32,6 +32,7 @@ console.log("--- which page gets a copy, and which map describes it ---");
 const COPY = [
   ["/models/sdlc/deep-dive/d1/", "/models/sdlc/deep-dive/d1.md"],
   ["/models/ea/whole-model-view/", "/models/ea/whole-model-view.md"],
+  ["/models/productmarketing/whole-model-view/", "/models/productmarketing/whole-model-view.md"],
   ["/models/prioritization/strategic-value-matrix/", "/models/prioritization/strategic-value-matrix.md"],
   ["/strata/", "/strata.md"],
   ["/eaokf/", "/eaokf.md"],
@@ -70,11 +71,23 @@ console.log("--- one definition per term, across the maps ---");
   say(!!ok && ok.length === 0, "a link line with no definition, and distinct terms, pass", ok ? String(ok.length) : "missing");
 }
 
-console.log("--- the full file renders all four live models ---");
+console.log("--- the full file renders all five live models ---");
 {
   const core = read("lib/aiDigestCore.js") || "";
   say(/^## AI-Native EA Maturity Model$/m.test(core), "the full file has an EA model section (101-CC section 3: the EA model rendered)");
-  say(/\*\*What's included:\*\* all four live models/.test(core), "and says all four, now that it holds them");
+  // 2026-10-16, OKF-TOGAF#198: the fifth.
+  say(/^## AI-Native Product Marketing Maturity Model$/m.test(core), "the full file has a Product Marketing model section");
+  say(/\*\*What's included:\*\* all five live models/.test(core), "and says all five, now that it holds them");
+}
+
+console.log("--- the models map lists the fifth model, and no longer calls it unpublished ---");
+{
+  const m = aiMap.modelsMap ? aiMap.modelsMap({ deepDives: {} }) : "";
+  say(m.includes("[AI-Native Product Marketing Maturity Model](/models/productmarketing/whole-model-view.md)"), "the models map links its whole-model copy");
+  say(!!m && !/not yet published/.test(m), "no \"not yet published\"", m ? "" : "modelsMap not exported");
+  say(/The Product Marketing model has no deep dives yet\./.test(m), "says it has no deep dives yet, as it does for EA");
+  const r = aiMap.rootMap ? aiMap.rootMap() : "";
+  say(/The full text of the five maturity models/.test(r), "the root map counts five");
 }
 
 console.log("--- the root map ---");
