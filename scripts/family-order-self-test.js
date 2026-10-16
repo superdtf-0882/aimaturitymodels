@@ -28,7 +28,10 @@ const say = (ok, name, shown) => {
 };
 
 // The family, in the owner's order. Each page names a model by its own noun.
-const ORDER = ["AI-Native EA", "AI-Native SDLC", "AI-Native PDLC", "Portfolio Prioritization", "Product Marketing Lifecycle"];
+// 2026-10-16, OKF-TOGAF#198: the fifth is named as ratified, "AI-Native
+// Product Marketing Maturity Model", where the placeholder said "Product
+// Marketing Lifecycle".
+const ORDER = ["AI-Native EA", "AI-Native SDLC", "AI-Native PDLC", "Portfolio Prioritization", "AI-Native Product Marketing"];
 const names = (src) => [...src.matchAll(/<div className="model-name">([^<]+)<\/div>/g)].map((m) => m[1].trim());
 const family = (list) => list.map((n) => ORDER.find((o) => n.startsWith(o + " ")) || "?" + n);
 
@@ -36,6 +39,17 @@ for (const [page, noun] of [["pages/models/index.js", "Maturity Model"], ["pages
   const got = names(read(page));
   say(family(got).join(" | ") === ORDER.join(" | "), page + ": the owner's order", family(got).join(", "));
   say(got.length === ORDER.length && got.every((n) => n.endsWith(" " + noun)), page + ": five rows, each a " + noun);
+}
+
+// 2026-10-16, OKF-TOGAF#198: the fifth model is live on /models, linked to its
+// whole-model view; its assessment stays Coming until its instrument exists.
+{
+  const m = read("pages/models/index.js");
+  const row = (m.match(/<Link href="([^"]+)" className="model-row">\s*<div>\s*<div className="model-name">AI-Native Product Marketing Maturity Model<\/div>[\s\S]*?<span className="pill (\w+)">/) || []);
+  say(row[1] === "/models/productmarketing/whole-model-view" && row[2] === "live", "/models: Product Marketing is Live and links to its whole-model view", JSON.stringify(row.slice(1)));
+  const as = read("pages/assessments/index.js");
+  const at = as.indexOf("AI-Native Product Marketing Maturity Assessment");
+  say(at > 0 && /pill coming/.test(as.slice(at, at + 600)), "/assessments: Product Marketing stays Coming (no instrument yet)");
 }
 
 // The SDLC assessment's description reads as the EA one does.
