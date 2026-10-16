@@ -138,4 +138,64 @@ console.log("--- the SDLC and PDLC assembly keep the shared layer's sustainment 
     "a plain-string transition still normalizes (control)", JSON.stringify(legacy.transitions["A-B"]));
 }
 
+// The Product Marketing model's shape (OKF-TOGAF#198): levels as "### A — Nascent"
+// headings, "**Status:**" and "**Basis:**" lines under the description, the
+// shared layer's "**Transition from A to B**" and "**Verification:**", and the
+// sustainment inline as "**Sustainment:** text" after a level E that may run to
+// two paragraphs.
+const PMM = [
+  "# A model",
+  "",
+  "## Family consistency and review boundaries",
+  "",
+  "- A boundary bullet that belongs to no dimension.",
+  "",
+  "## D4. Knowledge corpus & standing",
+  "",
+  "*A description.*",
+  "",
+  "**Status:** Native",
+  "",
+  "**Basis:** Adapted from elsewhere",
+  "",
+  ...["A", "B", "C", "D"].flatMap((l, i) => [
+    "### " + l + " — Name",
+    "",
+    "Level " + l + " prose.",
+    "",
+    "**Transition from " + l + " to " + "BCDE"[i] + "**",
+    "",
+    l + " to " + "BCDE"[i] + " prose.",
+    "",
+    "**Verification:** " + l + " to " + "BCDE"[i] + " is verified by this.",
+    "",
+  ]),
+  "### E — Telemetric",
+  "",
+  "Level E prose.",
+  "",
+  "A vantage paragraph at E.",
+  "",
+  "**Sustainment:** Sustainment prose.",
+  "",
+].join("\n");
+{
+  const [d4, extra] = parseDimensionLevels(PMM, { captureTransitions: true, headingLevels: true });
+  say(!!d4 && !extra && d4.id === "D4" && d4.name === "Knowledge corpus & standing" && d4.desc === "A description.",
+    "PMM: one dimension, its name and description", JSON.stringify(d4 && [d4.id, d4.name, d4.desc]));
+  say(!!d4 && ["A", "B", "C", "D"].every((l) => d4.levels[l] === "Level " + l + " prose."),
+    "PMM: \"### A — Nascent\" headings read as levels", JSON.stringify(d4 && d4.levels));
+  say(!!d4 && d4.levels.E === "Level E prose. A vantage paragraph at E.",
+    "PMM: level E keeps its second paragraph, not the sustainment", JSON.stringify(d4 && d4.levels.E));
+  say(!!d4 && d4.transitions["C-D"] && d4.transitions["C-D"].text === "C to D prose." && d4.transitions["C-D"].verification === "C to D is verified by this.",
+    "PMM: transitions and their verifications", JSON.stringify(d4 && d4.transitions["C-D"]));
+  say(!!d4 && Object.keys(d4.transitions).join(",") === "A-B,B-C,C-D,D-E",
+    "PMM: four transitions, no more", JSON.stringify(d4 && Object.keys(d4.transitions)));
+  say(!!d4 && d4.sustainment === "Sustainment prose.",
+    "PMM: the inline \"**Sustainment:**\" line is the sustainment", JSON.stringify(d4 && d4.sustainment));
+  const plain = parseDimensionLevels(PMM, { captureTransitions: true })[0];
+  say(!!plain && Object.keys(plain.levels).length === 0,
+    "without the option the heading shape reads nothing (others unchanged)", JSON.stringify(plain && plain.levels));
+}
+
 process.exitCode = bad;
