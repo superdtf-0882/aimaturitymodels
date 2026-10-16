@@ -49,7 +49,7 @@ if (G) {
   // Staged as 104-DT2 section 5 and 108-CC section 4 recorded it, as Ring 3 was:
   // stage 1 runs all three checks on a live build and refuses nothing; stage 2
   // refuses on a secret. The stage is one constant, so moving it is one commit.
-  ok(G.STAGE === 1, "stage 1: all three checks report, nothing refuses yet", "STAGE " + G.STAGE);
+  ok(G.STAGE === 2, "stage 2: a secret refuses the build; lint and the audit still report", "STAGE " + G.STAGE);
   ok(typeof G.gateExit === "function" && G.gateExit(hits, false) === (G.STAGE >= 2 ? 1 : 0) && G.gateExit(hits, true) === 0 && G.gateExit([], false) === 0,
     "the build's exit follows the stage; --report never refuses");
   fs.rmSync(dir, { recursive: true, force: true });
