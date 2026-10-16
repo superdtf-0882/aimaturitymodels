@@ -45,7 +45,9 @@ say(j(P("")) === j([]) && j(P(null)) === j([]), "empty and missing text render n
 console.log("--- the view uses it everywhere it prints model text ---");
 const view = fs.readFileSync(path.join(root, "components/WholeModelView.js"), "utf8");
 for (const raw of ["{dim.levels[level]}", "{transition.text}", "{transition.verification}", "{dim.sustainment}", "{dim.desc}", "{dim.digest[l]}", "{dim.title}", "{dim.flag}", "{dim.name}"]) {
-  say(!view.includes(raw), "no raw " + raw);
+  // Raw means printed as a child, not passed to <Marks text=...>.
+  const at = [...view.matchAll(new RegExp(raw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"))].map((m) => m.index);
+  say(at.every((i) => view.slice(i - 5, i) === "text="), "no raw " + raw, at.length + " use(s)");
 }
 say(/<Marks text=/.test(view), "the view renders through <Marks>");
 say(!/dangerouslySetInnerHTML/.test(view), "no HTML injected");

@@ -4,6 +4,20 @@ import Layout from "./Layout";
 import useAddressState from "./useAddressState";
 import { LEVEL_NAMES } from "../lib/levelVocabulary";
 
+const { parseMarks, stripMarks } = require("../lib/inline-marks");
+
+// OKF-TOGAF#203: a model's **bold** and *italic* marks, rendered as <strong>
+// and <em> rather than printed as asterisks. React elements only -- model text
+// never becomes HTML. An asterisk that does not pair stays a character.
+function MarksNodes({ nodes }) {
+  return nodes.map((n, i) => typeof n === "string" ? n
+    : n.strong ? <strong key={i}><MarksNodes nodes={n.strong} /></strong>
+    : <em key={i}><MarksNodes nodes={n.em} /></em>);
+}
+function Marks({ text }) {
+  return <MarksNodes nodes={parseMarks(text)} />;
+}
+
 const { matrix } = require("../lib/address-codecs");
 
 // Shared by all four models' Whole-Model Views (SDLC, PDLC,
@@ -115,7 +129,7 @@ function CellDetail({ dim, level, deepDiveBasePath, geometry }) {
       <div className="wmv-detail-head">
         <span className="wmv-detail-level">{level}</span>
         <span className="wmv-detail-name">{LEVEL_NAMES[level]}</span>
-        <span className="wmv-detail-id">{dim.id} &middot; {dim.name}</span>
+        <span className="wmv-detail-id">{dim.id} &middot; <Marks text={dim.name} /></span>
       </div>
 
       {dim.transitionCaution && (
@@ -137,12 +151,12 @@ function CellDetail({ dim, level, deepDiveBasePath, geometry }) {
           rather than dropped. Same field, two correct answers, decided per
           model by the route rather than here. */}
       {dim.flag && (
-        <p className="wmv-detail-flag">&#9873; <strong>Open question.</strong> {dim.flag}</p>
+        <p className="wmv-detail-flag">&#9873; <strong>Open question.</strong> <Marks text={dim.flag} /></p>
       )}
 
       <div className="wmv-detail-section">
         <div className="wmv-detail-label">Definition</div>
-        <p>{dim.levels[level]}</p>
+        <p><Marks text={dim.levels[level]} /></p>
       </div>
 
       <div className="wmv-detail-section">
@@ -150,10 +164,10 @@ function CellDetail({ dim, level, deepDiveBasePath, geometry }) {
         {next ? (
           transition ? (
             <>
-              <p>{transition.text}</p>
+              <p><Marks text={transition.text} /></p>
               {transition.verification && (
                 <p className="wmv-detail-verification">
-                  <strong>Verification:</strong> {transition.verification}
+                  <strong>Verification:</strong> <Marks text={transition.verification} />
                 </p>
               )}
             </>
@@ -161,7 +175,7 @@ function CellDetail({ dim, level, deepDiveBasePath, geometry }) {
             <p className="wmv-detail-pending">Transition notes not yet drafted for this dimension.</p>
           )
         ) : dim.sustainment ? (
-          <p>{dim.sustainment}</p>
+          <p><Marks text={dim.sustainment} /></p>
         ) : (
           <p className="wmv-detail-pending">Sustainment notes not yet drafted for this dimension.</p>
         )}
@@ -194,12 +208,12 @@ function DimensionBand({ dim }) {
     <section className="wmv-band" aria-live="polite">
       <div className="wmv-band-col">
         <div className="wmv-band-label">What {dim.id} measures</div>
-        <p>{dim.desc}</p>
+        <p><Marks text={dim.desc} /></p>
       </div>
       <div className="wmv-band-col">
         <div className="wmv-band-label">Where it ends</div>
         {dim.sustainment
-          ? <p>{dim.sustainment}</p>
+          ? <p><Marks text={dim.sustainment} /></p>
           : <p className="wmv-detail-pending">Sustainment notes not yet drafted for this dimension.</p>}
       </div>
     </section>
@@ -372,7 +386,7 @@ export default function WholeModelView({
                         // flag marker, hence the class.
                         <span className="dim-id">{dim.id}</span>
                       )}
-                      {dim.title}
+                      <Marks text={dim.title} />
                       {/* Marks the row so a flagged dimension is findable
                           without clicking every cell; the text itself is in
                           the detail panel. */}
@@ -394,11 +408,11 @@ export default function WholeModelView({
                             tabIndex={isSel ? 0 : -1}
                             role="gridcell"
                             aria-selected={isSel}
-                            aria-label={`${dim.id} Level ${l}, ${LEVEL_NAMES[l]} — ${dim.name}`}
+                            aria-label={`${dim.id} Level ${l}, ${LEVEL_NAMES[l]} — ${stripMarks(dim.name)}`}
                             onClick={() => select(dim.id, l)}
                             onFocus={() => { if (!isSel) select(dim.id, l); }}
                           >
-                            {dim.digest[l]}
+                            <Marks text={dim.digest[l]} />
                           </div>
                         </td>
                       );
