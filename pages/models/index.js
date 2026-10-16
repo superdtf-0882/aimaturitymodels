@@ -57,16 +57,20 @@ export default function ModelsIndex() {
           </div>
           <span className="pill live">Live</span>
         </Link>
-        <div className="model-row">
+        {/* OKF-TOGAF#198: live 2026-10-16 under its ratified name. The old
+            placeholder led with positioning, which the model itself assigns
+            to Product Management; the description follows its README. */}
+        <Link href="/models/productmarketing/whole-model-view" className="model-row">
           <div>
-            <div className="model-name">Product Marketing Lifecycle Maturity Model</div>
+            <div className="model-name">AI-Native Product Marketing Maturity Model</div>
             <div className="model-desc">
-              How positioning, messaging, and go-to-market discipline mature
-              alongside the product itself.
+              How messaging, proof, enablement, launch and adoption
+              communication mature on market intelligence the organization
+              shares.
             </div>
           </div>
-          <span className="pill coming">Coming</span>
-        </div>
+          <span className="pill live">Live</span>
+        </Link>
       </div>
       <h2>How to read these models</h2>
       <p>{MODELS_HOWTO.states}</p>
@@ -91,7 +95,7 @@ export default function ModelsIndex() {
           to be reasoned about. */}
       <p className="footnote">
         Each model stands alone &mdash; you don&rsquo;t need the others to use
-        one. Whole-Model Views for all four live models share the same
+        one. Whole-Model Views for all five live models share the same
         interaction: select a cell to read it &mdash; click, or use the arrow
         keys &mdash; and the detail stays open beside the matrix.
       </p>

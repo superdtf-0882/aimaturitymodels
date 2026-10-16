@@ -60,9 +60,9 @@ export default function AssessmentsIndex() {
         </Link>
         <div className="model-row">
           <div>
-            <div className="model-name">Product Marketing Lifecycle Maturity Assessment</div>
+            <div className="model-name">AI-Native Product Marketing Maturity Assessment</div>
             <div className="model-desc">
-              Waiting on the model itself, not just its assessment instrument.
+              The model is published; its scoring instrument is not yet written.
             </div>
           </div>
           <span className="pill coming">Coming</span>
