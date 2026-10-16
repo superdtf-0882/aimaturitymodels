@@ -84,6 +84,28 @@ if (T) {
   ok(/\*\*\[AI\]\*\* A model scores it/.test(md) && /\*\*\[waits: adjuster\]\*\* An adjuster reviews it/.test(md), "the steps keep their AI and waits marks, as the examples write them");
   ok(md.includes("What starts it: a claim arriving") && !md.includes("What it keeps:"), "the card carries the facts given and leaves out the blank ones");
   ok(/fourth draft/i.test(md), "the card names the draft it was classified against");
+
+  // DTOG's answers to 344-CC (OKF TOGAF k189), applied on "Apply DTOG's
+  // answers to 344-CC on the taxonomy page and push them to aimaturitymodels
+  // -- David Facer 10/15/2026": its final words for what each answer asks.
+  const fam = (k) => FAMILIES.find((f) => f.key === k) || {};
+  ok((fam("built-with").decide || {}).decision === "Operation is described the way any conventional system is. One decision remains from construction: whether AI-authored change carries a distinct review or attribution requirement."
+    && (fam("built-with").decide || {}).evidence === "Change records showing who authored each change and who reviewed it.", "DTOG's words: built with AI, runs without it");
+  ok(/^Define the boundary where the model's value enters the logic: the input it accepts, the output it will act on, and what the logic does with an output it won't/.test((fam("fixed-logic").decide || {}).decision || "")
+    && /^A log of model calls with an outcome class \(accepted, fallback, refused\); for staged logic, traces showing each model output beside the step taken next\.$/.test((fam("fixed-logic").decide || {}).evidence || ""), "DTOG's words: fixed logic decides");
+  ok((fam("user").decide || {}).decision === "Name the commitment point: where a suggestion or draft becomes an act, and who performs it."
+    && (fam("user").decide || {}).evidence === "A sample of outputs traced to what was then committed, declined or changed.", "DTOG's words: the user steers");
+  ok(/State who may do what — the actor, what needs approval, what it may reach, how its authority is withdrawn\. If that isn't described, record the gap; what the system is technically able to do is not read as permission\.$/.test((fam("ai-chooses").decide || {}).decision || "")
+    && /and the record of each act with who is answerable for it\.$/.test((fam("ai-chooses").decide || {}).evidence || ""), "DTOG's words: the AI chooses its own next step");
+  ok(T.GUIDANCE && T.GUIDANCE.composite === "Each part gets its own, above."
+    && T.GUIDANCE["none-of-these"] === "The sentence you wrote is the finding. Keep it; it's the kind of case that changes the taxonomy."
+    && /^Look at the steps you marked AI and ask, for each, what happens to its output next: code acts on it, a person acts on it, or the AI itself decides\. That answer is the family\.$/.test(T.GUIDANCE.unknown || ""),
+    "DTOG's words for composite, none of these and can't tell yet");
+  const w19 = EXAMPLES.find((e) => e.id === "W-19") || {};
+  ok(w19.note === "Same family as W-18; the difference is who may act without approval, not how the system decides — capability and authority are kept separate.", "W-19's note as DTOG approved it, with its added clause");
+  ok((EXAMPLES.find((e) => e.id === "W-17") || {}).title === "Claude Code in its default mode (labelled Manual)", "W-17 named as its source does");
+  const mdU = cardMarkdown({ ...base, answer: "unknown" });
+  ok(mdU.includes(T.GUIDANCE ? T.GUIDANCE.unknown : "\u0000"), "the card carries can't-tell-yet's guidance");
 }
 
 // The page.
