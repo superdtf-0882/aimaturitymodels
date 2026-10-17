@@ -1,4 +1,4 @@
-import { getPrioritizationShortForm, getPrioritizationFullModel, currencyBasisLine } from "../../../lib/models";
+import { getFamilyLevels, getPrioritizationShortForm, getPrioritizationFullModel, currencyBasisLine } from "../../../lib/models";
 import Link from "next/link";
 import WholeModelView from "../../../components/WholeModelView";
 
@@ -12,12 +12,13 @@ export async function getStaticProps() {
     title: shortForm.dimensions[d.id].title,
     digest: shortForm.dimensions[d.id].levels,
   }));
-  return { props: { dimensions, sourceCommit: fullModel.sourceCommit, currencyBasis: currencyBasisLine("prioritization") } };
+  return { props: { levelNames: await getFamilyLevels(), dimensions, sourceCommit: fullModel.sourceCommit, currencyBasis: currencyBasisLine("prioritization") } };
 }
 
-export default function PrioritizationWholeModelView({ dimensions, sourceCommit, currencyBasis }) {
+export default function PrioritizationWholeModelView({ levelNames, dimensions, sourceCommit, currencyBasis }) {
   return (
     <WholeModelView
+      levelNames={levelNames}
       dimensions={dimensions}
       sourceCommit={sourceCommit}
       currencyBasis={currencyBasis}

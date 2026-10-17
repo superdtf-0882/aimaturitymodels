@@ -18,6 +18,12 @@
 // reads the same from every function's chair, and D1 and D3 at D require that
 // no function keeps its own version; the short form names v1.4.0.
 //
+// v1.4.2, OKF-TOGAF#204, on the owner's #204 plan line and "Approve the family
+// file's text as DTOG-family-levels-text gives it; CC lands it in SDLC's #204
+// release -- David Facer 10/17/2026": family_maturity_levels.md (STD-FAMILY-LEVELS
+// v1.0) at the pin, the matrix's names section the five names and a pointer to
+// it, and the pages reading the names from it (lib/familyLevels.js).
+//
 // Usage: node scripts/sdlc-release-self-test.js   (network; exit 1 on a failing case)
 "use strict";
 
@@ -26,6 +32,7 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { parseDimensionLevels, normalizeSharedDimension } = require("../lib/dimension-parser");
 const { SDLC_PINNED_COMMIT, SDLC_SHORT_FORM_PINNED_COMMIT } = require("../lib/pins");
+const { parseFamilyLevels } = require("../lib/familyLevels");
 
 const RAW = "https://raw.githubusercontent.com/superdtf-0882/ai-native-sdlc-maturity-model/";
 let bad = 0;
@@ -57,9 +64,21 @@ async function get(commit, file) {
   say(!!d11 && /attributable/.test(d11.desc) && !/Deferred/i.test(d11.desc) && !d11.desc.includes("*"),
     "#156: D11's definition is the rewrite, plain text, not deferred");
   say(/Version 1\.3\.0/.test(matrix.text), "#156: the matrix declares v1.3.0");
-  say(/^\*\*Version 1\.4\.1/m.test(matrix.text) && matrix.text.includes("(`STD-SHARED-INTELLIGENCE` v1.2)"), "#200: the matrix leads with v1.4.1 and cites the layer at v1.2");
+  say(/^\*\*Version 1\.4\.2/m.test(matrix.text) && matrix.text.includes("(`STD-SHARED-INTELLIGENCE` v1.2)"), "#204: the matrix leads with v1.4.2 and cites the layer at v1.2");
   say(!/STD-SHARED-INTELLIGENCE v1\.1 as of/.test(matrix.text) && matrix.text.includes("(STD-SHARED-INTELLIGENCE v1.2 as of 2026-10-16)"),
     "#200 (v1.4.1): the closing status line cites the layer at v1.2, not v1.1");
+
+  // #204: the level names' one home, and the matrix's names section in M3's fixed form.
+  const fam = await get(SDLC_PINNED_COMMIT, "family_maturity_levels.md");
+  let levels = null;
+  try { levels = parseFamilyLevels(fam.text); } catch { /* reported below */ }
+  say(fam.status === 200 && /^\*\*STD-FAMILY-LEVELS · v1\.0 · \d{4}-\d{2}-\d{2}\*\*$/m.test(fam.text), "#204: family_maturity_levels.md is at the pin, STD-FAMILY-LEVELS v1.0", String(fam.status));
+  say(!!levels && Object.values(levels.names).join(" ") === "Nascent Modeled Continuous Integral Telemetric" && Object.keys(levels.oneLine).length === 5,
+    "#204: the family file gives five names and five one-line descriptions", levels ? Object.values(levels.names).join(" ") : "unparsed");
+  const names = (matrix.text.split("## Family maturity names")[1] || "").split("\n---")[0].split("\n").map((l) => l.trim()).filter(Boolean);
+  say(names.length === 2 && names[0] === "A — Nascent · B — Modeled · C — Continuous · D — Integral · E — Telemetric" && /^Names, descriptions and the general shape: family_maturity_levels\.md in github\.com\/superdtf-0882\/ai-native-sdlc-maturity-model at v1\.4\.2\.$/.test(names[1] || ""),
+    "#204: the matrix's names section is the names line and the pointer", JSON.stringify(names).slice(0, 80));
+  say(!/### Maturity-level names/.test(matrix.text) && !/shared with the AI-Native PDLC Maturity Model/.test(matrix.text), "#204: no table of names and no list of models in the matrix");
 
   const ts = await get(SDLC_PINNED_COMMIT, "sdlc_transition_states_d4_d13.md");
   const tsD11 = ts.text.slice(ts.text.indexOf("# D11."), ts.text.indexOf("# D12."));
@@ -75,8 +94,8 @@ async function get(commit, file) {
   let doc = null;
   try { doc = yaml.load(sf.text); } catch { /* reported below */ }
   const cells = doc ? doc.dimensions.D11.levels : {};
-  say(!!doc && !doc.dimensions.D11.flag && doc.source_matrix_version === "1.4.1" && /agent/i.test(cells.A || "") && /telemetry/.test(cells.E || ""),
-    "#156: D11's five cells re-compressed, its flag gone; the short form names v1.4.1", doc ? doc.source_matrix_version : "unparsed");
+  say(!!doc && !doc.dimensions.D11.flag && doc.source_matrix_version === "1.4.2" && /agent/i.test(cells.A || "") && /telemetry/.test(cells.E || ""),
+    "#156: D11's five cells re-compressed, its flag gone; the short form names v1.4.2", doc ? doc.source_matrix_version : "unparsed");
 
   console.log("--- this site's own words ---");
   const core = fs.readFileSync(path.join(__dirname, "..", "lib", "aiDigestCore.js"), "utf8");

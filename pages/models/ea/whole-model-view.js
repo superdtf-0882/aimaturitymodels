@@ -1,4 +1,4 @@
-import { getEaShortForm, getEaFullModel, currencyBasisLine } from "../../../lib/models";
+import { getFamilyLevels, getEaShortForm, getEaFullModel, currencyBasisLine } from "../../../lib/models";
 import WholeModelView from "../../../components/WholeModelView";
 
 export async function getStaticProps() {
@@ -17,7 +17,7 @@ export async function getStaticProps() {
     flag: shortForm.dimensions[d.id].flag || null,
   }));
   return {
-    props: {
+    props: { levelNames: await getFamilyLevels(),
       dimensions,
       sourceCommit: fullModel.sourceCommit,
       currencyBasis: currencyBasisLine("ea"),
@@ -25,9 +25,10 @@ export async function getStaticProps() {
   };
 }
 
-export default function EaWholeModelView({ dimensions, sourceCommit, currencyBasis }) {
+export default function EaWholeModelView({ levelNames, dimensions, sourceCommit, currencyBasis }) {
   return (
     <WholeModelView
+      levelNames={levelNames}
       dimensions={dimensions}
       sourceCommit={sourceCommit}
       currencyBasis={currencyBasis}

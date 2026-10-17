@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback, useLayoutEffect, useMemo } fr
 import Link from "next/link";
 import Layout from "./Layout";
 import useAddressState from "./useAddressState";
-import { LEVEL_NAMES } from "../lib/levelVocabulary";
 
 const { parseMarks, stripMarks } = require("../lib/inline-marks");
 
@@ -121,14 +120,14 @@ function nextLevel(l) {
 // move. The dimension's own prose is constant across all five levels, so it
 // lives in the band and not here; that is also the only reason the longest
 // cell fits without the rail growing its own scrollbar.
-function CellDetail({ dim, level, deepDiveBasePath, geometry }) {
+function CellDetail({ dim, level, levelNames, deepDiveBasePath, geometry }) {
   const next = nextLevel(level);
   const transition = next ? dim.transitions[`${level}-${next}`] : null;
   return (
     <div className={`wmv-detail wmv-detail--${geometry}`} aria-live="polite">
       <div className="wmv-detail-head">
         <span className="wmv-detail-level">{level}</span>
-        <span className="wmv-detail-name">{LEVEL_NAMES[level]}</span>
+        <span className="wmv-detail-name">{levelNames[level]}</span>
         <span className="wmv-detail-id">{dim.id} &middot; <Marks text={dim.name} /></span>
       </div>
 
@@ -221,6 +220,7 @@ function DimensionBand({ dim }) {
 }
 
 export default function WholeModelView({
+  levelNames, // the five names, from family_maturity_levels.md at SDLC's pin (OKF-TOGAF#204)
   dimensions,
   sourceCommit,
   currencyBasis,
@@ -360,7 +360,7 @@ export default function WholeModelView({
                   <th key={l} className={`level-th${l === sel.level ? " is-selected" : ""}`}>
                     <span className="level-head">
                       <span className="ltr">{l}</span>
-                      <span className="nm">{LEVEL_NAMES[l]}</span>
+                      <span className="nm">{levelNames[l]}</span>
                       <span className="bar" style={{ width: BAR_WIDTHS[i] }} />
                     </span>
                   </th>
@@ -408,7 +408,7 @@ export default function WholeModelView({
                             tabIndex={isSel ? 0 : -1}
                             role="gridcell"
                             aria-selected={isSel}
-                            aria-label={`${dim.id} Level ${l}, ${LEVEL_NAMES[l]} — ${stripMarks(dim.name)}`}
+                            aria-label={`${dim.id} Level ${l}, ${levelNames[l]} — ${stripMarks(dim.name)}`}
                             onClick={() => select(dim.id, l)}
                             onFocus={() => { if (!isSel) select(dim.id, l); }}
                           >
@@ -426,6 +426,7 @@ export default function WholeModelView({
 
         <aside className="wmv-rail" ref={railRef} style={railStyle}>
           <CellDetail
+            levelNames={levelNames}
             dim={activeDim}
             level={sel.level}
             deepDiveBasePath={deepDiveBasePath}

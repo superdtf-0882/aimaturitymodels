@@ -1,4 +1,4 @@
-import { getProductMarketingShortForm, getProductMarketingFullModel, currencyBasisLine } from "../../../lib/models";
+import { getFamilyLevels, getProductMarketingShortForm, getProductMarketingFullModel, currencyBasisLine } from "../../../lib/models";
 import WholeModelView from "../../../components/WholeModelView";
 
 // The fifth family member (OKF-TOGAF#198). Titles are the matrix's own
@@ -17,7 +17,7 @@ export async function getStaticProps() {
     flag: shortForm.dimensions[d.id].flag || null,
   }));
   return {
-    props: {
+    props: { levelNames: await getFamilyLevels(),
       dimensions,
       sourceCommit: fullModel.sourceCommit,
       currencyBasis: currencyBasisLine("productmarketing"),
@@ -25,9 +25,10 @@ export async function getStaticProps() {
   };
 }
 
-export default function ProductMarketingWholeModelView({ dimensions, sourceCommit, currencyBasis }) {
+export default function ProductMarketingWholeModelView({ levelNames, dimensions, sourceCommit, currencyBasis }) {
   return (
     <WholeModelView
+      levelNames={levelNames}
       dimensions={dimensions}
       sourceCommit={sourceCommit}
       currencyBasis={currencyBasis}

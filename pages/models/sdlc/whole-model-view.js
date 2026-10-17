@@ -1,4 +1,4 @@
-import { getSdlcShortForm, getSdlcFullModel, currencyBasisLine } from "../../../lib/models";
+import { getFamilyLevels, getSdlcShortForm, getSdlcFullModel, currencyBasisLine } from "../../../lib/models";
 import WholeModelView from "../../../components/WholeModelView";
 
 export async function getStaticProps() {
@@ -22,12 +22,13 @@ export async function getStaticProps() {
     // never pulled from shortForm to begin with.
     digest: shortForm.dimensions[d.id].levels,
   }));
-  return { props: { dimensions, sourceCommit: fullModel.sourceCommit, currencyBasis: currencyBasisLine("sdlc") } };
+  return { props: { levelNames: await getFamilyLevels(), dimensions, sourceCommit: fullModel.sourceCommit, currencyBasis: currencyBasisLine("sdlc") } };
 }
 
-export default function SdlcWholeModelView({ dimensions, sourceCommit, currencyBasis }) {
+export default function SdlcWholeModelView({ levelNames, dimensions, sourceCommit, currencyBasis }) {
   return (
     <WholeModelView
+      levelNames={levelNames}
       dimensions={dimensions}
       sourceCommit={sourceCommit}
       currencyBasis={currencyBasis}
