@@ -6,6 +6,14 @@ const nextConfig = {
   // in prebuild prints its counts; Next would otherwise lint again and refuse
   // the build on an error.
   eslint: { ignoreDuringBuilds: true },
+  // OKF-TOGAF#205: lib/model-parser.js, the family parser vendored byte for byte, requires
+  // "fs" for its command-line use only. lib/models.js reaches the browser bundle through the
+  // deep-dive pages' dimension-order constants, so there "fs" resolves to nothing; the parser
+  // runs only at build time, in getStaticProps, where Node provides it.
+  webpack(config, { isServer }) {
+    if (!isServer) config.resolve.fallback = { ...(config.resolve.fallback || {}), fs: false };
+    return config;
+  },
   // Issue #13: /models/** pages are static (getStaticProps) but their
   // content is fetched at build time from a separate repo and changes
   // with every deploy -- Vercel's default edge cache for prerendered
