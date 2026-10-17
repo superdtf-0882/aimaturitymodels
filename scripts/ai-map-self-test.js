@@ -82,7 +82,7 @@ console.log("--- the full file renders all five live models ---");
 
 console.log("--- the models map lists the fifth model, and no longer calls it unpublished ---");
 {
-  const m = aiMap.modelsMap ? aiMap.modelsMap({ deepDives: {} }) : "";
+  const m = aiMap.modelsMap ? aiMap.modelsMap({ deepDives: {}, familyLevels: { names: { A: "Nascent", B: "Modeled", C: "Continuous", D: "Integral", E: "Telemetric" } } }) : "";
   say(m.includes("[AI-Native Product Marketing Maturity Model](/models/productmarketing/whole-model-view.md)"), "the models map links its whole-model copy");
   say(!!m && !/not yet published/.test(m), "no \"not yet published\"", m ? "" : "modelsMap not exported");
   say(/The Product Marketing model has no deep dives yet\./.test(m), "says it has no deep dives yet, as it does for EA");

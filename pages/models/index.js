@@ -1,8 +1,14 @@
 import Link from "next/link";
 import Layout from "../../components/Layout";
 import { MODELS_LEAD, MODELS_HOWTO } from "../../lib/intros";
+import { getFamilyLevels } from "../../lib/models";
 
-export default function ModelsIndex() {
+// The five names, from family_maturity_levels.md at SDLC's pin (OKF-TOGAF#204).
+export async function getStaticProps() {
+  return { props: { levelNames: await getFamilyLevels() } };
+}
+
+export default function ModelsIndex({ levelNames }) {
   return (
     <Layout
       title="The Family"
@@ -73,7 +79,7 @@ export default function ModelsIndex() {
         </Link>
       </div>
       <h2>How to read these models</h2>
-      <p>{MODELS_HOWTO.states}</p>
+      <p>{MODELS_HOWTO.statesFor(levelNames)}</p>
       <p>
         {MODELS_HOWTO.rule.before}
         <Link href={MODELS_HOWTO.rule.href}>{MODELS_HOWTO.rule.link}</Link>
