@@ -7,8 +7,13 @@
 // practice's model template. Its hash is held here with the template commit it came
 // from, so an edit made on this site, and not in the template, fails this test. The
 // model repositories carry the same file in tools/; the SDLC copy at the pin is read
-// over HTTPS and compared too. lib/sdlc-reader.js maps the parser's shape onto the
+// over HTTPS and compared too. lib/model-reader.js maps the parser's shape onto the
 // fields the pages already use, and the fixtures below hold that mapping.
+//
+// From Product Marketing's v1.0.3 (OKF-TOGAF#205), on "Build Product Marketing's two
+// releases as 429-CC plans them, with 222-DT2's answers and the flag wording in 430-CC
+// -- David Facer 10/17/2026": the reader reads every dimension a file renders, inherited
+// ones included, and Product Marketing's copy of the parser at its pin is compared too.
 //
 // Usage: node scripts/model-parser-vendored-self-test.js [--offline]   (exit 1 on a failing case)
 "use strict";
@@ -16,8 +21,8 @@
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
-const { SDLC_PINNED_COMMIT } = require("../lib/pins");
-const { readSdlcDimensions } = require("../lib/sdlc-reader");
+const { SDLC_PINNED_COMMIT, PRODUCT_MARKETING_PINNED_COMMIT } = require("../lib/pins");
+const { readSdlcDimensions, readModelDimensions } = require("../lib/model-reader");
 
 // The template's tools/model-parser.js at OKF-TOGAF 56bbb79, line endings as LF.
 const TEMPLATE_COMMIT = "56bbb79";
@@ -39,6 +44,9 @@ const sha = (s) => crypto.createHash("sha256").update(String(s).replace(/\r\n/g,
     const res = await fetch(RAW + SDLC_PINNED_COMMIT + "/tools/model-parser.js");
     const theirs = res.ok ? await res.text() : "";
     say(res.ok && sha(theirs) === TEMPLATE_SHA256, "SDLC carries the same file at the pin, " + SDLC_PINNED_COMMIT.slice(0, 7), String(res.status));
+    const pm = await fetch("https://raw.githubusercontent.com/superdtf-0882/ai-native-product-marketing-maturity-model/" + PRODUCT_MARKETING_PINNED_COMMIT + "/tools/model-parser.js");
+    const pmText = pm.ok ? await pm.text() : "";
+    say(pm.ok && sha(pmText) === TEMPLATE_SHA256, "Product Marketing carries the same file at its pin, " + PRODUCT_MARKETING_PINNED_COMMIT.slice(0, 7), String(pm.status));
   }
 
   console.log("--- the adapter ---");
@@ -71,6 +79,15 @@ const sha = (s) => crypto.createHash("sha256").update(String(s).replace(/\r\n/g,
   say(!!d4 && d4.levels.A === "One. Two.", "two paragraphs join with a space, as the site's own reader joined them", d4 && d4.levels.A);
   say(!!d4 && !("title" in d4.transitions["A-B"]) && d4.transitions["A-B"].text === "Go.", "a transition's title is read and not passed to the page");
   say(!!d4 && Object.keys(d4.transitions).join(",") === "A-B,B-C,C-D,D-E" && d4.sustainment === "Hold.", "all four transitions and the sustainment, from the matrix");
+
+  // Product Marketing's shape: an inherited dimension the matrix renders is read; a range heading
+  // that only names a source is not.
+  const rendered = layer.replace("*What the dimension is.*", "*What the dimension is.*\n\n**Status:** Inherited · by reference\n\n**Basis:** STD-X v1.0, github.com/superdtf-0882/ai-native-x-maturity-model at v1.0.0, by reference.")
+    + "\n## D2–D3. A range\n\n**Basis:** STD-Y v1.0; referenced.\n";
+  const pmById = typeof readModelDimensions === "function" ? readModelDimensions(rendered) : new Map();
+  const r1 = pmById.get("D1");
+  say([...pmById.keys()].join(",") === "D1", "an inherited dimension the matrix renders is read; a range heading's dimensions are not", [...pmById.keys()].join(","));
+  say(!!r1 && r1.levels.E === "E's text. From D1's vantage, a view." && r1.transitions["A-B"].verification === "Shown so.", "the rendered dimension maps as a native one does");
 
   process.exitCode = bad;
 })();

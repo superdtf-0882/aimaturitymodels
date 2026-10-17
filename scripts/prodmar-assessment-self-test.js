@@ -38,6 +38,10 @@ console.log("--- the loader ---");
   say(/fetchRawFrom\(PRODUCT_MARKETING_D10_RAW, "ai_native_ea_maturity_model\.md"\)/.test(fn) && /readThresholdStates\(/.test(fn),
     "Pre-AI and Exempt are read from the EA matrix at v1.1.2");
   say(/withShortFormFlags\(/.test(fn), "its flags come from its short form");
+  // OKF-TOGAF#205, v1.0.3: the matrix in the common form in full, read through the family parser.
+  const full = fnBody(models, "getProductMarketingFullModel");
+  say(/readModelDimensions\(md\)/.test(full) && !/parseDimensionLevels\(/.test(full), "#205: the whole model is read through the family parser (lib/model-reader.js)");
+  say(/const PRODUCT_MARKETING_PINNED_COMMIT = "c475da9585a876d5fc441f04a57779384a0f25a6";/.test(read("lib/pins.js")), "#205: Product Marketing is pinned at v1.0.3 (c475da9)");
   const pins = read("lib/pins.js");
   say(/const PRODUCT_MARKETING_D10_SOURCE_COMMIT = "2688129234b59c0f9a864512fbe68eadad41aabe";/.test(pins), "that commit is EA v1.1.2 (2688129)");
 }
