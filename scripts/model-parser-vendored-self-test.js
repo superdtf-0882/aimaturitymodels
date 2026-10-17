@@ -89,5 +89,15 @@ const sha = (s) => crypto.createHash("sha256").update(String(s).replace(/\r\n/g,
   say([...pmById.keys()].join(",") === "D1", "an inherited dimension the matrix renders is read; a range heading's dimensions are not", [...pmById.keys()].join(","));
   say(!!r1 && r1.levels.E === "E's text. From D1's vantage, a view." && r1.transitions["A-B"].verification === "Shown so.", "the rendered dimension maps as a native one does");
 
+  // Portfolio Prioritization from v1.4.3 (OKF-TOGAF#205): its tables are prose, read through the
+  // family parser; the site's table reader keeps one caller, PDLC, until PDLC's layout release.
+  console.log("--- the loaders ---");
+  const models = fs.readFileSync(path.join(__dirname, "..", "lib", "models.js"), "utf8").replace(/\r\n/g, "\n");
+  const body = (name) => (models.match(new RegExp("export (?:async )?function " + name + "\\([^)]*\\)\\s*\\{([\\s\\S]*?)\\n\\}")) || [])[1] || "";
+  const prio = body("getPrioritizationFullModel");
+  say(/readModelDimensions\(md\)/.test(prio) && !/parseTableModel\(/.test(prio), "#205: Prioritization's whole model is read through the family parser");
+  say(/const PRIORITIZATION_PINNED_COMMIT = "893feeb8588584ae940aa802e31a3a322199343c";/.test(fs.readFileSync(path.join(__dirname, "..", "lib", "pins.js"), "utf8")), "#205: Prioritization is pinned at v1.4.3 (893feeb)");
+  say((models.match(/parseTableModel\(/g) || []).length === 2 && /parseTableModel\(pdlcMd\)/.test(models), "the table reader keeps one caller, PDLC's", String((models.match(/parseTableModel\(/g) || []).length - 1) + " caller(s)");
+
   process.exitCode = bad;
 })();
