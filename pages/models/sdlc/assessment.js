@@ -1,9 +1,11 @@
-import { getSdlcAssessmentDimensions } from "../../../lib/models";
+import { getSdlcAssessmentDimensions, getSdlcShortForm, withShortFormFlags } from "../../../lib/models";
 import Assessment from "../../../components/Assessment";
 
 export async function getStaticProps() {
-  const { dimensions, sourceCommit, thresholdStates } = await getSdlcAssessmentDimensions();
-  return { props: { dimensions, sourceCommit, thresholdStates } };
+  // OKF-TOGAF#202: the short form's open questions, shown on every model's
+  // assessment page. SDLC's has none at its pin.
+  const [{ dimensions, sourceCommit, thresholdStates }, shortForm] = await Promise.all([getSdlcAssessmentDimensions(), getSdlcShortForm()]);
+  return { props: { dimensions: withShortFormFlags(dimensions, shortForm), sourceCommit, thresholdStates } };
 }
 
 export default function SdlcAssessment({ dimensions, sourceCommit, thresholdStates }) {

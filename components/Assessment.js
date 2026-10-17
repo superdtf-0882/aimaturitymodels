@@ -17,13 +17,27 @@ import useAddressState from "./useAddressState";
 const { LEVELS, buildAssessmentMd } = require("../lib/assessment-md");
 const { isGraded } = require("../lib/score-vector");
 const { assessment } = require("../lib/address-codecs");
+const { parseMarks } = require("../lib/inline-marks");
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 
-// Shared by the self-assessment tools of the three models that have one --
-// SDLC, PDLC and Prioritization. The family is four models as of 2026-09-12;
-// EA's assessment is tracked, open work, so this count is of this surface
-// and not of the family. Originally built for
+// A model's **bold** and *italic* marks as <strong> and <em>, as the
+// whole-model view renders them (OKF-TOGAF#203). React elements only -- model
+// text never becomes HTML. OKF-TOGAF#202 brought it here: the Product
+// Marketing model's D10 levels carry marks, as EA's do, and this page printed
+// them as asterisks. The downloaded file keeps them, as Markdown.
+function MarksNodes({ nodes }) {
+  return nodes.map((n, i) => typeof n === "string" ? n
+    : n.strong ? <strong key={i}><MarksNodes nodes={n.strong} /></strong>
+    : <em key={i}><MarksNodes nodes={n.em} /></em>);
+}
+function Marks({ text }) {
+  return <MarksNodes nodes={parseMarks(text || "")} />;
+}
+
+// Shared by the self-assessment tools of all five models -- SDLC, PDLC,
+// Prioritization, EA (OKF-TOGAF#145) and Product Marketing (OKF-TOGAF#202).
+// Originally built for
 // SDLC alone (pages/models/sdlc/assessment.js), extracted here for issue #25
 // once PDLC and Prioritization needed the identical scoring/chart/download/
 // Executive-Readout interaction with different data and a different
@@ -200,7 +214,12 @@ export default function Assessment({
                 >
                   <span className="assess-pill-label">
                     <span className="assess-pill-id">{d.id}</span>
-                    <span className="assess-pill-name">{d.name}</span>
+                    <span className="assess-pill-name">
+                      {d.name}
+                      {d.flag && (
+                        <span className="dim-flag" title="Open question — select this dimension to read it" aria-label="Open question">&#9873;</span>
+                      )}
+                    </span>
                   </span>
                   {grade && <span className="assess-pill-grade">{grade}</span>}
                 </button>
@@ -214,7 +233,12 @@ export default function Assessment({
               {scores[dim.id] && <span className="assess-dim-grade">{scores[dim.id]}</span>}
             </div>
             <h2 className="assess-dim-name">{dim.name}</h2>
-            <p className="assess-dim-desc">{dim.desc}</p>
+            <p className="assess-dim-desc"><Marks text={dim.desc} /></p>
+            {/* OKF-TOGAF#202: the model's open question on this dimension, as
+                the whole-model view shows it. Shown, never scored. */}
+            {dim.flag && (
+              <p className="wmv-detail-flag">&#9873; <strong>Open question.</strong> <Marks text={dim.flag} /></p>
+            )}
 
             <div className="assess-levels">
               {LEVELS.map((l) => (
@@ -265,7 +289,7 @@ export default function Assessment({
             ) : scores[dim.id] ? (
               <div className="assess-level-def">
                 <div className="assess-level-def-label">Level {scores[dim.id]} — definition</div>
-                <p>{dim.levels[scores[dim.id]]}</p>
+                <p><Marks text={dim.levels[scores[dim.id]]} /></p>
               </div>
             ) : (
               <div style={{ height: 20 }} />

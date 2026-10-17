@@ -1,9 +1,11 @@
-import { getPdlcFullModel } from "../../../lib/models";
+import { getPdlcFullModel, getPdlcShortForm, withShortFormFlags } from "../../../lib/models";
 import Assessment from "../../../components/Assessment";
 
 export async function getStaticProps() {
-  const { dimensions, sourceCommit } = await getPdlcFullModel();
-  return { props: { dimensions, sourceCommit } };
+  // OKF-TOGAF#202: the short form's open questions, shown on every model's
+  // assessment page. PDLC's has none at its pin.
+  const [{ dimensions, sourceCommit }, shortForm] = await Promise.all([getPdlcFullModel(), getPdlcShortForm()]);
+  return { props: { dimensions: withShortFormFlags(dimensions, shortForm), sourceCommit } };
 }
 
 export default function PdlcAssessment({ dimensions, sourceCommit }) {

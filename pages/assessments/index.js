@@ -58,23 +58,26 @@ export default function AssessmentsIndex() {
           </div>
           <span className="pill live">Live</span>
         </Link>
-        <div className="model-row">
+        {/* OKF-TOGAF#202: live with its instrument, SPEC-D6-SCORE-PRODMAR,
+            ratified 2026-10-16. Pre-AI and Exempt are EA's text. */}
+        <Link href="/models/productmarketing/assessment" className="model-row">
           <div>
             <div className="model-name">AI-Native Product Marketing Maturity Assessment</div>
             <div className="model-desc">
-              The model is published; its scoring instrument is not yet written.
+              Eleven dimensions, scored A through E or marked Pre-AI or
+              Exempt, with an AI-generated Executive Readout.
             </div>
           </div>
-          <span className="pill coming">Coming</span>
-        </div>
+          <span className="pill live">Live</span>
+        </Link>
       </div>
       <p className="footnote">
-        All four live assessments share the same instrument shape &mdash; self-score
+        All five live assessments share the same instrument shape &mdash; self-score
         each dimension, download a summary, or generate an AI-assisted
-        Executive Readout. Formal instrument-scored assessment (the
-        SPEC-D6-SCORE equivalent) exists for SDLC, PDLC and Prioritization
-        &mdash; SPEC-D6-SCORE for SDLC, and SPEC-D6-SCORE-PDLC and
-        SPEC-D6-SCORE-PRIORITIZATION for the other two. Their criteria text
+        Executive Readout. Formal instrument-scored assessment exists for all
+        five &mdash; SPEC-D6-SCORE for SDLC, SPEC-D6-SCORE-PDLC,
+        SPEC-D6-SCORE-PRIORITIZATION, SPEC-D6-SCORE-EA, and
+        SPEC-D6-SCORE-PRODMAR for Product Marketing. Their criteria text
         lives in a private governance corpus rather than in these public
         repositories, so the formal instruments themselves aren&rsquo;t
         published here.

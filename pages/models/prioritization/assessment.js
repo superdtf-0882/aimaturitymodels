@@ -1,9 +1,11 @@
-import { getPrioritizationFullModel } from "../../../lib/models";
+import { getPrioritizationFullModel, getPrioritizationShortForm, withShortFormFlags } from "../../../lib/models";
 import Assessment from "../../../components/Assessment";
 
 export async function getStaticProps() {
-  const { dimensions, sourceCommit } = await getPrioritizationFullModel();
-  return { props: { dimensions, sourceCommit } };
+  // OKF-TOGAF#202: the short form's open questions, shown on every model's
+  // assessment page. Prioritization's has none at its pin.
+  const [{ dimensions, sourceCommit }, shortForm] = await Promise.all([getPrioritizationFullModel(), getPrioritizationShortForm()]);
+  return { props: { dimensions: withShortFormFlags(dimensions, shortForm), sourceCommit } };
 }
 
 export default function PrioritizationAssessment({ dimensions, sourceCommit }) {

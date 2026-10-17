@@ -28,8 +28,8 @@ import { EA_EXECUTIVE_READOUT_PROMPT_V2 } from "../../lib/prompts/ea-executive-r
 // The Product Marketing readout (OKF-TOGAF#202), on "ProdMar readout v1.0: EA v2
 // with DTOG's nine passages replaced and 203-DT2's two changes, which CC applies
 // at landing with the self-test updated, nothing else -- David Facer 10/16/2026".
-// Registered here so the route knows the model; no page asks for it until the
-// model's assessment page exists, which is #202's own work.
+// Registered here first; pages/models/productmarketing/assessment.js asks for
+// it as of #202's page.
 import { PRODMAR_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/prodmar-executive-readout-v1";
 import crypto from "crypto";
 // OKF-TOGAF#161: the score reading moved to lib/score-vector.js.
