@@ -85,11 +85,13 @@ say(/returns findings to the stratum they bear on/.test(core), "the digest says 
 
 console.log("--- 6. instruments and inheritance, for five models (OKF-TOGAF#198) ---");
 // EA's instrument was ratified 2026-10-10 and its assessment is live; the digest
-// still said it had none. The Product Marketing model has none yet (#202).
+// still said it had none. The Product Marketing model had none until 2026-10-16
+// (OKF-TOGAF#202, SPEC-D6-SCORE-PRODMAR).
 say(/SPEC-D6-SCORE-EA/.test((core.match(/^G3\..*$/m) || [""])[0]), "G3 lists EA's instrument");
+say(/SPEC-D6-SCORE-PRODMAR/.test((core.match(/^G3\..*$/m) || [""])[0]), "G3 lists Product Marketing's instrument");
 const noInstr = (core.match(/\*\*The ([A-Za-z ]+) model has no scoring instrument yet\*\*/) || [])[1];
-say(noInstr === "Product Marketing", "the one model without an instrument is Product Marketing", noInstr || "none named");
-say(/Formal scoring instruments exist for four of the five models/.test(core), "four of the five models have instruments");
+say(!noInstr, "no model is named as lacking an instrument", noInstr || "none named");
+say(/Formal scoring instruments exist for all five models/.test(core), "all five models have instruments");
 const m5 = (core.match(/^M5\..*$/m) || [""])[0];
 say(/inherited by SDLC, PDLC and Product Marketing/.test(m5) && /Product Marketing's D10/.test(m5), "M5: D1-D3's three inheritors, and Product Marketing's D10");
 console.log(bad ? "DIGEST CONSISTENCY SELF-TEST FAIL" : "DIGEST CONSISTENCY SELF-TEST PASS");

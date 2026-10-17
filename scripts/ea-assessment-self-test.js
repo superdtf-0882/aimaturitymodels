@@ -81,7 +81,9 @@ console.log("--- /assessments, the EA row ---");
   const i = idx.indexOf("AI-Native EA Maturity Assessment");
   const row = i < 0 ? "" : idx.slice(idx.lastIndexOf("<", idx.lastIndexOf("model-row", i)), idx.indexOf("</span>", i) + 7);
   say(/href="\/models\/ea\/assessment"/.test(row) && /pill live">Live/.test(row), "the EA row links to the assessment and reads Live");
-  say(!/All three live assessments/.test(idx) && /All four live assessments/.test(idx), "the footnote counts four live assessments");
+  // [Four until OKF-TOGAF#202 made the Product Marketing assessment the
+  // fifth (scripts/prodmar-assessment-self-test.js).]
+  say(!/All three live assessments/.test(idx) && /All five live assessments/.test(idx), "the footnote counts five live assessments");
 }
 
 process.exitCode = bad;

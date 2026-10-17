@@ -31,7 +31,8 @@ try {
 if (C) {
   const { EVENTS, MODELS, FROMS, countKey, checkCount, fromOf, utcDay, daysBack, tally } = C;
   ok(EVENTS.join(",") === "assessment-started,taxonomy-intake-completed", "two events, and only these");
-  ok(MODELS.join(",") === "sdlc,pdlc,prioritization,ea", "the four models with an assessment");
+  // OKF-TOGAF#202: the fifth, under the readout route's key.
+  ok(MODELS.join(",") === "sdlc,pdlc,prioritization,ea,prodmar", "the five models with an assessment");
   ok(FROMS.join(",") === "direct,taxonomy", "a start comes directly or from the taxonomy");
   ok(utcDay(new Date("2026-10-15T23:30:00-06:00")) === "2026-10-16", "the day is UTC");
   ok(countKey("assessment-started", "sdlc", "taxonomy", "2026-10-15") === "count:v1:assessment-started:sdlc:taxonomy:2026-10-15", "one key per event, model, origin and day");

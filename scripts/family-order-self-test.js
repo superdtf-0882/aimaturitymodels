@@ -42,14 +42,15 @@ for (const [page, noun] of [["pages/models/index.js", "Maturity Model"], ["pages
 }
 
 // 2026-10-16, OKF-TOGAF#198: the fifth model is live on /models, linked to its
-// whole-model view; its assessment stays Coming until its instrument exists.
+// whole-model view; its assessment stayed Coming until its instrument existed.
+// OKF-TOGAF#202: the instrument was ratified 2026-10-16, and the assessment is live.
 {
   const m = read("pages/models/index.js");
   const row = (m.match(/<Link href="([^"]+)" className="model-row">\s*<div>\s*<div className="model-name">AI-Native Product Marketing Maturity Model<\/div>[\s\S]*?<span className="pill (\w+)">/) || []);
   say(row[1] === "/models/productmarketing/whole-model-view" && row[2] === "live", "/models: Product Marketing is Live and links to its whole-model view", JSON.stringify(row.slice(1)));
   const as = read("pages/assessments/index.js");
   const at = as.indexOf("AI-Native Product Marketing Maturity Assessment");
-  say(at > 0 && /pill coming/.test(as.slice(at, at + 600)), "/assessments: Product Marketing stays Coming (no instrument yet)");
+  say(at > 0 && /pill live/.test(as.slice(at, at + 600)) && !/pill coming/.test(as.slice(at, at + 600)), "/assessments: Product Marketing is Live");
 }
 
 // The SDLC assessment's description reads as the EA one does.
