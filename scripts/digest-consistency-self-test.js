@@ -61,8 +61,12 @@ console.log("--- 2. the SDLC matrix cites the shared layer's own version ---");
 }
 
 console.log("--- 3. the level names, family-wide, name all four models ---");
-say(/every model in this family \(SDLC, PDLC, Portfolio Prioritization, and Enterprise Architecture\)/.test(text["Portfolio Prioritization"]),
-  "Portfolio Prioritization's level-names line");
+// From Portfolio Prioritization's v1.4.2 (OKF-TOGAF#207, STD-MODEL-PARTS v1.1 M3 and section 3.7),
+// a model's names section is the names line and a pointer to the family file, with no list of
+// the family's models; the list below is checked only where a model still carries one.
+say(/^Names, descriptions and the general shape: family_maturity_levels\.md in github\.com\/superdtf-0882\/ai-native-sdlc-maturity-model at v\d+\.\d+\.\d+\.$/m.test(text["Portfolio Prioritization"])
+  && !/every model in this family \(/.test(text["Portfolio Prioritization"]),
+  "Portfolio Prioritization's names section points to the family file and lists no models");
 // Added the same day: PDLC carried the same line, missing EA, and the outside
 // reading did not name it; CC found it in the built full file. Every model
 // that lists the family in this line must list all four.
