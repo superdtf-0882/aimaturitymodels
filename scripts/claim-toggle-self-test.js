@@ -83,8 +83,9 @@ console.log("--- the page ---");
 console.log("--- SDLC's verification lines, from its named home ---");
 {
   const fn = fnBody(read("lib/models.js"), "getSdlcAssessmentDimensions");
-  say(/parseDimensionLevels\(sharedMd, \{ captureTransitions: true \}\)/.test(fn), "D1-D3's transitions are read from the shared layer");
-  say(/parseDimensionLevels\(fullMd, \{ inlineTransitions: true \}\)/.test(fn), "D4-D13's are read from the matrix, SDLC's named home, not the transition-states file");
+  // From SDLC v1.4.3 (OKF-TOGAF#205), both files through the vendored family parser, lib/sdlc-reader.js.
+  say(/readSdlcDimensions\(sharedMd, fullMd\)/.test(fn) && /fetchRawPinned\("shared_intelligence_layer\.md"\)/.test(fn), "D1-D3's transitions are read from the shared layer");
+  say(/fetchRawPinned\("ai_native_sdlc_maturity_model\.md"\)/.test(fn), "D4-D13's are read from the matrix, SDLC's named home, not the transition-states file");
   say(!/sdlc_transition_states_d4_d13\.md/.test(fn), "the assessment does not read the transition-states file");
 }
 

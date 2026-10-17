@@ -24,6 +24,12 @@
 // v1.0) at the pin, the matrix's names section the five names and a pointer to
 // it, and the pages reading the names from it (lib/familyLevels.js).
 //
+// v1.4.3, OKF-TOGAF#205, on "Build SDLC's layout release as 419-CC plans it, with
+// 420-CC's amendments -- David Facer 10/17/2026": the matrix and the layer in the family's
+// common form, read through the vendored family parser (lib/sdlc-reader.js), the
+// transition-states file retired, and PDLC's D1-D3 on their own pin at v1.4.0, the tag PDLC
+// cites (lib/pins.js). The cases below read the model as the pages now do.
+//
 // Usage: node scripts/sdlc-release-self-test.js   (network; exit 1 on a failing case)
 "use strict";
 
@@ -31,7 +37,8 @@ const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
 const { parseDimensionLevels, normalizeSharedDimension } = require("../lib/dimension-parser");
-const { SDLC_PINNED_COMMIT, SDLC_SHORT_FORM_PINNED_COMMIT } = require("../lib/pins");
+const { SDLC_PINNED_COMMIT, SDLC_SHORT_FORM_PINNED_COMMIT, PDLC_D1_D3_SOURCE_COMMIT } = require("../lib/pins");
+const { readSdlcDimensions } = require("../lib/sdlc-reader");
 const { parseFamilyLevels } = require("../lib/familyLevels");
 
 const RAW = "https://raw.githubusercontent.com/superdtf-0882/ai-native-sdlc-maturity-model/";
@@ -48,7 +55,9 @@ async function get(commit, file) {
 (async () => {
   console.log("--- the model at SDLC_PINNED_COMMIT " + SDLC_PINNED_COMMIT.slice(0, 7) + " ---");
   const shared = await get(SDLC_PINNED_COMMIT, "shared_intelligence_layer.md");
-  const dims = parseDimensionLevels(shared.text, { captureTransitions: true }).map((d) => normalizeSharedDimension(d));
+  const matrix = await get(SDLC_PINNED_COMMIT, "ai_native_sdlc_maturity_model.md");
+  const byId = readSdlcDimensions(shared.text, matrix.text);
+  const dims = ["D1", "D2", "D3"].map((id) => byId.get(id)).filter(Boolean);
   let v = 0;
   for (const d of dims) for (const t of Object.values(d.transitions || {})) if (t.verification) v++;
   say(dims.length === 3 && v === 12, "#143: all twelve D1-D3 transitions carry a verification", v + " of 12");
@@ -59,12 +68,11 @@ async function get(commit, file) {
     && shared.text.includes("rather than commissioning separate research or maintaining a feed of their own"),
     "#200: D1 and D3 at D require that no function keeps its own version");
 
-  const matrix = await get(SDLC_PINNED_COMMIT, "ai_native_sdlc_maturity_model.md");
-  const d11 = parseDimensionLevels(matrix.text, { captureTransitions: true }).find((d) => d.id === "D11");
+  const d11 = byId.get("D11");
   say(!!d11 && /attributable/.test(d11.desc) && !/Deferred/i.test(d11.desc) && !d11.desc.includes("*"),
     "#156: D11's definition is the rewrite, plain text, not deferred");
   say(/Version 1\.3\.0/.test(matrix.text), "#156: the matrix declares v1.3.0");
-  say(/^\*\*Version 1\.4\.2/m.test(matrix.text) && matrix.text.includes("(`STD-SHARED-INTELLIGENCE` v1.2)"), "#204: the matrix leads with v1.4.2 and cites the layer at v1.2");
+  say(/^\*\*Version 1\.4\.3/m.test(matrix.text) && matrix.text.includes("(`STD-SHARED-INTELLIGENCE` v1.2)"), "#205: the matrix leads with v1.4.3 and cites the layer at v1.2");
   say(!/STD-SHARED-INTELLIGENCE v1\.1 as of/.test(matrix.text) && matrix.text.includes("(STD-SHARED-INTELLIGENCE v1.2 as of 2026-10-16)"),
     "#200 (v1.4.1): the closing status line cites the layer at v1.2, not v1.1");
 
@@ -80,10 +88,23 @@ async function get(commit, file) {
     "#204: the matrix's names section is the names line and the pointer", JSON.stringify(names).slice(0, 80));
   say(!/### Maturity-level names/.test(matrix.text) && !/shared with the AI-Native PDLC Maturity Model/.test(matrix.text), "#204: no table of names and no list of models in the matrix");
 
+  // #205: the matrix is the one home of D4-D13's transitions; the file that held a second copy is gone.
+  // The pages read the transition's text; its title ("Instrument the hits and the silence") is
+  // read from the matrix's D11 section, as the page shows no titles.
+  const d11t = d11 ? Object.values(d11.transitions).map((x) => x.text + " " + x.verification).join(" ") : "";
+  const d11s = matrix.text.slice(matrix.text.indexOf("\n## D11."), matrix.text.indexOf("\n## D12."));
+  say(/declare the paths by which it can be crossed/.test(d11t) && /^\*\*Transition from D to E\*\* — Instrument the hits and the silence$/m.test(d11s),
+    "#156: D11's transitions are the rewrite, read from the matrix");
   const ts = await get(SDLC_PINNED_COMMIT, "sdlc_transition_states_d4_d13.md");
-  const tsD11 = ts.text.slice(ts.text.indexOf("# D11."), ts.text.indexOf("# D12."));
-  say(tsD11.length > 0 && !/Draft caution/.test(tsD11) && /declare the paths by which it can be crossed/.test(tsD11) && /Instrument the hits and the silence/.test(tsD11),
-    "#156: D11's transitions are the rewrite, no draft caution");
+  say(ts.status === 404, "#205: the transition-states file is retired at the pin", String(ts.status));
+  const rest = Array.from({ length: 10 }, (_, i) => byId.get("D" + (i + 4))).filter(Boolean);
+  const full = rest.filter((d) => Object.keys(d.transitions).length === 4 && Object.values(d.transitions).every((x) => x.text && x.verification) && d.sustainment);
+  say(rest.length === 10 && full.length === 10, "#205: D4-D13 each give four transitions, verified, and a sustainment", full.length + " of 10");
+  say(!/^\*\*Level [A-E]/m.test(matrix.text + shared.text) && (matrix.text.match(/^### [A-E] — /gm) || []).length === 50 && (shared.text.match(/^### [A-E] — /gm) || []).length === 15,
+    "#205: the matrix and the layer write their levels in the common form");
+  say(dims.every((d) => / From D\d's vantage/.test(d.levels.E || "")), "#205: each layer vantage still reads after its level E");
+  say(/^\*\*Basis:\*\* STD-SHARED-INTELLIGENCE v1\.2, github\.com\/superdtf-0882\/ai-native-sdlc-maturity-model\/shared_intelligence_layer\.md, in this repository; referenced\.$/m.test(matrix.text),
+    "#205: the matrix's D1-D3 section names the layer's home");
 
   const rule = await get(SDLC_PINNED_COMMIT, "guardrail_rule.md");
   say(rule.status === 200 && /frequently contacted mean there is a broken process/.test(rule.text),
@@ -94,8 +115,20 @@ async function get(commit, file) {
   let doc = null;
   try { doc = yaml.load(sf.text); } catch { /* reported below */ }
   const cells = doc ? doc.dimensions.D11.levels : {};
-  say(!!doc && !doc.dimensions.D11.flag && doc.source_matrix_version === "1.4.2" && /agent/i.test(cells.A || "") && /telemetry/.test(cells.E || ""),
-    "#156: D11's five cells re-compressed, its flag gone; the short form names v1.4.2", doc ? doc.source_matrix_version : "unparsed");
+  say(!!doc && !doc.dimensions.D11.flag && doc.source_matrix_version === "1.4.3" && /agent/i.test(cells.A || "") && /telemetry/.test(cells.E || ""),
+    "#156: D11's five cells re-compressed, its flag gone; the short form names v1.4.3", doc ? doc.source_matrix_version : "unparsed");
+
+  console.log("--- PDLC's D1-D3 at PDLC_D1_D3_SOURCE_COMMIT " + PDLC_D1_D3_SOURCE_COMMIT.slice(0, 7) + " ---");
+  const pl = await get(PDLC_D1_D3_SOURCE_COMMIT, "shared_intelligence_layer.md");
+  const pdims = parseDimensionLevels(pl.text, { captureTransitions: true }).map((d) => normalizeSharedDimension(d));
+  let pv = 0;
+  for (const d of pdims) for (const x of Object.values(d.transitions || {})) if (x.verification) pv++;
+  say(pdims.length === 3 && pv === 12 && /STD-SHARED-INTELLIGENCE · v1\.2 ·/.test(pl.text), "#205: PDLC's page reads the v1.2 layer at v1.4.0 with its own reader", pv + " of 12");
+  const psf = await get(PDLC_D1_D3_SOURCE_COMMIT, "short_form.yml");
+  let pdoc = null;
+  try { pdoc = yaml.load(psf.text); } catch { /* reported below */ }
+  say(!!pdoc && !!doc && ["D1", "D2", "D3"].every((id) => JSON.stringify(pdoc.dimensions[id]) === JSON.stringify(doc.dimensions[id])),
+    "#205: PDLC's D1-D3 cells at v1.4.0 are SDLC's at the pin");
 
   console.log("--- this site's own words ---");
   const core = fs.readFileSync(path.join(__dirname, "..", "lib", "aiDigestCore.js"), "utf8");
