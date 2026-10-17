@@ -649,6 +649,19 @@ html:has(.longview-sort) { scroll-behavior: smooth; }
   letter-spacing: 0.13em; color: var(--muted); margin-bottom: 8px;
 }
 .assess-level-def p { color: var(--ink-soft); font-size: 13.5px; line-height: 1.75; margin: 0; }
+/* OKF-TOGAF#206: the definition/claim toggle, for levels B to E. The view showing is marked,
+   a keyboard's focus shows, and the claim's lead-in is its own muted line. */
+.assess-level-def-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.assess-view-toggle { display: inline-flex; gap: 4px; }
+.assess-view-btn {
+  font: 11px var(--mono); text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 3px 8px; border-radius: 6px; border: 1px solid var(--line);
+  background: transparent; color: var(--muted); cursor: pointer;
+}
+.assess-view-btn:hover { color: var(--ink); border-color: var(--orange); }
+.assess-view-btn.is-selected { color: var(--ink); border-color: var(--orange); background: var(--orange-soft); }
+.assess-view-btn:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.assess-level-def p.assess-claim-lead { font-size: 12.5px; color: var(--muted); margin: 0 0 6px; }
 
 .assess-chart-wrap { max-width: 380px; margin: 0 0 8px; }
 .assess-chart-label {
