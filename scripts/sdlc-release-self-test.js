@@ -26,7 +26,7 @@
 //
 // v1.4.3, OKF-TOGAF#205, on "Build SDLC's layout release as 419-CC plans it, with
 // 420-CC's amendments -- David Facer 10/17/2026": the matrix and the layer in the family's
-// common form, read through the vendored family parser (lib/sdlc-reader.js), the
+// common form, read through the vendored family parser (lib/model-reader.js), the
 // transition-states file retired, and PDLC's D1-D3 on their own pin at v1.4.0, the tag PDLC
 // cites (lib/pins.js). The cases below read the model as the pages now do.
 //
@@ -38,7 +38,7 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { parseDimensionLevels, normalizeSharedDimension } = require("../lib/dimension-parser");
 const { SDLC_PINNED_COMMIT, SDLC_SHORT_FORM_PINNED_COMMIT, PDLC_D1_D3_SOURCE_COMMIT } = require("../lib/pins");
-const { readSdlcDimensions } = require("../lib/sdlc-reader");
+const { readSdlcDimensions } = require("../lib/model-reader");
 const { parseFamilyLevels } = require("../lib/familyLevels");
 
 const RAW = "https://raw.githubusercontent.com/superdtf-0882/ai-native-sdlc-maturity-model/";
