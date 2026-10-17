@@ -46,6 +46,18 @@ if (cv) {
   say(cv.claimFor(dim, "Pre-AI") === null && cv.claimFor(dim, "Exempt") === null && cv.claimFor(dim, undefined) === null, "Pre-AI, Exempt and no grade have no claim");
   say(cv.claimFor({ ...dim, transitions: { ...dim.transitions, "B-C": { text: "Move B to C." } } }, "C") === null, "a step with no verification line gives no claim, never a substitute");
   say(cv.claimFor({ id: "D1", levels: dim.levels }, "B") === null, "a dimension with no transitions gives no claim");
+
+  // The owner, 2026-10-17, on the live toggle: a new level, or a new dimension, opens on the
+  // definition. The claim shows only for the dimension and level it was opened on.
+  const has = typeof cv.claimKey === "function" && typeof cv.claimShown === "function";
+  say(has, "the rule says which dimension and level a claim was opened for");
+  if (has) {
+    const opened = cv.claimKey("D4", "C");
+    say(cv.claimShown(opened, "D4", "C") === true, "the claim opened on D4 at C shows on D4 at C");
+    say(cv.claimShown(opened, "D4", "B") === false, "moving D4 from C to B opens B on its definition");
+    say(cv.claimShown(opened, "D5", "C") === false, "moving to D5, even at the same level, opens on the definition");
+    say(cv.claimShown(null, "D4", "C") === false, "with no claim opened, every level shows its definition");
+  }
 }
 
 console.log("--- the page ---");
@@ -59,6 +71,8 @@ console.log("--- the page ---");
   say(buttons.length === 2 && buttons.every((b) => /is-selected/.test(b)), "the view that is showing is marked (design note 1)");
   say(/role="group"/.test(toggle) && /aria-label="[^"]+"/.test(toggle), "the pair is one labelled group");
   say(/levelClaim && \(/.test(a) || /\{levelClaim \?/.test(a), "the toggle is drawn only when the level has a claim: none for A, Pre-AI or Exempt");
+  say(/claimShown\(claimOpenFor, dim\.id, scores\[dim\.id\]\)/.test(a) && /setClaimOpenFor\(claimKey\(dim\.id, scores\[dim\.id\]\)\)/.test(a) && !/levelView/.test(a),
+    "the claim is opened for one dimension at one level, not for the whole page (the owner, 2026-10-17)");
   say(/className="assess-claim-lead">\{CLAIM_LEAD\}</.test(a), "the lead-in sits on its own line, in its own muted style (design note 2)");
   say(/<Marks text=\{levelClaim\} \/>/.test(a), "the claim is the model's line, its marks rendered as the definition's are");
   const css = read("styles/globals.css");
