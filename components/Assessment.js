@@ -20,7 +20,7 @@ const { assessment } = require("../lib/address-codecs");
 const { parseMarks } = require("../lib/inline-marks");
 // OKF-TOGAF#206: the claim for a graded level B to E -- the model's verification line
 // for the step into it, word for word -- and the lead-in that introduces it.
-const { CLAIM_LEAD, claimFor } = require("../lib/claim-view");
+const { CLAIM_LEAD, claimFor, claimKey, claimShown } = require("../lib/claim-view");
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 
@@ -100,16 +100,16 @@ export default function Assessment({
   const [generating, setGenerating] = useState(false);
   const [readoutMsgIndex, setReadoutMsgIndex] = useState(0);
   const [error, setError] = useState(null);
-  // OKF-TOGAF#206: which side of the level window is showing, the level's definition or
-  // its claim. One choice for the page, kept as the visitor moves between dimensions; it
-  // is a view, not an answer, so it is not written to the address or the file.
-  const [levelView, setLevelView] = useState("definition");
+  // OKF-TOGAF#206: the claim that is open, for one dimension at one level, or null. Any other
+  // level or dimension opens on its definition (the owner, 2026-10-17). It is a view, not an
+  // answer, so it is not written to the address or the file.
+  const [claimOpenFor, setClaimOpenFor] = useState(null);
 
   const dim = dimensions.find((d) => d.id === selectedDim);
   // OKF-TOGAF#206: the graded level's claim, or null for A, Pre-AI, Exempt and no grade,
   // which get no toggle.
   const levelClaim = claimFor(dim, scores[dim.id]);
-  const showClaim = !!levelClaim && levelView === "claim";
+  const showClaim = !!levelClaim && claimShown(claimOpenFor, dim.id, scores[dim.id]);
   // Exempt counts only with its reason: the models say an exemption without a
   // citable constraint is not Exempt.
   const gradedCount = dimensions.filter((d) => isGraded(scores[d.id], exemptReasons[d.id])).length;
@@ -306,8 +306,8 @@ export default function Assessment({
                         buttons, each saying whether it is pressed, so a keyboard and a screen
                         reader can switch; the one showing is marked. */}
                     <span className="assess-view-toggle" role="group" aria-label="Show this level's definition or its claim">
-                      <button type="button" className={`assess-view-btn${showClaim ? "" : " is-selected"}`} aria-pressed={!showClaim} onClick={() => setLevelView("definition")}>Definition</button>
-                      <button type="button" className={`assess-view-btn${showClaim ? " is-selected" : ""}`} aria-pressed={showClaim} onClick={() => setLevelView("claim")}>Claim</button>
+                      <button type="button" className={`assess-view-btn${showClaim ? "" : " is-selected"}`} aria-pressed={!showClaim} onClick={() => setClaimOpenFor(null)}>Definition</button>
+                      <button type="button" className={`assess-view-btn${showClaim ? " is-selected" : ""}`} aria-pressed={showClaim} onClick={() => setClaimOpenFor(claimKey(dim.id, scores[dim.id]))}>Claim</button>
                     </span>
                   </div>
                 ) : (
