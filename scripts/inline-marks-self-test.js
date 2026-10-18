@@ -59,7 +59,9 @@ const pins = fs.readFileSync(path.join(root, "lib/pins.js"), "utf8");
 const pin = (k) => (pins.match(new RegExp("const " + k + ' = "([0-9a-f]{40})"')) || [])[1];
 const show = (repo, ref, file) => { try { return execSync(`git show ${ref}:${file}`, { cwd: path.join(root, "..", repo), encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).replace(/\r\n/g, "\n"); } catch { return ""; } };
 for (const [label, repo, key, file, opts] of [
-  ["EA", "ai-native-ea-maturity-model", "EA_PINNED_COMMIT", "ai_native_ea_maturity_model.md", { inlineTransitions: true }],
+  // EA's options moved with its v1.1.4 layout release (OKF-TOGAF#205): its matrix
+  // is in the family's common form now, so it reads as Product Marketing does.
+  ["EA", "ai-native-ea-maturity-model", "EA_PINNED_COMMIT", "ai_native_ea_maturity_model.md", { captureTransitions: true, headingLevels: true }],
   ["Product Marketing", "ai-native-product-marketing-maturity-model", "PRODUCT_MARKETING_PINNED_COMMIT", "ai_native_product_marketing_maturity_model.md", { captureTransitions: true, headingLevels: true }],
 ]) {
   const md = show(repo, pin(key), file);
