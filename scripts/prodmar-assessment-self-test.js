@@ -65,7 +65,11 @@ console.log("--- the flags, on every model's assessment page ---");
   say(!!helper && /\.flag/.test(helper) && /null/.test(helper), "withShortFormFlags carries each dimension's flag, or null");
   const ea = fnBody(models, "getEaAssessmentDimensions");
   say(/withShortFormFlags\(/.test(ea), "EA's loader brings EA's three");
-  for (const [slug, short] of [["sdlc", "getSdlcShortForm"], ["pdlc", "getPdlcShortForm"], ["prioritization", "getPrioritizationShortForm"]]) {
+  // OKF-TOGAF#207: PDLC's page reads through its own assessment loader, for Pre-AI and Exempt,
+  // and the flags come with it, as EA's do.
+  const pdlc = fnBody(models, "getPdlcAssessmentDimensions");
+  say(/getPdlcShortForm\(\)/.test(pdlc) && /withShortFormFlags\(/.test(pdlc) && /getPdlcAssessmentDimensions\(\)/.test(read("pages/models/pdlc/assessment.js")), "PDLC's loader brings its short form's flags, none today");
+  for (const [slug, short] of [["sdlc", "getSdlcShortForm"], ["prioritization", "getPrioritizationShortForm"]]) {
     const p = read("pages/models/" + slug + "/assessment.js");
     say(new RegExp(short + "\\(\\)").test(p) && /withShortFormFlags\(/.test(p), slug + ": the page reads its short form's flags, none today");
   }
