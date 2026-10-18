@@ -90,7 +90,7 @@ const sha = (s) => crypto.createHash("sha256").update(String(s).replace(/\r\n/g,
   say(!!r1 && r1.levels.E === "E's text. From D1's vantage, a view." && r1.transitions["A-B"].verification === "Shown so.", "the rendered dimension maps as a native one does");
 
   // Portfolio Prioritization from v1.4.3 (OKF-TOGAF#205): its tables are prose, read through the
-  // family parser; the site's table reader keeps one caller, PDLC, until PDLC's layout release.
+  // family parser, as PDLC's are from its v1.2.5 below.
   console.log("--- the loaders ---");
   const models = fs.readFileSync(path.join(__dirname, "..", "lib", "models.js"), "utf8").replace(/\r\n/g, "\n");
   const body = (name) => (models.match(new RegExp("export (?:async )?function " + name + "\\([^)]*\\)\\s*\\{([\\s\\S]*?)\\n\\}")) || [])[1] || "";
