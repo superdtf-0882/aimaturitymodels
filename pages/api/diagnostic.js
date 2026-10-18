@@ -21,7 +21,11 @@ import { kvGet, kvSet, kvIncr, kvExpire } from "../../lib/kv";
 // Pre-AI line -- David Facer 10/7/2026", under #145. Both SDLC (V3) and EA (V2)
 // carry the length rule, on "Readout length: 900-word ceiling with section
 // budgets, as 111-DT2 proposes, tested on the preview -- David Facer 10/7/2026".
-import { PDLC_EXECUTIVE_READOUT_PROMPT_V2 } from "../../lib/prompts/pdlc-executive-readout-v2";
+// PDLC's readout v3 (OKF-TOGAF#207), on "Approve PDLC's readout prompt v3 as 448-CC drafts it, with outcome measurement out of the
+// often-Pre-AI group as 226-DT2 suggests, and build it as 448-CC section 3 lists -- David Facer
+// 10/17/2026": v2 with Pre-AI and Exempt, which PDLC's model
+// names from EA's text from its v1.2.4 (scripts/pdlc-readout-self-test.js).
+import { PDLC_EXECUTIVE_READOUT_PROMPT_V3 } from "../../lib/prompts/pdlc-executive-readout-v3";
 import { PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V3 } from "../../lib/prompts/prioritization-executive-readout-v3";
 import { EXECUTIVE_READOUT_PROMPT_V3 } from "../../lib/prompts/executive-readout-v3";
 import { EA_EXECUTIVE_READOUT_PROMPT_V2 } from "../../lib/prompts/ea-executive-readout-v2";
@@ -51,7 +55,7 @@ const READOUT_EFFORT = "medium";
 // prompt is never served for another.
 const MODEL_CONFIG = {
   sdlc: { dimensionCount: 13, prompt: EXECUTIVE_READOUT_PROMPT_V3, promptVersion: "sdlc-v3", thresholdStates: true },
-  pdlc: { dimensionCount: 12, prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V2, promptVersion: "pdlc-v2" },
+  pdlc: { dimensionCount: 12, prompt: PDLC_EXECUTIVE_READOUT_PROMPT_V3, promptVersion: "pdlc-v3", thresholdStates: true },
   prioritization: { dimensionCount: 3, prompt: PRIORITIZATION_EXECUTIVE_READOUT_PROMPT_V3, promptVersion: "prioritization-v3" },
   ea: { dimensionCount: 10, prompt: EA_EXECUTIVE_READOUT_PROMPT_V2, promptVersion: "ea-v2", thresholdStates: true },
   prodmar: { dimensionCount: 11, prompt: PRODMAR_EXECUTIVE_READOUT_PROMPT_V1, promptVersion: "prodmar-v1", thresholdStates: true },

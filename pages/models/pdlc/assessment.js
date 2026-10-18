@@ -1,18 +1,20 @@
-import { getPdlcFullModel, getPdlcShortForm, withShortFormFlags } from "../../../lib/models";
+import { getPdlcAssessmentDimensions } from "../../../lib/models";
 import Assessment from "../../../components/Assessment";
 
 export async function getStaticProps() {
   // OKF-TOGAF#202: the short form's open questions, shown on every model's
-  // assessment page. PDLC's has none at its pin.
-  const [{ dimensions, sourceCommit }, shortForm] = await Promise.all([getPdlcFullModel(), getPdlcShortForm()]);
-  return { props: { dimensions: withShortFormFlags(dimensions, shortForm), sourceCommit } };
+  // assessment page. PDLC's has none at its pin. OKF-TOGAF#207: Pre-AI and Exempt,
+  // read from EA's text at the tag PDLC's model names.
+  const { dimensions, sourceCommit, thresholdStates } = await getPdlcAssessmentDimensions();
+  return { props: { dimensions, sourceCommit, thresholdStates } };
 }
 
-export default function PdlcAssessment({ dimensions, sourceCommit }) {
+export default function PdlcAssessment({ dimensions, sourceCommit, thresholdStates }) {
   return (
     <Assessment
       dimensions={dimensions}
       sourceCommit={sourceCommit}
+      thresholdStates={thresholdStates}
       modelSlug="pdlc"
       modelName="AI-Native PDLC"
       modelTitle="AI-Native PDLC Maturity Assessment"
