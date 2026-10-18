@@ -15,19 +15,25 @@
 // -- David Facer 10/17/2026": the reader reads every dimension a file renders, inherited
 // ones included, and Product Marketing's copy of the parser at its pin is compared too.
 //
+// From 2026-10-18, on "Bring the site's parser copy level with the template, compared field by field
+// before its push, then close #205 as 456-CC reads it with 228-DT2's additions -- David Facer
+// 10/18/2026": the copy is the template's at c7259fb, which EA and PDLC carry at their pins, so their
+// copies are the ones compared. SDLC and Product Marketing carry the 56bbb79 copy until their next
+// releases; every field the site reads from all five is the same through either (457-CC).
+//
 // Usage: node scripts/model-parser-vendored-self-test.js [--offline]   (exit 1 on a failing case)
 "use strict";
 
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
-const { SDLC_PINNED_COMMIT, PRODUCT_MARKETING_PINNED_COMMIT } = require("../lib/pins");
+const { EA_PINNED_COMMIT, PDLC_PINNED_COMMIT } = require("../lib/pins");
 const { readSdlcDimensions, readModelDimensions } = require("../lib/model-reader");
 
-// The template's tools/model-parser.js at OKF-TOGAF 56bbb79, line endings as LF.
-const TEMPLATE_COMMIT = "56bbb79";
-const TEMPLATE_SHA256 = "8a107d7463b750f45b4842d22e370b8716e40a3faa2d95d0cb66b34b75e835a2";
-const RAW = "https://raw.githubusercontent.com/superdtf-0882/ai-native-sdlc-maturity-model/";
+// The template's tools/model-parser.js at OKF-TOGAF c7259fb, line endings as LF.
+const TEMPLATE_COMMIT = "c7259fb";
+const TEMPLATE_SHA256 = "01e4e7f4394ae2bf52b4bd5ca7f38de72243207472d5657c34fbcdccdccd8ca5";
+const RAW = "https://raw.githubusercontent.com/superdtf-0882/";
 
 let bad = 0;
 const say = (ok, name, shown) => {
@@ -41,12 +47,11 @@ const sha = (s) => crypto.createHash("sha256").update(String(s).replace(/\r\n/g,
   const mine = fs.readFileSync(path.join(__dirname, "..", "lib", "model-parser.js"), "utf8");
   say(sha(mine) === TEMPLATE_SHA256, "lib/model-parser.js is the template's at " + TEMPLATE_COMMIT, sha(mine).slice(0, 12));
   if (!process.argv.includes("--offline")) {
-    const res = await fetch(RAW + SDLC_PINNED_COMMIT + "/tools/model-parser.js");
-    const theirs = res.ok ? await res.text() : "";
-    say(res.ok && sha(theirs) === TEMPLATE_SHA256, "SDLC carries the same file at the pin, " + SDLC_PINNED_COMMIT.slice(0, 7), String(res.status));
-    const pm = await fetch("https://raw.githubusercontent.com/superdtf-0882/ai-native-product-marketing-maturity-model/" + PRODUCT_MARKETING_PINNED_COMMIT + "/tools/model-parser.js");
-    const pmText = pm.ok ? await pm.text() : "";
-    say(pm.ok && sha(pmText) === TEMPLATE_SHA256, "Product Marketing carries the same file at its pin, " + PRODUCT_MARKETING_PINNED_COMMIT.slice(0, 7), String(pm.status));
+    for (const [label, repo, pin] of [["EA", "ai-native-ea-maturity-model", EA_PINNED_COMMIT], ["PDLC", "ai-native-pdlc-maturity-model", PDLC_PINNED_COMMIT]]) {
+      const res = await fetch(RAW + repo + "/" + pin + "/tools/model-parser.js");
+      const theirs = res.ok ? await res.text() : "";
+      say(res.ok && sha(theirs) === TEMPLATE_SHA256, label + " carries the same file at its pin, " + pin.slice(0, 7), String(res.status));
+    }
   }
 
   console.log("--- the adapter ---");
