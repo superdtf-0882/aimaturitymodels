@@ -36,7 +36,6 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const { parseDimensionLevels, normalizeSharedDimension } = require("../lib/dimension-parser");
 const { SDLC_PINNED_COMMIT, SDLC_SHORT_FORM_PINNED_COMMIT, PDLC_D1_D3_SOURCE_COMMIT } = require("../lib/pins");
 const { readSdlcDimensions } = require("../lib/model-reader");
 const { parseFamilyLevels } = require("../lib/familyLevels");

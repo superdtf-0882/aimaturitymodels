@@ -54,20 +54,20 @@ say(!/dangerouslySetInnerHTML/.test(view), "no HTML injected");
 say(!/aria-label=\{`[^`]*\$\{dim\.name\}/.test(view), "screen-reader labels use the plain words, not the marks");
 
 console.log("--- the real models: no asterisk survives ---");
-const { parseDimensionLevels } = require("../lib/dimension-parser");
+const { readModelDimensions } = require("../lib/model-reader");
 const pins = fs.readFileSync(path.join(root, "lib/pins.js"), "utf8");
 const pin = (k) => (pins.match(new RegExp("const " + k + ' = "([0-9a-f]{40})"')) || [])[1];
 const show = (repo, ref, file) => { try { return execSync(`git show ${ref}:${file}`, { cwd: path.join(root, "..", repo), encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).replace(/\r\n/g, "\n"); } catch { return ""; } };
-for (const [label, repo, key, file, opts] of [
-  // EA's options moved with its v1.1.4 layout release (OKF-TOGAF#205): its matrix
-  // is in the family's common form now, so it reads as Product Marketing does.
-  ["EA", "ai-native-ea-maturity-model", "EA_PINNED_COMMIT", "ai_native_ea_maturity_model.md", { captureTransitions: true, headingLevels: true }],
-  ["Product Marketing", "ai-native-product-marketing-maturity-model", "PRODUCT_MARKETING_PINNED_COMMIT", "ai_native_product_marketing_maturity_model.md", { captureTransitions: true, headingLevels: true }],
+for (const [label, repo, key, file] of [
+  // Read as the pages read them, through the family parser (OKF-TOGAF#205): the site's old
+  // dimension reader was removed with PDLC's v1.2.5.
+  ["EA", "ai-native-ea-maturity-model", "EA_PINNED_COMMIT", "ai_native_ea_maturity_model.md"],
+  ["Product Marketing", "ai-native-product-marketing-maturity-model", "PRODUCT_MARKETING_PINNED_COMMIT", "ai_native_product_marketing_maturity_model.md"],
 ]) {
   const md = show(repo, pin(key), file);
   if (!md) { console.log("  skip  " + label + ": no local clone at the pin"); continue; }
   const texts = [];
-  for (const d of parseDimensionLevels(md, opts)) {
+  for (const d of readModelDimensions(md).values()) {
     texts.push(d.name, d.desc, d.sustainment, ...Object.values(d.levels));
     for (const t of Object.values(d.transitions)) texts.push(t.text, t.verification);
   }
