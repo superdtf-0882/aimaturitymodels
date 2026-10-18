@@ -106,7 +106,10 @@ const pdlcTag = gitIn("ai-native-pdlc-maturity-model", "describe --tags --abbrev
 say(!!pdlcPin && /^v1\.2\.([1-9]\d*)$/.test(pdlcTag), "the PDLC pin is v1.2.1 or a later v1.2 patch", (pdlcPin || "").slice(0, 7) + " / " + pdlcTag);
 for (const f of ["ai_native_pdlc_maturity_model.md", "deep_dives/d5.md", "deep_dives/d11.md"]) {
   const s = gitIn("ai-native-pdlc-maturity-model", `show ${pdlcPin}:${f}`);
-  say(!!s && !OLD.test(s) && s.includes(NEW_MODEL), "PDLC " + f + " names the new model");
+  // From PDLC's v1.2.4 (OKF-TOGAF#207, STD-MODEL-PARTS v1.1 section 3.7) the matrix cites the model
+  // by its standard ID, STD-PRIORITIZATION-MM, rather than describing it; never by the old name.
+  const named = s.includes(NEW_MODEL) || (f === "ai_native_pdlc_maturity_model.md" && /STD-PRIORITIZATION-MM/.test(s));
+  say(!!s && !OLD.test(s) && named, "PDLC " + f + " names the new model" + (f === "ai_native_pdlc_maturity_model.md" ? ", or cites it by standard ID" : ""));
 }
 const eaReadme = gitIn("ai-native-ea-maturity-model", "show v1.1.2:README.md");
 say(!!eaReadme && !OLD.test(eaReadme) && eaReadme.includes(NEW_MODEL), "EA README at v1.1.2 names the new model");

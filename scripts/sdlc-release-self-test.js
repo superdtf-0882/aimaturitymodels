@@ -120,15 +120,15 @@ async function get(commit, file) {
 
   console.log("--- PDLC's D1-D3 at PDLC_D1_D3_SOURCE_COMMIT " + PDLC_D1_D3_SOURCE_COMMIT.slice(0, 7) + " ---");
   const pl = await get(PDLC_D1_D3_SOURCE_COMMIT, "shared_intelligence_layer.md");
-  const pdims = parseDimensionLevels(pl.text, { captureTransitions: true }).map((d) => normalizeSharedDimension(d));
+  const pdims = [...readSdlcDimensions(pl.text, "").values()];
   let pv = 0;
   for (const d of pdims) for (const x of Object.values(d.transitions || {})) if (x.verification) pv++;
-  say(pdims.length === 3 && pv === 12 && /STD-SHARED-INTELLIGENCE · v1\.2 ·/.test(pl.text), "#205: PDLC's page reads the v1.2 layer at v1.4.0 with its own reader", pv + " of 12");
+  say(pdims.length === 3 && pv === 12 && /STD-SHARED-INTELLIGENCE · v1\.2 ·/.test(pl.text), "#205: PDLC's page reads the v1.2 layer at its D1-D3 pin through the family parser", pv + " of 12");
   const psf = await get(PDLC_D1_D3_SOURCE_COMMIT, "short_form.yml");
   let pdoc = null;
   try { pdoc = yaml.load(psf.text); } catch { /* reported below */ }
   say(!!pdoc && !!doc && ["D1", "D2", "D3"].every((id) => JSON.stringify(pdoc.dimensions[id]) === JSON.stringify(doc.dimensions[id])),
-    "#205: PDLC's D1-D3 cells at v1.4.0 are SDLC's at the pin");
+    "#205: PDLC's D1-D3 cells at their pin are SDLC's at the pin");
 
   console.log("--- this site's own words ---");
   const core = fs.readFileSync(path.join(__dirname, "..", "lib", "aiDigestCore.js"), "utf8");
