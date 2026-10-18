@@ -97,7 +97,13 @@ const sha = (s) => crypto.createHash("sha256").update(String(s).replace(/\r\n/g,
   const prio = body("getPrioritizationFullModel");
   say(/readModelDimensions\(md\)/.test(prio) && !/parseTableModel\(/.test(prio), "#205: Prioritization's whole model is read through the family parser");
   say(/const PRIORITIZATION_PINNED_COMMIT = "893feeb8588584ae940aa802e31a3a322199343c";/.test(fs.readFileSync(path.join(__dirname, "..", "lib", "pins.js"), "utf8")), "#205: Prioritization is pinned at v1.4.3 (893feeb)");
-  say((models.match(/parseTableModel\(/g) || []).length === 2 && /parseTableModel\(pdlcMd\)/.test(models), "the table reader keeps one caller, PDLC's", String((models.match(/parseTableModel\(/g) || []).length - 1) + " caller(s)");
+  // PDLC from v1.2.5 (OKF-TOGAF#205): the last model read through the family parser, so no page
+  // calls the site's table reader or its old dimension reader.
+  const pdlc = body("getPdlcFullModel");
+  say(/readModelDimensions\(sharedMd, pdlcMd\)/.test(pdlc), "#205: PDLC's whole model is read through the family parser, D1-D3 from the layer");
+  say(/const PDLC_PINNED_COMMIT = "21a6d877538133ee530204b4eaab746fd2917ec7";/.test(fs.readFileSync(path.join(__dirname, "..", "lib", "pins.js"), "utf8")), "#205: PDLC is pinned at v1.2.5 (21a6d87)");
+  const oldCalls = (models.match(/(?<!function )\b(parseTableModel|parseDimensionLevels|normalizeSharedDimension)\(\w/g) || []);
+  say(oldCalls.length === 0, "no page reads through the table reader or the old dimension reader", oldCalls.join(", ") || "none");
 
   process.exitCode = bad;
 })();
