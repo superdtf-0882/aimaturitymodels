@@ -31,7 +31,7 @@ try {
 if (C) {
   const { EVENTS, MODELS, FROMS, countKey, checkCount, fromOf, utcDay, daysBack, tally, PER_MODEL } = C;
   // OKF-TOGAF#212: the ask at the end of every readout, taken by its email link.
-  ok(EVENTS.join(",") === "assessment-started,taxonomy-intake-completed,ask-taken", "three events, and only these: a start, an intake, the ask taken");
+  ok(EVENTS.join(",") === "assessment-started,taxonomy-intake-completed,ask-taken,taxonomy-row-followed", "four events, and only these: a start, an intake (no longer sent), the ask taken, a taxonomy row followed");
   ok(Array.isArray(PER_MODEL) && PER_MODEL.join(",") === "assessment-started,ask-taken", "a start and the ask are counted per model");
   // OKF-TOGAF#202: the fifth, under the readout route's key.
   ok(MODELS.join(",") === "sdlc,pdlc,prioritization,ea,prodmar", "the five models with an assessment");
@@ -43,6 +43,11 @@ if (C) {
   ok(good.ok && good.model === "pdlc" && good.from === "taxonomy", "a start with a known model is counted");
   ok(checkCount({ event: "taxonomy-intake-completed" }).ok && checkCount({ event: "taxonomy-intake-completed" }).model === "-", "an intake is counted without a model");
   ok(!checkCount({ event: "assessment-started" }).ok, "a start without a model is refused");
+  // OKF-TOGAF#189: a taxonomy row followed is counted per row, the row in the model's slot.
+  const rowFollowed = checkCount({ event: "taxonomy-row-followed", row: "user" });
+  ok(rowFollowed.ok && rowFollowed.model === "user", "a taxonomy row followed is counted, by row");
+  ok(!checkCount({ event: "taxonomy-row-followed" }).ok && !checkCount({ event: "taxonomy-row-followed", row: "nope" }).ok, "a row followed without a known row is refused");
+  ok(!checkCount({ event: "taxonomy-row-followed", row: "user", visitor: "x" }).ok, "nothing about the visitor rides with a row followed");
   const askTaken = checkCount({ event: "ask-taken", model: "prodmar" });
   ok(askTaken.ok && askTaken.model === "prodmar", "the ask taken on a known model is counted");
   ok(!checkCount({ event: "ask-taken" }).ok, "the ask taken without a model is refused");
@@ -62,6 +67,7 @@ const api = read("pages/api/count.js");
 ok(/checkCount\(/.test(api) && /kvIncr\(/.test(api), "the count route checks a count, then increments its key");
 ok(/req\.method === "GET"/.test(api) && /kvMGet\(/.test(api), "the count route also reads totals back");
 ok(/PER_MODEL\.includes\(event\)/.test(api), "the totals read back per model for each per-model event, the ask among them");
+ok(/ROW_EVENTS\.includes\(event\)/.test(api), "the totals read back per row for a taxonomy row followed");
 ok(!/headers\[?["']?x-forwarded-for|req\.socket|remoteAddress|set-cookie|Set-Cookie/i.test(api), "the count route reads no address and sets no cookie");
 
 const kv = read("lib/kv.js");

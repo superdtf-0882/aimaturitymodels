@@ -65,6 +65,28 @@ if (T) {
   try { fromOf = new Function(counts.replace(/^export\s+/gm, "") + "\nreturn fromOf;")(); } catch (e) { fromOf = null; }
   ok(fromOf && MODELS.every((m) => fromOf(assessmentHref(m.slug).slice(assessmentHref(m.slug).indexOf("?"))) === "taxonomy"), "the counters read those links as from the taxonomy");
 
+
+  // THE TABLE (OKF-TOGAF#189, rebuilt 2026-10-19 on the owner's line "Build the
+  // taxonomy page as DTOG-taxonomy-table drafts it with 252-DT2's link fixes,
+  // under #189 -- David Facer 10/19/2026"): four rows, each with the next
+  // question to ask, two examples, and the dimensions that measure the answer.
+  const R = T.ROWS || [];
+  ok(R.map((r) => r.key).join(",") === "built-with,fixed-logic,user,ai-chooses", "four rows, one per family, in order");
+  ok(R.map((r) => r.name).join("|") === "AI helped build conventional software|A fixed workflow uses AI outputs|A person directs the interaction|AI chooses successive actions", "the rows carry the owner's names");
+  ok((R[0] || {}).question === "How have we verified the resulting software — and can we say who authored each AI-written change and who reviewed it?", "row 1's question, with the attribution join");
+  ok((R[1] || {}).question === "What happens when an output is wrong, uncertain, or unexpected?", "row 2's question");
+  ok((R[2] || {}).question === "Can that person understand and meaningfully check the AI's contribution before anything is committed on it?", "row 3's question, with the commitment join");
+  ok((R[3] || {}).question === "How do we evaluate the sequence, constrain what it may do, and recover from mistakes?", "row 4's question");
+  ok(R.map((r) => (r.examples || []).join("+")).join(",") === "W-14+W-03,W-05+W-21,W-15+W-04,W-17+W-27", "two examples per row, as drafted");
+  ok(R.every((r) => (r.examples || []).every((id) => (EXAMPLES.find((e) => e.id === id) || {}).family === r.key)), "each row's examples belong to its family");
+  const dimsOf = (r) => (r.dims || []).map((d) => d.model + ":" + d.dim).join("+");
+  ok(R.map(dimsOf).join(",") === "sdlc:d7+sdlc:d8+sdlc:d11,sdlc:d12,sdlc:d12+sdlc:d8,sdlc:d11+sdlc:d12", "the dimensions that measure each answer, with the two link fixes");
+  ok(/D12 stays classic/.test((R[0] || {}).note || ""), "row 1 says D12 stays classic");
+  ok(/where the contribution is code/.test(((R[2] || {}).dims || [])[1] ? R[2].dims[1].when || "" : ""), "row 3's D8 applies where the contribution is code");
+  ok(/steering, or just reading/i.test((R[2] || {}).note || ""), "row 3 carries the first hard-case test");
+  ok(typeof T.dimensionHref === "function" && T.dimensionHref("sdlc", "d7") === "/models/sdlc/assessment/?from=taxonomy#dim=d7", "each cell links to that assessment at that dimension, marked from the taxonomy");
+  ok(T.SORTING === "Once the system is running, what decides the next piece of domain work — nothing by AI, fixed logic, a person, or the AI itself?", "the sorting question, as the way to find your row");
+
   // When the intake is complete: a named system and an answer; none of these
   // needs its sentence; composite needs at least two parts, each classified.
   const base = { name: "Claims triage", purpose: "", steps: [], facts: {}, answer: "fixed-logic", reason: "", parts: [] };
@@ -111,11 +133,14 @@ if (T) {
 // The page.
 ok(/export default function/.test(page), "pages/taxonomy.js exists and renders");
 ok(/not (yet )?(been )?checked/i.test(page), "the page says the examples' families are not yet checked by anyone else");
-ok(/"taxonomy-intake-completed"/.test(page) && /\/api\/count\//.test(page), "a completed intake is counted, at the count route's own address");
-ok(/useRef\(/.test(page) && /counted\.current/.test(page), "it is counted once per visit");
+ok(/ROWS\.map\(/.test(page) && page.indexOf("ROWS.map(") < page.indexOf("EXAMPLES"), "the table comes first, before the examples");
+ok(/How you would answer it/.test(page) && /decideFor\(/.test(page), "under each row, how you would answer it: the decision and its evidence");
+ok(/When a case is hard/.test(page) && /TESTS\.map\(/.test(page), "the hard-case tests sit under a disclosure below the table");
+ok(!/Name your system/.test(page) && !/intakeComplete\(/.test(page) && !/"taxonomy-intake-completed"/.test(page), "the card intake is gone, and its count with it");
+ok(/dimensionHref\(/.test(page) && /\/api\/count\//.test(page), "each cell links to its dimension, and following it is counted at the count route");
+ok(/event: "taxonomy-row-followed", row: /.test(page) && /keepalive: true/.test(page), "the count carries the event and the row, and nothing else");
 ok(!/localStorage|sessionStorage|document\.cookie/.test(page), "the page keeps nothing in the browser");
-ok(/JSON\.stringify\(\{ event: "taxonomy-intake-completed" \}\)/.test(page), "the count carries the event and nothing else");
-ok(/assessmentHref\(/.test(page), "the page links to the assessments through the marked link");
+ok(/SORTING/.test(page) && /one row per part/.test(page) && /finding, not a mistake/.test(page), "under the table: the sorting question, composite, and none of these");
 ok(/href="\/taxonomy"|href="\/taxonomy\/"/.test(read("components/Layout.js")), "the site's menu links to the taxonomy");
 
 // Nothing private on the public page or in its data.
