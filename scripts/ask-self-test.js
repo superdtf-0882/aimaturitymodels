@@ -9,6 +9,11 @@
 // the click per model and keeps nothing about the person.
 //
 // The component and pages are ES modules Next compiles, so they are read as text.
+// REOPENED 2026-10-19 on the owner's test of the live ask: a web page cannot
+// attach a file, so the email carries the link to the visitor's readout and
+// claims no attachment, and readouts are kept four days -- the owner, in session:
+// "Just include the link", "let's keep the links for four days", "re-open #212".
+//
 // Usage: node scripts/ask-self-test.js   (exit 1 on a failing case)
 "use strict";
 const fs = require("fs");
@@ -25,7 +30,13 @@ const ASK_PLAIN = "Send me your assessment summary and I'll read it with you \u2
 check(ro.includes(ASK) || ro.includes(ASK_PLAIN), "the ask, in the owner's words");
 check(/mailto:david\.facer@davidfacer\.com/.test(ro), "taken by an email link to the owner's davidfacer.com address");
 check(/subject=/.test(ro) && /body=/.test(ro), "the email names the assessment and carries a short body");
-check(/attach/i.test(ro), "the body asks the visitor to attach their summary");
+const bodyLine = (ro.match(/const body = [^\n]*/) || [""])[0];
+check(bodyLine !== "" && !/attach/i.test(bodyLine), "the email claims no attachment: a web page cannot attach a file");
+check(/readoutUrl/.test(bodyLine) && /executivereadout/.test(ro) && /hash/.test(ro.slice(ro.indexOf("function askHref"), ro.indexOf("function askHref") + 900)), "the email carries the link to the visitor's own readout");
+check(/kept for four days/.test(ro) && !/24 hours/.test(ro), "the readout page says readouts are kept for four days");
+const diag = read("pages/api/diagnostic.js");
+check(/READOUT_KEPT_SECONDS = 4 \* 86400/.test(diag) && /kvSet\(cacheKey, readout, READOUT_KEPT_SECONDS\)/.test(diag), "the readout service keeps each readout four days");
+check(/kvExpire\(dayKey, 86400\)/.test(diag), "the daily limit still resets each day");
 check(/event: "ask-taken"/.test(ro) && /keepalive: true/.test(ro), "the click counts the ask taken, without waiting on it");
 check(/modelSlug/.test(ro), "the count names the model");
 check(/href="https:\/\/davidfacer\.com"[^>]*>\s*David Facer/.test(ro), "an author line names the owner and links to davidfacer.com");
