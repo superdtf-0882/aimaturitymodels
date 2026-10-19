@@ -3,6 +3,17 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import Layout from "./Layout";
 
+// OKF-TOGAF#212: every readout ends with one ask, in the owner's words, taken by
+// an email link to his davidfacer.com address. The visitor writes and sends the
+// email from their own mail program and attaches their summary; the site counts
+// the click per model and keeps nothing about the person.
+const ASK = "Send me your assessment summary and I'll read it with you — a short call, no charge.";
+function askHref(assessmentLabel) {
+  const subject = "Read my " + assessmentLabel + " with me";
+  const body = "Hello David,\n\nI've attached the assessment summary I downloaded from aimaturitymodels.com. Could we read it together?\n\n";
+  return "mailto:david.facer@davidfacer.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+}
+
 // Shared by the Executive Readout pages of the three models that have them
 // -- SDLC, PDLC and Prioritization. The family is four models as of
 // 2026-09-12; EA has no readout yet. Originally built
@@ -20,6 +31,7 @@ export default function ExecutiveReadout({
   modelTitle, // e.g. "AI-Native PDLC Maturity Model" -- used in the download footer
   repoUrl,
   downloadFilename, // e.g. "pdlc-executive-readout.md"
+  modelSlug, // the counter's key, as the model's assessment page names it
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -62,6 +74,17 @@ export default function ExecutiveReadout({
     a.click();
   }
 
+  function countAsk() {
+    try {
+      fetch("/api/count", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event: "ask-taken", model: modelSlug }),
+        keepalive: true,
+      }).catch(() => {});
+    } catch (e) { /* counting never stands between the visitor and the email */ }
+  }
+
   async function handleCopyUrl() {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -88,6 +111,15 @@ export default function ExecutiveReadout({
         <Link href={assessmentHref} className="readout-rerun">
           Run another assessment →
         </Link>
+      </div>
+      <div className="readout-ask">
+        <p>
+          {ASK}{" "}
+          <a href={askHref(assessmentLabel)} onClick={countAsk}>Email David</a>
+        </p>
+        <p className="readout-author">
+          — <a href="https://davidfacer.com">David Facer</a>
+        </p>
       </div>
       <p className="footnote" style={{ textAlign: "center", marginTop: 14 }}>
         <a href={repoUrl} target="_blank" rel="noopener noreferrer">

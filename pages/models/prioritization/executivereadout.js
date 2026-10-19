@@ -18,6 +18,7 @@ export default function PrioritizationExecutiveReadout({ readout, hash }) {
       modelTitle="AI-Native Portfolio Prioritization Maturity Model"
       repoUrl="https://github.com/superdtf-0882/ai-native-product-prioritization-maturity-model"
       downloadFilename="prioritization-executive-readout.md"
+      modelSlug="prioritization"
     />
   );
 }

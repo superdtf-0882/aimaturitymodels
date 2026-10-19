@@ -21,6 +21,7 @@ export default function SdlcExecutiveReadout({ readout, hash }) {
       modelTitle="AI-Native SDLC Maturity Model"
       repoUrl="https://github.com/superdtf-0882/ai-native-sdlc-maturity-model"
       downloadFilename="sdlc-executive-readout.md"
+      modelSlug="sdlc"
     />
   );
 }

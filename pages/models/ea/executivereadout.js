@@ -19,6 +19,7 @@ export default function EaExecutiveReadout({ readout, hash }) {
       modelTitle="AI-Native EA Maturity Model"
       repoUrl="https://github.com/superdtf-0882/ai-native-ea-maturity-model"
       downloadFilename="ea-executive-readout.md"
+      modelSlug="ea"
     />
   );
 }

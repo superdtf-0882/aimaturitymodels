@@ -19,6 +19,7 @@ export default function ProductMarketingExecutiveReadout({ readout, hash }) {
       modelTitle="AI-Native Product Marketing Maturity Model"
       repoUrl="https://github.com/superdtf-0882/ai-native-product-marketing-maturity-model"
       downloadFilename="productmarketing-executive-readout.md"
+      modelSlug="prodmar"
     />
   );
 }

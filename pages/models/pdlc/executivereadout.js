@@ -18,6 +18,7 @@ export default function PdlcExecutiveReadout({ readout, hash }) {
       modelTitle="AI-Native PDLC Maturity Model"
       repoUrl="https://github.com/superdtf-0882/ai-native-pdlc-maturity-model"
       downloadFilename="pdlc-executive-readout.md"
+      modelSlug="pdlc"
     />
   );
 }

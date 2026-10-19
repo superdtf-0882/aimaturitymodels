@@ -7,7 +7,7 @@
 // HOW IT CAN BE CROSSED (declared): anyone can post a count, so totals can be
 // inflated by someone who wants to; the counts are a signal to read, not a
 // figure to bill.
-import { checkCount, countKey, utcDay, daysBack, tally, EVENTS, MODELS, FROMS } from "../../lib/counts";
+import { checkCount, countKey, utcDay, daysBack, tally, EVENTS, MODELS, FROMS, PER_MODEL } from "../../lib/counts";
 import { kvIncr, kvMGet } from "../../lib/kv";
 
 export default async function handler(req, res) {
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
     const dayList = daysBack(utcDay(Date.now()), days);
     const keys = [];
     for (const event of EVENTS) {
-      const models = event === "assessment-started" ? MODELS : ["-"];
+      const models = PER_MODEL.includes(event) ? MODELS : ["-"];
       for (const model of models) for (const from of FROMS) for (const day of dayList) keys.push(countKey(event, model, from, day));
     }
     try {

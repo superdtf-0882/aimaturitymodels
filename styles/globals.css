@@ -708,6 +708,11 @@ html:has(.longview-sort) { scroll-behavior: smooth; }
 .readout-actions { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .readout-rerun { font-size: 13.5px; color: var(--muted); text-decoration: none; }
 .readout-rerun:hover { color: var(--orange); }
+/* OKF-TOGAF#212: the ask at the end of every readout. */
+.readout-ask { margin-top: 22px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 6px; }
+.readout-ask p { margin: 0; }
+.readout-ask a { color: var(--orange); }
+.readout-author { margin-top: 8px !important; font-size: 13.5px; color: var(--muted); }
 
 /* Issue #15, corrected same day: a fixed upper-right badge, not a rail
    link -- see the comment in components/Layout.js for why. Orange
