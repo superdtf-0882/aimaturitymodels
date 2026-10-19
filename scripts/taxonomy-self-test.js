@@ -133,7 +133,7 @@ if (T) {
 // The page.
 ok(/export default function/.test(page), "pages/taxonomy.js exists and renders");
 ok(/not (yet )?(been )?checked/i.test(page), "the page says the examples' families are not yet checked by anyone else");
-ok(/ROWS\.map\(/.test(page) && page.indexOf("ROWS.map(") < page.indexOf("EXAMPLES"), "the table comes first, before the examples");
+ok(/ROWS\.map\(/.test(page) && page.indexOf("ROWS.map(") < page.indexOf("<h2>Worked examples</h2>"), "the table comes first, before the examples");
 ok(/How you would answer it/.test(page) && /decideFor\(/.test(page), "under each row, how you would answer it: the decision and its evidence");
 ok(/When a case is hard/.test(page) && /TESTS\.map\(/.test(page), "the hard-case tests sit under a disclosure below the table");
 ok(!/Name your system/.test(page) && !/intakeComplete\(/.test(page) && !/"taxonomy-intake-completed"/.test(page), "the card intake is gone, and its count with it");

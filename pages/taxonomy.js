@@ -1,22 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import Layout from "../components/Layout";
 const {
-  VERSION, QUESTION, DOMAIN_WORK, FAMILIES, ANSWERS, GUIDANCE, TESTS, FACT_LINES, EXAMPLES, MODELS,
-  assessmentHref, familyName, decideFor, intakeComplete, cardMarkdown,
+  VERSION, DOMAIN_WORK, FAMILIES, TESTS, EXAMPLES, SORTING, ROWS,
+  familyName, decideFor, dimensionHref,
 } = require("../lib/taxonomy");
 
-// The AI Architecture Taxonomy -- OKF-TOGAF#189. The page is the taxonomy's
-// intake: describe one system on a card, answer the one question, read what
-// the answer asks you to decide, keep the card, and go on to an assessment by
-// a link marked ?from=taxonomy. The worked examples below it carry the
-// families their author gave them. The content lives in lib/taxonomy.js; this
-// page lays it out (scripts/taxonomy-self-test.js).
-
-const BLANK_STEP = () => ({ text: "", ai: false, waits: "" });
-const BLANK = () => ({
-  name: "", purpose: "", steps: [BLANK_STEP(), BLANK_STEP(), BLANK_STEP()],
-  facts: {}, answer: "", reason: "", parts: [{ name: "", family: "" }, { name: "", family: "" }],
-});
+// The AI Architecture Taxonomy -- OKF-TOGAF#189, rebuilt 19 October 2026
+// around the owner's table: four arrangements, each with the next question to
+// ask, two examples, and the dimension that measures the answer, as a link to
+// that assessment at that dimension. What each arrangement asks you to decide
+// sits one click under its row; the hard cases under a disclosure; the worked
+// examples below. The content lives in lib/taxonomy.js (scripts/taxonomy-self-test.js).
 
 // The examples' card text is light Markdown: **[AI]** and **[waits: who]**
 // marks, *italic* source sections, **bold**, and bare links.
@@ -45,56 +39,26 @@ function Decide({ k }) {
 }
 
 export default function Taxonomy() {
-  const [card, setCard] = useState(BLANK);
   const [filter, setFilter] = useState("all");
-  const [copied, setCopied] = useState(false);
-  const set = (patch) => setCard((c) => ({ ...c, ...patch }));
-  const complete = intakeComplete(card);
-
-  // A completed intake is counted once per visit: one anonymous count to the
-  // site's own store, with nothing but its event. No cookie, nothing kept in
-  // the browser, and a failed count changes nothing.
-  const counted = useRef(false);
-  useEffect(() => {
-    if (!complete || counted.current) return;
-    counted.current = true;
-    try {
-      fetch("/api/count/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ event: "taxonomy-intake-completed" }),
-        keepalive: true,
-      }).catch(() => {});
-    } catch (e) { /* counting never blocks the intake */ }
-  }, [complete]);
-
-  const md = useMemo(() => cardMarkdown(card), [card]);
   const byFamily = useMemo(() => {
     const n = {};
     EXAMPLES.forEach((e) => { n[e.family] = (n[e.family] || 0) + 1; });
     return n;
   }, []);
   const shown = filter === "all" ? EXAMPLES : EXAMPLES.filter((e) => e.family === filter);
-
-  function setStep(i, patch) {
-    set({ steps: card.steps.map((s, j) => (j === i ? { ...s, ...patch } : s)) });
-  }
-  function setPart(i, patch) {
-    set({ parts: card.parts.map((p, j) => (j === i ? { ...p, ...patch } : p)) });
-  }
-  function copyCard() {
+  const exampleTitle = (id) => (EXAMPLES.find((e) => e.id === id) || {}).title || id;
+  // Following a row's dimension link is counted: one anonymous count to the
+  // site's own store, with its row and nothing else. No cookie, nothing kept in
+  // the browser, and a failed count never stands in the link's way.
+  function countRow(row) {
     try {
-      navigator.clipboard.writeText(md).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }, () => {});
-    } catch (e) { /* the download still works */ }
-  }
-  function downloadCard() {
-    const name = (card.name.trim() || "system").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase() || "system";
-    const a = Object.assign(document.createElement("a"), {
-      href: URL.createObjectURL(new Blob([md], { type: "text/markdown" })),
-      download: name + "-architecture-card.md",
-    });
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      fetch("/api/count/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event: "taxonomy-row-followed", row: row }),
+        keepalive: true,
+      }).catch(() => {});
+    } catch (e) { /* counting never blocks the link */ }
   }
 
   return (
@@ -104,24 +68,55 @@ export default function Taxonomy() {
     >
       <h1>AI Architecture Taxonomy</h1>
       <p className="dek">
-        Before you assess how capable your practices are, name the kind of system they build and run. One question
-        decides it.
+        Find the row that describes your system. Its question is the one to ask next, and the dimension beside it
+        is where the answer is measured.
       </p>
-      <p className="tx-question">{QUESTION}</p>
-      <p>{DOMAIN_WORK}</p>
 
-      <div className="tx-families">
-        {FAMILIES.map((f) => (
-          <div key={f.key} className="tx-family">
-            <div className="tx-family-name">{f.name}</div>
-            <div className="tx-family-answer">{f.answer}</div>
-            <div className="tx-family-means">{f.means}</div>
-          </div>
-        ))}
+      <div className="tx-table-wrap">
+        <table className="tx-table">
+          <thead>
+            <tr>
+              <th scope="col">Arrangement</th>
+              <th scope="col">The next question to ask</th>
+              <th scope="col">For example</th>
+              <th scope="col">Where the answer is measured</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ROWS.map((r) => (
+              <tr key={r.key}>
+                <th scope="row">{r.name}</th>
+                <td>
+                  <div className="tx-q">{r.question}</div>
+                  {r.note && <p className="tx-row-note">{r.note}</p>}
+                  <details className="tx-answer">
+                    <summary>How you would answer it</summary>
+                    <Decide k={r.key} />
+                  </details>
+                </td>
+                <td>{r.examples.map((id) => <div key={id} className="tx-ex-name">{exampleTitle(id)}</div>)}</td>
+                <td>
+                  {r.dims.map((d) => (
+                    <div key={d.dim}>
+                      <a href={dimensionHref(d.model, d.dim)} onClick={() => countRow(r.key)}>{d.label}</a>
+                      {d.when ? " " + d.when : ""}
+                    </div>
+                  ))}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
+      <p className="tx-under"><strong>Finding your row.</strong> {SORTING}</p>
+      <p className="tx-under tx-muted">{DOMAIN_WORK}</p>
+      <p className="tx-under"><strong>Composite.</strong> Different parts answer differently — one row per part.</p>
+      <p className="tx-under"><strong>None of these.</strong> Say in a sentence why; that sentence is a finding, not a mistake.</p>
+      <p className="tx-under">Each question leads to the assessment that measures your answer: follow the dimension beside it.</p>
+
       <details className="tx-tests">
-        <summary>Four tests for the hard cases</summary>
+        <summary>When a case is hard</summary>
         {TESTS.map((t, i) => (
           <div key={t.title} className="tx-test">
             <div className="tx-test-title">{i + 1}. {t.title}</div>
@@ -129,127 +124,7 @@ export default function Taxonomy() {
           </div>
         ))}
       </details>
-
-      <h2>Name your system</h2>
-      <p>
-        Describe one system on a card, the way the worked examples below are described. A card is one system: a
-        product with an advisor and a separate part that changes accounts is two parts of a composite. Nothing you
-        type leaves this page; keep the card when you're done.
-      </p>
-
-      <div className="tx-card">
-        <label className="tx-field">
-          <span>System name</span>
-          <input type="text" value={card.name} onChange={(e) => set({ name: e.target.value })} placeholder="Claims triage" />
-        </label>
-        <label className="tx-field">
-          <span>What it's for</span>
-          <input type="text" value={card.purpose} onChange={(e) => set({ purpose: e.target.value })} placeholder="Routes incoming insurance claims to the right adjuster" />
-        </label>
-
-        <div className="tx-label">How it runs, step by step</div>
-        <ol className="tx-steps">
-          {card.steps.map((s, i) => (
-            <li key={i} className="tx-step">
-              <input type="text" aria-label={`Step ${i + 1}`} value={s.text} onChange={(e) => setStep(i, { text: e.target.value })} placeholder={i === 0 ? "A claim arrives by email" : ""} />
-              <div className="tx-step-marks">
-                <label><input type="checkbox" checked={s.ai} onChange={(e) => setStep(i, { ai: e.target.checked, waits: e.target.checked ? "" : s.waits })} /> AI does this</label>
-                {!s.ai && (
-                  <input type="text" className="tx-waits" aria-label={`Step ${i + 1} waits for`} value={s.waits} onChange={(e) => setStep(i, { waits: e.target.value })} placeholder="waits for… (who)" />
-                )}
-                {card.steps.length > 1 && (
-                  <button type="button" className="tx-link" onClick={() => set({ steps: card.steps.filter((_, j) => j !== i) })}>Remove</button>
-                )}
-              </div>
-            </li>
-          ))}
-        </ol>
-        <button type="button" className="tx-btn" onClick={() => set({ steps: [...card.steps, BLANK_STEP()] })}>Add a step</button>
-
-        <details className="tx-facts">
-          <summary>The facts, if you know them</summary>
-          {FACT_LINES.map((f) => (
-            <label key={f.line} className="tx-field">
-              <span>{f.line}</span>
-              <input type="text" value={card.facts[f.line] || ""} placeholder={f.hint}
-                onChange={(e) => set({ facts: { ...card.facts, [f.line]: e.target.value } })} />
-            </label>
-          ))}
-        </details>
-
-        <div className="tx-label tx-ask">{QUESTION}</div>
-        <div className="tx-answers" role="group" aria-label="The one question">
-          {ANSWERS.map((a) => (
-            <button key={a.key} type="button" aria-pressed={card.answer === a.key} onClick={() => set({ answer: card.answer === a.key ? "" : a.key })}>
-              {a.name}
-            </button>
-          ))}
-        </div>
-
-        {card.answer === "composite" && (
-          <div className="tx-parts">
-            <div className="tx-label">Its parts, each classified</div>
-            {card.parts.map((p, i) => (
-              <div key={i} className="tx-part">
-                <input type="text" aria-label={`Part ${i + 1}`} value={p.name} onChange={(e) => setPart(i, { name: e.target.value })} placeholder={`Part ${i + 1}`} />
-                <select aria-label={`Part ${i + 1}'s family`} value={p.family} onChange={(e) => setPart(i, { family: e.target.value })}>
-                  <option value="">Family…</option>
-                  {FAMILIES.filter((f) => f.decide).map((f) => <option key={f.key} value={f.key}>{f.name}</option>)}
-                </select>
-              </div>
-            ))}
-            <button type="button" className="tx-btn" onClick={() => set({ parts: [...card.parts, { name: "", family: "" }] })}>Add a part</button>
-          </div>
-        )}
-
-        <label className="tx-field">
-          <span>{card.answer === "none-of-these" ? "Why none of these fits, in a sentence" : "Why, in a sentence (optional)"}</span>
-          <input type="text" value={card.reason} onChange={(e) => set({ reason: e.target.value })} />
-        </label>
-      </div>
-
-      {complete && (
-        <section className="tx-result" aria-live="polite">
-          <div className="tx-result-head">{card.name.trim()}</div>
-          <div className="tx-result-family">{familyName(card.answer)}</div>
-          {card.answer === "composite" ? (
-            <>
-              {card.parts.filter((p) => p.name.trim()).map((p, i) => (
-                <div key={i} className="tx-result-part">
-                  <div className="tx-result-partname">{p.name.trim()}: {familyName(p.family)}</div>
-                  <Decide k={p.family} />
-                </div>
-              ))}
-              <p className="tx-result-means">{GUIDANCE.composite}</p>
-            </>
-          ) : card.answer === "none-of-these" || card.answer === "unknown" ? (
-            <p className="tx-result-means">{GUIDANCE[card.answer]}</p>
-          ) : (
-            <>
-              <p className="tx-result-means">{(FAMILIES.find((f) => f.key === card.answer) || {}).means}</p>
-              <div className="tx-label">What it asks you to decide</div>
-              <Decide k={card.answer} />
-            </>
-          )}
-
-          <div className="tx-keep">
-            <button type="button" className="tx-btn" onClick={copyCard}>{copied ? "Copied" : "Copy the card"}</button>
-            <button type="button" className="tx-btn" onClick={downloadCard}>Download it (.md)</button>
-          </div>
-
-          <h3 className="tx-next">Now assess the practices that build and run it</h3>
-          <div className="model-list">
-            {MODELS.map((m) => (
-              <a key={m.slug} href={assessmentHref(m.slug)} className="model-row">
-                <div>
-                  <div className="model-name">{m.name}</div>
-                  <div className="model-desc">For {m.for}.</div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
+      <p className="tx-version">{VERSION}</p>
 
       <h2>Worked examples</h2>
       <p>
@@ -309,6 +184,19 @@ export default function Taxonomy() {
       <p className="footnote">{VERSION}. The taxonomy describes arrangements; the maturity models assess the practices that build and run them. It authorises nothing.</p>
 
       <style jsx>{`
+        .tx-table-wrap { overflow-x: auto; margin: 18px 0; }
+        .tx-table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 640px; }
+        .tx-table th, .tx-table td { text-align: left; vertical-align: top; padding: 10px 12px; border-top: 1px solid var(--line); }
+        .tx-table thead th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-top: 0; }
+        .tx-table tbody th { font-weight: 600; width: 22%; }
+        .tx-q { font-family: var(--serif); font-size: 16px; }
+        .tx-row-note { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+        .tx-answer { margin-top: 8px; font-size: 14px; }
+        .tx-answer summary { cursor: pointer; color: var(--ink-soft); }
+        .tx-ex-name { font-size: 14px; }
+        .tx-under { margin: 8px 0; }
+        .tx-muted { color: var(--muted); font-size: 14px; }
+        .tx-version { font-size: 12px; color: var(--muted); margin: 6px 0 22px; }
         .tx-question { font-family: var(--serif); font-size: 21px; margin: 6px 0 10px; color: var(--ink); }
         .tx-families { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin: 18px 0; }
         .tx-family { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; background: var(--paper-raised); min-width: 0; }
