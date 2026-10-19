@@ -80,13 +80,18 @@ if (T) {
   ok(R.map((r) => (r.examples || []).join("+")).join(",") === "W-14+W-03,W-05+W-21,W-15+W-04,W-17+W-27", "two examples per row, as drafted");
   ok(R.every((r) => (r.examples || []).every((id) => (EXAMPLES.find((e) => e.id === id) || {}).family === r.key)), "each row's examples belong to its family");
   const dimsOf = (r) => (r.dims || []).map((d) => d.model + ":" + d.dim).join("+");
-  ok(R.map(dimsOf).join(",") === "sdlc:d7+sdlc:d8+sdlc:d11,sdlc:d12,ea:d10+ea:d6+pdlc:d10,ea:d7+sdlc:d11+sdlc:d12", "the dimensions that measure each answer: row 3 as DTOG's v0.2, EA D7 on row 4");
+  ok(R.map(dimsOf).join(",") === "sdlc:d7+sdlc:d8+sdlc:d11,sdlc:d12,ea:d10+ea:d6+pdlc:d10+sdlc:d8,ea:d7+sdlc:d11+sdlc:d12", "the dimensions that measure each answer: row 3 as DTOG's v0.2 with SDLC D8 kept, EA D7 on row 4");
   // OKF-TOGAF#189, on "Change the taxonomy's third row to EA D10 and EA D6, with
   // PDLC D10 for validating with users, as DTOG's v0.2 has it, under #189 --
   // David Facer 10/19/2026" (DTOG-taxonomy-table-v0.2 section 2; 261-DT2).
   const r3 = (R[2] || {}).dims || [];
-  ok(r3.map((d) => d.label).join(",") === "EA D10,EA D6,PDLC D10", "row 3 links EA D10, then EA D6, then PDLC D10");
-  ok(/for validating with the users themselves/.test((r3[2] || {}).when || "") && !(r3[0] || {}).when && !(r3[1] || {}).when, "row 3's PDLC D10 is for validating with the users themselves; the EA links carry no condition");
+  ok(r3.map((d) => d.label).join(",") === "EA D10,EA D6,PDLC D10,SDLC D8", "row 3 links EA D10, EA D6, PDLC D10, then SDLC D8");
+  ok(/for validating with the users themselves/.test((r3[2] || {}).when || "") && !(r3[1] || {}).when, "row 3's PDLC D10 is for validating with the users themselves; EA D6 carries no condition");
+  // OKF-TOGAF#189, on "Add to the taxonomy's third row SDLC D8 where the
+  // contribution is code, and "for the organization's shared language" beside
+  // EA D10, under #189 -- David Facer 10/19/2026" (262-DT2 section 2).
+  ok((r3[0] || {}).when === "for the organization's shared language", "row 3's EA D10 is for the organization's shared language");
+  ok((r3[3] || {}).when === "where the contribution is code", "row 3's SDLC D8 applies where the contribution is code");
   ok(T.dimensionHref("pdlc", "d10") === "/models/pdlc/assessment/?from=taxonomy#dim=d10", "the PDLC link opens the PDLC assessment at D10, marked from the taxonomy");
   // OKF-TOGAF#189, on "Add EA D7 to the taxonomy's fourth row for agents acting
   // in the business, under #189 -- David Facer 10/19/2026" (260-DT2 section 4):
