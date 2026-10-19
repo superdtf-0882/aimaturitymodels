@@ -80,7 +80,16 @@ if (T) {
   ok(R.map((r) => (r.examples || []).join("+")).join(",") === "W-14+W-03,W-05+W-21,W-15+W-04,W-17+W-27", "two examples per row, as drafted");
   ok(R.every((r) => (r.examples || []).every((id) => (EXAMPLES.find((e) => e.id === id) || {}).family === r.key)), "each row's examples belong to its family");
   const dimsOf = (r) => (r.dims || []).map((d) => d.model + ":" + d.dim).join("+");
-  ok(R.map(dimsOf).join(",") === "sdlc:d7+sdlc:d8+sdlc:d11,sdlc:d12,sdlc:d12+sdlc:d8,sdlc:d11+sdlc:d12", "the dimensions that measure each answer, with the two link fixes");
+  ok(R.map(dimsOf).join(",") === "sdlc:d7+sdlc:d8+sdlc:d11,sdlc:d12,sdlc:d12+sdlc:d8,ea:d7+sdlc:d11+sdlc:d12", "the dimensions that measure each answer, with the two link fixes and EA D7 on row 4");
+  // OKF-TOGAF#189, on "Add EA D7 to the taxonomy's fourth row for agents acting
+  // in the business, under #189 -- David Facer 10/19/2026" (260-DT2 section 4):
+  // row 4 splits by what the agent acts on. EA D7, the authority plane, for an
+  // agent acting in the business; SDLC D11 for one acting in the delivery path.
+  const r4 = (R[3] || {}).dims || [];
+  ok((r4[0] || {}).label === "EA D7" && /where the agent acts in the business/.test((r4[0] || {}).when || ""), "row 4's EA D7 applies where the agent acts in the business");
+  ok((r4[1] || {}).label === "SDLC D11" && /where it acts in the delivery path/.test((r4[1] || {}).when || ""), "row 4's SDLC D11 applies where it acts in the delivery path");
+  ok(!((r4[2] || {}).when), "row 4's SDLC D12 applies to either, as before");
+  ok(T.dimensionHref("ea", "d7") === "/models/ea/assessment/?from=taxonomy#dim=d7", "the EA link opens the EA assessment at D7, marked from the taxonomy");
   ok(/D12 stays classic/.test((R[0] || {}).note || ""), "row 1 says D12 stays classic");
   ok(/where the contribution is code/.test(((R[2] || {}).dims || [])[1] ? R[2].dims[1].when || "" : ""), "row 3's D8 applies where the contribution is code");
   ok(/steering, or just reading/i.test((R[2] || {}).note || ""), "row 3 carries the first hard-case test");
