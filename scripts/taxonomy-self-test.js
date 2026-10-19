@@ -80,7 +80,14 @@ if (T) {
   ok(R.map((r) => (r.examples || []).join("+")).join(",") === "W-14+W-03,W-05+W-21,W-15+W-04,W-17+W-27", "two examples per row, as drafted");
   ok(R.every((r) => (r.examples || []).every((id) => (EXAMPLES.find((e) => e.id === id) || {}).family === r.key)), "each row's examples belong to its family");
   const dimsOf = (r) => (r.dims || []).map((d) => d.model + ":" + d.dim).join("+");
-  ok(R.map(dimsOf).join(",") === "sdlc:d7+sdlc:d8+sdlc:d11,sdlc:d12,sdlc:d12+sdlc:d8,ea:d7+sdlc:d11+sdlc:d12", "the dimensions that measure each answer, with the two link fixes and EA D7 on row 4");
+  ok(R.map(dimsOf).join(",") === "sdlc:d7+sdlc:d8+sdlc:d11,sdlc:d12,ea:d10+ea:d6+pdlc:d10,ea:d7+sdlc:d11+sdlc:d12", "the dimensions that measure each answer: row 3 as DTOG's v0.2, EA D7 on row 4");
+  // OKF-TOGAF#189, on "Change the taxonomy's third row to EA D10 and EA D6, with
+  // PDLC D10 for validating with users, as DTOG's v0.2 has it, under #189 --
+  // David Facer 10/19/2026" (DTOG-taxonomy-table-v0.2 section 2; 261-DT2).
+  const r3 = (R[2] || {}).dims || [];
+  ok(r3.map((d) => d.label).join(",") === "EA D10,EA D6,PDLC D10", "row 3 links EA D10, then EA D6, then PDLC D10");
+  ok(/for validating with the users themselves/.test((r3[2] || {}).when || "") && !(r3[0] || {}).when && !(r3[1] || {}).when, "row 3's PDLC D10 is for validating with the users themselves; the EA links carry no condition");
+  ok(T.dimensionHref("pdlc", "d10") === "/models/pdlc/assessment/?from=taxonomy#dim=d10", "the PDLC link opens the PDLC assessment at D10, marked from the taxonomy");
   // OKF-TOGAF#189, on "Add EA D7 to the taxonomy's fourth row for agents acting
   // in the business, under #189 -- David Facer 10/19/2026" (260-DT2 section 4):
   // row 4 splits by what the agent acts on. EA D7, the authority plane, for an
@@ -92,7 +99,6 @@ if (T) {
   ok(T.dimensionHref("ea", "d7") === "/models/ea/assessment/?from=taxonomy#dim=d7", "the EA link opens the EA assessment at D7, marked from the taxonomy");
   ok(/key=\{d\.model \+ ":" \+ d\.dim\}/.test(page), "the page keys each link by model and dimension, so two models' D7 in one row stay apart");
   ok(/D12 stays classic/.test((R[0] || {}).note || ""), "row 1 says D12 stays classic");
-  ok(/where the contribution is code/.test(((R[2] || {}).dims || [])[1] ? R[2].dims[1].when || "" : ""), "row 3's D8 applies where the contribution is code");
   ok(/steering, or just reading/i.test((R[2] || {}).note || ""), "row 3 carries the first hard-case test");
   ok(typeof T.dimensionHref === "function" && T.dimensionHref("sdlc", "d7") === "/models/sdlc/assessment/?from=taxonomy#dim=d7", "each cell links to that assessment at that dimension, marked from the taxonomy");
   ok(T.SORTING === "Once the system is running, what decides the next piece of domain work — nothing by AI, fixed logic, a person, or the AI itself?", "the sorting question, as the way to find your row");
