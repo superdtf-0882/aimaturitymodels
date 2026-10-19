@@ -25,12 +25,14 @@ console.log("SELF-TEST -- the site's counters (OKF-TOGAF#189; 190-DT2 section 2)
 const lib = read("lib/counts.js");
 let C = null;
 try {
-  C = new Function(lib.replace(/^export\s+/gm, "") + "\nreturn { EVENTS, MODELS, FROMS, countKey, checkCount, fromOf, utcDay, daysBack, tally };")();
+  C = new Function(lib.replace(/^export\s+/gm, "") + "\nreturn { EVENTS, MODELS, FROMS, countKey, checkCount, fromOf, utcDay, daysBack, tally, PER_MODEL: typeof PER_MODEL === \"undefined\" ? undefined : PER_MODEL };")();
 } catch (e) { console.log("  FAIL lib/counts.js does not load: " + e.message); bad = 1; }
 
 if (C) {
-  const { EVENTS, MODELS, FROMS, countKey, checkCount, fromOf, utcDay, daysBack, tally } = C;
-  ok(EVENTS.join(",") === "assessment-started,taxonomy-intake-completed", "two events, and only these");
+  const { EVENTS, MODELS, FROMS, countKey, checkCount, fromOf, utcDay, daysBack, tally, PER_MODEL } = C;
+  // OKF-TOGAF#212: the ask at the end of every readout, taken by its email link.
+  ok(EVENTS.join(",") === "assessment-started,taxonomy-intake-completed,ask-taken", "three events, and only these: a start, an intake, the ask taken");
+  ok(Array.isArray(PER_MODEL) && PER_MODEL.join(",") === "assessment-started,ask-taken", "a start and the ask are counted per model");
   // OKF-TOGAF#202: the fifth, under the readout route's key.
   ok(MODELS.join(",") === "sdlc,pdlc,prioritization,ea,prodmar", "the five models with an assessment");
   ok(FROMS.join(",") === "direct,taxonomy", "a start comes directly or from the taxonomy");
@@ -41,6 +43,11 @@ if (C) {
   ok(good.ok && good.model === "pdlc" && good.from === "taxonomy", "a start with a known model is counted");
   ok(checkCount({ event: "taxonomy-intake-completed" }).ok && checkCount({ event: "taxonomy-intake-completed" }).model === "-", "an intake is counted without a model");
   ok(!checkCount({ event: "assessment-started" }).ok, "a start without a model is refused");
+  const askTaken = checkCount({ event: "ask-taken", model: "prodmar" });
+  ok(askTaken.ok && askTaken.model === "prodmar", "the ask taken on a known model is counted");
+  ok(!checkCount({ event: "ask-taken" }).ok, "the ask taken without a model is refused");
+  ok(!checkCount({ event: "ask-taken", model: "nope" }).ok, "the ask taken on an unknown model is refused");
+  ok(!checkCount({ event: "ask-taken", model: "sdlc", email: "x" }).ok, "nothing about the visitor rides with the ask");
   ok(!checkCount({ event: "assessment-started", model: "nope" }).ok, "an unknown model is refused");
   ok(!checkCount({ event: "page-view", model: "sdlc" }).ok, "an unknown event is refused");
   ok(checkCount({ event: "assessment-started", model: "ea", from: "elsewhere" }).from === "direct", "an unknown origin counts as direct");
@@ -54,6 +61,7 @@ if (C) {
 const api = read("pages/api/count.js");
 ok(/checkCount\(/.test(api) && /kvIncr\(/.test(api), "the count route checks a count, then increments its key");
 ok(/req\.method === "GET"/.test(api) && /kvMGet\(/.test(api), "the count route also reads totals back");
+ok(/PER_MODEL\.includes\(event\)/.test(api), "the totals read back per model for each per-model event, the ask among them");
 ok(!/headers\[?["']?x-forwarded-for|req\.socket|remoteAddress|set-cookie|Set-Cookie/i.test(api), "the count route reads no address and sets no cookie");
 
 const kv = read("lib/kv.js");
