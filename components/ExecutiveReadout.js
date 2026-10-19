@@ -5,12 +5,16 @@ import Layout from "./Layout";
 
 // OKF-TOGAF#212: every readout ends with one ask, in the owner's words, taken by
 // an email link to his davidfacer.com address. The visitor writes and sends the
-// email from their own mail program and attaches their summary; the site counts
-// the click per model and keeps nothing about the person.
+// email from their own mail program; a web page cannot attach a file, so the
+// email carries the link to the visitor's own readout, which the site keeps four
+// days (reopened 2026-10-19 on the owner's test). The site counts the click per
+// model and keeps nothing about the person.
 const ASK = "Send me your assessment summary and I'll read it with you — a short call, no charge.";
-function askHref(assessmentLabel) {
+function askHref(assessmentLabel, assessmentHref, hash) {
   const subject = "Read my " + assessmentLabel + " with me";
-  const body = "Hello David,\n\nI've attached the assessment summary I downloaded from aimaturitymodels.com. Could we read it together?\n\n";
+  // The readout's own page, e.g. /models/sdlc/executivereadout?hash=..., kept four days.
+  const readoutUrl = "https://aimaturitymodels.com" + assessmentHref.replace(/assessment$/, "executivereadout") + "?hash=" + encodeURIComponent(hash || "");
+  const body = "Hello David,\n\nHere is my readout from aimaturitymodels.com: " + readoutUrl + "\n\nCould we read it together?\n\n";
   return "mailto:david.facer@davidfacer.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
 }
 
@@ -48,7 +52,7 @@ export default function ExecutiveReadout({
         <h1>Executive Readout</h1>
         <p className="dek">
           {hash
-            ? "This readout has expired or wasn't found — cached readouts are kept for 24 hours."
+            ? "This readout has expired or wasn't found — cached readouts are kept for four days."
             : "No readout requested."}
         </p>
         <p>
@@ -115,7 +119,7 @@ export default function ExecutiveReadout({
       <div className="readout-ask">
         <p>
           {ASK}{" "}
-          <a href={askHref(assessmentLabel)} onClick={countAsk}>Email David</a>
+          <a href={askHref(assessmentLabel, assessmentHref, hash)} onClick={countAsk}>Email David</a>
         </p>
         <p className="readout-author">
           — <a href="https://davidfacer.com">David Facer</a>

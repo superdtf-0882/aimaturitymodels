@@ -40,6 +40,9 @@ import crypto from "crypto";
 const { extractScores, vectorKey } = require("../../lib/score-vector");
 import OpenAI from "openai";
 
+// How long a readout is kept, so its emailed link still opens (OKF-TOGAF#212).
+const READOUT_KEPT_SECONDS = 4 * 86400;
+
 const RATE_LIMIT_PER_HOUR = 5;
 const DAILY_CAP = 120;
 
@@ -172,7 +175,10 @@ export default async function handler(req, res) {
     return res.status(502).json({ error: "Failed to generate the Executive Readout. Please try again." });
   }
 
-  await kvSet(cacheKey, readout, 86400);
+  // OKF-TOGAF#212: kept four days, so the link a visitor emails with the ask still
+  // opens when the owner replies (the owner, 2026-10-19: "let's keep the links for
+  // four days"). The daily limit above still resets each day.
+  await kvSet(cacheKey, readout, READOUT_KEPT_SECONDS);
 
   return res.status(200).json({ readout, hash });
 }
