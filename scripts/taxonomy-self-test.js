@@ -90,6 +90,7 @@ if (T) {
   ok((r4[1] || {}).label === "SDLC D11" && /where it acts in the delivery path/.test((r4[1] || {}).when || ""), "row 4's SDLC D11 applies where it acts in the delivery path");
   ok(!((r4[2] || {}).when), "row 4's SDLC D12 applies to either, as before");
   ok(T.dimensionHref("ea", "d7") === "/models/ea/assessment/?from=taxonomy#dim=d7", "the EA link opens the EA assessment at D7, marked from the taxonomy");
+  ok(/key=\{d\.model \+ ":" \+ d\.dim\}/.test(page), "the page keys each link by model and dimension, so two models' D7 in one row stay apart");
   ok(/D12 stays classic/.test((R[0] || {}).note || ""), "row 1 says D12 stays classic");
   ok(/where the contribution is code/.test(((R[2] || {}).dims || [])[1] ? R[2].dims[1].when || "" : ""), "row 3's D8 applies where the contribution is code");
   ok(/steering, or just reading/i.test((R[2] || {}).note || ""), "row 3 carries the first hard-case test");

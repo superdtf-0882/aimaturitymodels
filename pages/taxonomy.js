@@ -97,7 +97,7 @@ export default function Taxonomy() {
                 <td>{r.examples.map((id) => <div key={id} className="tx-ex-name">{exampleTitle(id)}</div>)}</td>
                 <td>
                   {r.dims.map((d) => (
-                    <div key={d.dim}>
+                    <div key={d.model + ":" + d.dim}>
                       <a href={dimensionHref(d.model, d.dim)} onClick={() => countRow(r.key)}>{d.label}</a>
                       {d.when ? " " + d.when : ""}
                     </div>
