@@ -155,9 +155,10 @@ export default async function handler(req, res) {
   if (cached) {
     // An entry saved as text alone, before OKF-TOGAF#217: saved again with the
     // scores this request carries (the key is a hash of exactly those), its
-    // version recorded as not kept, since the key carries no pin (265-DT2).
+    // version and its day recorded as not kept, since the key carries neither
+    // (265-DT2, 266-DT2).
     if (!cached.scores && kept) {
-      await kvSet(cacheKey, upgradeEntry(cached.readout, kept.scores, kept.reasons, today), READOUT_KEPT_SECONDS);
+      await kvSet(cacheKey, upgradeEntry(cached.readout, kept.scores, kept.reasons), READOUT_KEPT_SECONDS);
     }
     return res.status(200).json({ readout: cached.readout, hash });
   }
