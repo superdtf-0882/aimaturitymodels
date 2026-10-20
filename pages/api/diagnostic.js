@@ -38,6 +38,9 @@ import { PRODMAR_EXECUTIVE_READOUT_PROMPT_V1 } from "../../lib/prompts/prodmar-e
 import crypto from "crypto";
 // OKF-TOGAF#161: the score reading moved to lib/score-vector.js.
 const { extractScores, vectorKey } = require("../../lib/score-vector");
+// OKF-TOGAF#217: each readout is kept with the scores it was written from and
+// the model version, through lib/readout-entry.js, which says what is kept.
+const { scoresFromMd, encodeEntry, decodeEntry, upgradeEntry, versionFor } = require("../../lib/readout-entry");
 import OpenAI from "openai";
 
 // How long a readout is kept, so its emailed link still opens (OKF-TOGAF#212).
@@ -144,9 +147,19 @@ export default async function handler(req, res) {
   const hash = hashVector(body.model, scoreVector, READOUT_MODEL, READOUT_EFFORT, modelConfig.promptVersion, parsed.reasons);
   const cacheKey = `diag_cache:${hash}`;
 
-  const cached = await kvGet(cacheKey);
+  // The scores and Exempt reasons as the visitor's assessment states them.
+  const kept = scoresFromMd(body.md, modelConfig.dimensionCount, { thresholdStates: !!modelConfig.thresholdStates });
+  const today = new Date().toISOString().slice(0, 10);
+
+  const cached = decodeEntry(await kvGet(cacheKey));
   if (cached) {
-    return res.status(200).json({ readout: cached, hash });
+    // An entry saved as text alone, before OKF-TOGAF#217: saved again with the
+    // scores this request carries (the key is a hash of exactly those), its
+    // version recorded as not kept, since the key carries no pin (265-DT2).
+    if (!cached.scores && kept) {
+      await kvSet(cacheKey, upgradeEntry(cached.readout, kept.scores, kept.reasons, today), READOUT_KEPT_SECONDS);
+    }
+    return res.status(200).json({ readout: cached.readout, hash });
   }
 
   if (!process.env.OPENAI_API_KEY) {
@@ -178,7 +191,8 @@ export default async function handler(req, res) {
   // OKF-TOGAF#212: kept four days, so the link a visitor emails with the ask still
   // opens when the owner replies (the owner, 2026-10-19: "let's keep the links for
   // four days"). The daily limit above still resets each day.
-  await kvSet(cacheKey, readout, READOUT_KEPT_SECONDS);
+  // OKF-TOGAF#217: kept with its scores and the version it is written under.
+  await kvSet(cacheKey, encodeEntry({ readout, scores: kept && kept.scores, reasons: kept && kept.reasons, version: versionFor(body.model), writtenAt: today }), READOUT_KEPT_SECONDS);
 
   return res.status(200).json({ readout, hash });
 }

@@ -2,6 +2,9 @@ import { useState } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import Layout from "./Layout";
+// OKF-TOGAF#217: the scores the readout was written from and the model version,
+// on the page and in its download (lib/readout-entry.js says what is kept).
+const { NO_SCORES, versionLine, levelCell, downloadMd } = require("../lib/readout-entry");
 
 // OKF-TOGAF#212: every readout ends with one ask, in the owner's words, taken by
 // an email link to his davidfacer.com address. The visitor writes and sends the
@@ -29,6 +32,9 @@ function askHref(assessmentLabel, assessmentHref, hash) {
 
 export default function ExecutiveReadout({
   readout,
+  scores = null, // [{ id, name, level }], or null for a readout saved before #217
+  reasons = {}, // each Exempt dimension's reason, in the visitor's own words
+  version = null, // the model version recorded when the readout was written
   hash,
   assessmentHref, // e.g. "/models/pdlc/assessment"
   assessmentLabel, // e.g. "AI-Native PDLC Assessment"
@@ -63,11 +69,7 @@ export default function ExecutiveReadout({
   }
 
   function buildDownloadMd() {
-    return (
-      `# Executive Readout\n\n${readout.trim()}\n\n` +
-      `*${modelTitle} © 2026 David Facer — CC BY 4.0*\n` +
-      `*Full model: ${repoUrl}*\n`
-    );
+    return downloadMd({ readout, scores, reasons, version }, modelTitle, repoUrl);
   }
 
   function handleDownload() {
@@ -102,6 +104,24 @@ export default function ExecutiveReadout({
   return (
     <Layout title="Executive Readout" crumb={crumb}>
       <h1>Executive Readout</h1>
+      <div className="readout-scores">
+        <h2>Your scores</h2>
+        {scores ? (
+          <table>
+            <thead>
+              <tr><th>Dimension</th><th>Name</th><th>Level</th></tr>
+            </thead>
+            <tbody>
+              {scores.map((s) => (
+                <tr key={s.id}><td>{s.id}</td><td>{s.name}</td><td>{levelCell(s, reasons)}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>{NO_SCORES}</p>
+        )}
+        <p className="readout-version">{versionLine(modelTitle, version)}</p>
+      </div>
       <div className="readout-body">
         <ReactMarkdown>{readout}</ReactMarkdown>
       </div>

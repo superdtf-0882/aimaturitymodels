@@ -705,6 +705,16 @@ html:has(.longview-sort) { scroll-behavior: smooth; }
 .readout-body ul { color: var(--ink-soft); font-size: 14.5px; line-height: 1.7; margin: 0 0 14px; padding-left: 20px; }
 .readout-body strong { color: var(--ink); }
 .readout-body hr { border: none; border-top: 1px solid var(--line); margin: 24px 0; }
+/* OKF-TOGAF#217: the scores a readout was written from, above it. */
+.readout-scores { max-width: 68ch; margin: 0 0 22px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.readout-scores h2 { font-family: var(--serif); font-size: 17px; margin: 16px 0 8px; }
+.readout-scores table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+.readout-scores th, .readout-scores td { padding: 6px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.readout-scores th { font-weight: 600; color: var(--ink); }
+.readout-scores td { color: var(--ink-soft); }
+.readout-scores td:first-child { font-family: var(--mono); white-space: nowrap; }
+.readout-scores p { color: var(--ink-soft); font-size: 14px; margin: 8px 0 0; }
+.readout-version { font-style: italic; }
 .readout-actions { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .readout-rerun { font-size: 13.5px; color: var(--muted); text-decoration: none; }
 .readout-rerun:hover { color: var(--orange); }

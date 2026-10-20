@@ -96,7 +96,7 @@ const diag = read("pages/api/diagnostic.js");
 check(/require\("\.\.\/\.\.\/lib\/readout-entry"\)/.test(diag), "the readout service writes entries through lib/readout-entry.js");
 check(/scoresFromMd\(body\.md/.test(diag) && /encodeEntry\(\{[^}]*version: versionFor\(body\.model\)/.test(diag), "a fresh readout records the version it is written under");
 check(/kvSet\(cacheKey, encodeEntry\(/.test(diag) && /READOUT_KEPT_SECONDS/.test(diag), "the entry is kept four days, as the readout was");
-check(/decodeEntry\(cached\)/.test(diag) && /upgradeEntry\(/.test(diag) && !/upgradeEntry\([^)]*versionFor/.test(diag), "a text-only entry found by a request is saved again with its scores, never with the current version");
+check(/decodeEntry\(await kvGet\(cacheKey\)\)/.test(diag) && /upgradeEntry\(/.test(diag) && !/upgradeEntry\([^)]*versionFor/.test(diag), "a text-only entry found by a request is saved again with its scores, never with the current version");
 
 // 7. The five readout pages and the shared component.
 for (const dir of ["sdlc", "pdlc", "prioritization", "ea", "productmarketing"]) {

@@ -35,7 +35,7 @@ check(bodyLine !== "" && !/attach/i.test(bodyLine), "the email claims no attachm
 check(/readoutUrl/.test(bodyLine) && /executivereadout/.test(ro) && /hash/.test(ro.slice(ro.indexOf("function askHref"), ro.indexOf("function askHref") + 900)), "the email carries the link to the visitor's own readout");
 check(/kept for four days/.test(ro) && !/24 hours/.test(ro), "the readout page says readouts are kept for four days");
 const diag = read("pages/api/diagnostic.js");
-check(/READOUT_KEPT_SECONDS = 4 \* 86400/.test(diag) && /kvSet\(cacheKey, readout, READOUT_KEPT_SECONDS\)/.test(diag), "the readout service keeps each readout four days");
+check(/READOUT_KEPT_SECONDS = 4 \* 86400/.test(diag) && /kvSet\(cacheKey, encodeEntry\(\{ readout,.*\}\), READOUT_KEPT_SECONDS\)/.test(diag), "the readout service keeps each readout four days");
 check(/kvExpire\(dayKey, 86400\)/.test(diag), "the daily limit still resets each day");
 check(/event: "ask-taken"/.test(ro) && /keepalive: true/.test(ro), "the click counts the ask taken, without waiting on it");
 check(/modelSlug/.test(ro), "the count names the model");
