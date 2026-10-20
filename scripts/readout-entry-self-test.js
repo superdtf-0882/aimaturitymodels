@@ -109,6 +109,20 @@ check(/CC BY 4\.0/.test(dl) && dl.includes("https://example.org/model"), "the do
 const dlOld = attempt(() => E.downloadMd(old, "AI-Native SDLC Maturity Model", "https://example.org/model")) || "";
 check(dlOld.includes("This readout was saved before scores were kept with it.") && dlOld.includes("The model version wasn't kept with this readout."), "an older readout's download says what wasn't kept");
 
+// 5b. One title. Every readout prompt opens the AI's text with "# Executive
+// Readout", and the page and the download title themselves so; shown with
+// the scores between them, the heading doubled. Reopened on the owner's word,
+// "Fix the doubled "Executive Readout"" (562-CC section 2). The text as kept
+// is unchanged; only its showing drops that one leading heading.
+check(attempt(() => E.readoutBody("# Executive Readout\n\n## Executive Summary\n\nText.")) === "## Executive Summary\n\nText.", "the AI's leading \"# Executive Readout\" heading is dropped when the readout is shown");
+check(attempt(() => E.readoutBody("\n  Executive Readout\n\nText.")) === "\n  Executive Readout\n\nText.", "a line that only says the words, with no heading mark, is left alone");
+check(attempt(() => E.readoutBody("## Executive Summary\n\n# Executive Readout\n\nText.")) === "## Executive Summary\n\n# Executive Readout\n\nText.", "only a leading heading is dropped, never one further down");
+check(attempt(() => E.readoutBody("## Executive Readout\r\n\r\nText.")) === "Text.", "any heading level, and Windows line ends, at the start");
+const dlOne = attempt(() => E.downloadMd({ readout: "# Executive Readout\n\n## Executive Summary\n\nText.", scores: null, reasons: {}, version: null }, "AI-Native SDLC Maturity Model", "https://example.org/model")) || "";
+check((dlOne.match(/Executive Readout/g) || []).length === 1, "the download says \"Executive Readout\" once");
+const roOne = read("components/ExecutiveReadout.js");
+check(/<ReactMarkdown>\{readoutBody\(readout\)\}<\/ReactMarkdown>/.test(roOne), "the page shows the readout without its leading heading");
+
 // 6. The readout service.
 const diag = read("pages/api/diagnostic.js");
 check(/require\("\.\.\/\.\.\/lib\/readout-entry"\)/.test(diag), "the readout service writes entries through lib/readout-entry.js");
