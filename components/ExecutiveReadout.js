@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import Layout from "./Layout";
 // OKF-TOGAF#217: the scores the readout was written from and the model version,
 // on the page and in its download (lib/readout-entry.js says what is kept).
-const { NO_SCORES, versionLine, levelCell, downloadMd } = require("../lib/readout-entry");
+const { NO_SCORES, readoutBody, versionLine, levelCell, downloadMd } = require("../lib/readout-entry");
 
 // OKF-TOGAF#212: every readout ends with one ask, in the owner's words, taken by
 // an email link to his davidfacer.com address. The visitor writes and sends the
@@ -123,7 +123,7 @@ export default function ExecutiveReadout({
         <p className="readout-version">{versionLine(modelTitle, version)}</p>
       </div>
       <div className="readout-body">
-        <ReactMarkdown>{readout}</ReactMarkdown>
+        <ReactMarkdown>{readoutBody(readout)}</ReactMarkdown>
       </div>
       <div className="readout-actions">
         <button type="button" className="assess-btn assess-btn-blue" onClick={handleDownload}>
