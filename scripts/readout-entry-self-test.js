@@ -41,6 +41,20 @@ try { P = require(path.join(root, "lib/pins.js")); } catch { P = {}; }
 const WANT_VERSIONS = { sdlc: "v1.4.3", pdlc: "v1.2.5", prioritization: "v1.4.3", ea: "v1.1.4", prodmar: "v1.0.3" };
 const MV = P.MODEL_VERSIONS || {};
 check(Object.keys(WANT_VERSIONS).every((k) => MV[k] === WANT_VERSIONS[k]), "each model's version sits beside its pin: SDLC v1.4.3, PDLC v1.2.5, Prioritization v1.4.3, EA v1.1.4, Product Marketing v1.0.3");
+// The pair, not the value: each pin's commit is the tag its version names, by
+// GitHub's tags (559-CC, 266-DT2). A pin moved without its version, or a
+// version moved without its pin, fails here until this table is written too.
+const TAG_AT = {
+  "475bdcbbe7a66785a43a10bb3166994109765f8b": "v1.4.3", // SDLC
+  "21a6d877538133ee530204b4eaab746fd2917ec7": "v1.2.5", // PDLC
+  "893feeb8588584ae940aa802e31a3a322199343c": "v1.4.3", // Portfolio Prioritization
+  "22a7b2b9fe4892f4ee1373312f2c3aa297354be4": "v1.1.4", // EA
+  "c475da9585a876d5fc441f04a57779384a0f25a6": "v1.0.3", // Product Marketing
+};
+for (const [key, pinName, label] of [["sdlc", "SDLC_PINNED_COMMIT", "SDLC"], ["pdlc", "PDLC_PINNED_COMMIT", "PDLC"], ["prioritization", "PRIORITIZATION_PINNED_COMMIT", "Portfolio Prioritization"], ["ea", "EA_PINNED_COMMIT", "EA"], ["prodmar", "PRODUCT_MARKETING_PINNED_COMMIT", "Product Marketing"]]) {
+  const pin = P[pinName];
+  check(Object.prototype.hasOwnProperty.call(TAG_AT, pin) && TAG_AT[pin] === MV[key], label + "'s pin and its version are a known pair: the commit is the tag the version names");
+}
 const pins = read("lib/pins.js");
 for (const [name, v] of [["SDLC", "v1.4.3"], ["PDLC", "v1.2.5"], ["PRIORITIZATION", "v1.4.3"], ["EA", "v1.1.4"], ["PRODUCT_MARKETING", "v1.0.3"]]) {
   const pinAt = pins.indexOf("const " + name + "_PINNED_COMMIT =");
@@ -76,8 +90,10 @@ check(old && old.readout === "## Summary\n\nAn older readout." && old.scores ===
 const jsonish = attempt(() => E.decodeEntry("{\"readout\": \"not ours\"}"));
 check(jsonish && jsonish.readout === "{\"readout\": \"not ours\"}" && jsonish.scores === null, "text that merely looks like JSON is read as text");
 check(attempt(() => E.decodeEntry(null)) === null && attempt(() => E.decodeEntry("")) === null, "no entry reads as none");
-const up = attempt(() => E.decodeEntry(E.upgradeEntry("An older readout.", sc.scores, sc.reasons, "2026-10-20")));
+const upRaw = attempt(() => E.upgradeEntry("An older readout.", sc.scores, sc.reasons));
+const up = attempt(() => E.decodeEntry(upRaw));
 check(up && up.readout === "An older readout." && up.scores.length === 3 && up.version === null, "a text-only entry saved again keeps the scores the request carries and records the version as not kept");
+check(attempt(() => JSON.parse(upRaw).writtenAt) === null, "a text-only entry saved again records the day it was written as not kept: the re-save day is not the day it was written (266-DT2)");
 
 // 5. What the page and the download say.
 check(attempt(() => E.versionLine("AI-Native SDLC Maturity Model", "v1.4.3")) === "Scored against the AI-Native SDLC Maturity Model v1.4.3.", "the version line, in the wording the card models-doesnt-describe-us uses");
@@ -86,6 +102,8 @@ check(attempt(() => E.NO_SCORES) === "This readout was saved before scores were 
 const dl = attempt(() => E.downloadMd(back, "AI-Native SDLC Maturity Model", "https://example.org/model")) || "";
 check(/## Your scores/.test(dl) && /\| D1 \| Strategy \| C \|/.test(dl) && /\| D2 \| Discovery \| Pre-AI \|/.test(dl), "the download carries the scores as a table");
 check(/\| D3 \| Delivery \| Exempt: Regulated by the Acme charter \|/.test(dl), "the download shows each Exempt reason in its table");
+const piped = attempt(() => E.downloadMd({ readout: "R.", scores: [{ id: "D3", name: "Delivery", level: "Exempt" }], reasons: { D3: "Acme | Beta" }, version: "v1.4.3" }, "AI-Native SDLC Maturity Model", "https://example.org/model")) || "";
+check(piped.includes("| D3 | Delivery | Exempt: Acme \\| Beta |"), "a \"|\" in a reason is escaped, so it doesn't break the download's table");
 check(dl.includes("Scored against the AI-Native SDLC Maturity Model v1.4.3.") && dl.includes("The readout.") && dl.indexOf("## Your scores") < dl.indexOf("The readout."), "the download names the version and puts the scores before the readout");
 check(/CC BY 4\.0/.test(dl) && dl.includes("https://example.org/model"), "the download keeps its licence and model lines");
 const dlOld = attempt(() => E.downloadMd(old, "AI-Native SDLC Maturity Model", "https://example.org/model")) || "";
