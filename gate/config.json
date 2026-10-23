@@ -1,0 +1,5 @@
+{
+ "mode": "record",
+ "serve_decision": false,
+ "why": "The maturity-models site runs the gate watching only (298-DT2; 628-CC with 308-DT2): every decision written to the build log, nothing refused, nothing served. Refusing here is later work."
+}

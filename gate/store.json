@@ -1,0 +1,1076 @@
+{
+ "source": "superdtf-0882/OKF-TOGAF:corpus/authority.md",
+ "revision": "f2942ccdb23fba51d0f7808d3c1e811cdc998eb5",
+ "actor": "AUTH-ACTOR-CC",
+ "action": "AUTH-ACT-PUSH",
+ "repository": "AUTH-SURF-SITE",
+ "rows": [
+  {
+   "id": "AUTH-ACTOR-OWNER",
+   "title": "David, the owner",
+   "relation": "Actor",
+   "role": "ROLE-OWNER",
+   "source": "CHARTER-OWNER"
+  },
+  {
+   "id": "AUTH-ACTOR-CC",
+   "title": "CC, the execution role",
+   "relation": "Actor",
+   "role": "ROLE-CC",
+   "source": "CHARTER-CC"
+  },
+  {
+   "id": "AUTH-ACTOR-DT2",
+   "title": "DT2, the provisioned architecture role",
+   "relation": "Actor",
+   "role": "ROLE-DT",
+   "occupant": "DT2",
+   "source": "CHARTER-DT"
+  },
+  {
+   "id": "AUTH-ACTOR-DTOG",
+   "title": "DTOG, the original architecture role",
+   "relation": "Actor",
+   "role": "ROLE-DTOG",
+   "source": "CHARTER-DTOG"
+  },
+  {
+   "id": "AUTH-TIER-OWNER",
+   "title": "The owner acts in the owner tier",
+   "relation": "Tier",
+   "actor": "AUTH-ACTOR-OWNER",
+   "tier": "owner",
+   "source": "CHARTER-OWNER"
+  },
+  {
+   "id": "AUTH-TIER-CC-EXECUTOR",
+   "title": "CC acts in the executor tier",
+   "relation": "Tier",
+   "actor": "AUTH-ACTOR-CC",
+   "tier": "executor",
+   "source": "CHARTER-CC"
+  },
+  {
+   "id": "AUTH-TIER-DT2-DRAFTER",
+   "title": "DT2 drafts",
+   "relation": "Tier",
+   "actor": "AUTH-ACTOR-DT2",
+   "tier": "drafter",
+   "source": "CHARTER-DT"
+  },
+  {
+   "id": "AUTH-TIER-DT2-REVIEWER",
+   "title": "DT2 reviews",
+   "relation": "Tier",
+   "actor": "AUTH-ACTOR-DT2",
+   "tier": "reviewer",
+   "source": "CHARTER-DT"
+  },
+  {
+   "id": "AUTH-TIER-DTOG-DRAFTER",
+   "title": "DTOG drafts",
+   "relation": "Tier",
+   "actor": "AUTH-ACTOR-DTOG",
+   "tier": "drafter",
+   "source": "CHARTER-DTOG"
+  },
+  {
+   "id": "AUTH-ACT-READ",
+   "title": "Read",
+   "relation": "Action",
+   "kind": "read",
+   "irreversible": false,
+   "source": "briefs/2026-10-01-svm-tranche-3/263-DT2-d7-plan-trace.md"
+  },
+  {
+   "id": "AUTH-ACT-PUSH",
+   "title": "Push to a repository",
+   "relation": "Action",
+   "kind": "write",
+   "irreversible": false,
+   "source": "briefs/2026-10-01-svm-tranche-3/DTOG-d7-plan.md"
+  },
+  {
+   "id": "AUTH-ACT-CONFIGURE",
+   "title": "Change a security or permission setting",
+   "relation": "Action",
+   "kind": "configure",
+   "irreversible": false,
+   "source": "briefs/2026-10-01-svm-tranche-3/52-CC-settings-and-containment.md"
+  },
+  {
+   "id": "AUTH-SURF-CORPUS",
+   "title": "The corpus repository, OKF-TOGAF",
+   "relation": "Surface",
+   "cites": "A21",
+   "party": "practice",
+   "source": "A21"
+  },
+  {
+   "id": "AUTH-SURF-SITE",
+   "title": "The maturity models site, aimaturitymodels.com",
+   "relation": "Surface",
+   "cites": "A13",
+   "party": "practice",
+   "source": "A13"
+  },
+  {
+   "id": "AUTH-SURF-SUPPLIER",
+   "title": "The market-intelligence supplier's repository",
+   "relation": "Surface",
+   "cites": "A18",
+   "party": "outside",
+   "source": "AC-013"
+  },
+  {
+   "id": "AUTH-SURF-SETTINGS-PROJECT",
+   "title": "The corpus repository's Claude Code settings",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": ".claude/settings.json",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/52-CC-settings-and-containment.md"
+  },
+  {
+   "id": "AUTH-SURF-SETTINGS-LOCAL",
+   "title": "The corpus repository's local Claude Code settings",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": ".claude/settings.local.json",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/52-CC-settings-and-containment.md"
+  },
+  {
+   "id": "AUTH-SURF-SETTINGS-USER",
+   "title": "The owner's user-level Claude Code settings, in no repository",
+   "relation": "Surface",
+   "path": "~/.claude/settings.json",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/52-CC-settings-and-containment.md"
+  },
+  {
+   "id": "AUTH-SURF-PLANE-SHEET",
+   "title": "The authority sheet",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "corpus/authority.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/570-CC-219-piece1-built.md"
+  },
+  {
+   "id": "AUTH-SURF-PLANE-RULES",
+   "title": "The generated rule file",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "tools/generated/authority.dl",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/570-CC-219-piece1-built.md"
+  },
+  {
+   "id": "AUTH-SURF-PLANE-LIB",
+   "title": "The authority checks",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "tools/lib/authority.js",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/570-CC-219-piece1-built.md"
+  },
+  {
+   "id": "AUTH-SURF-PLANE-EVALUATORS",
+   "title": "The authority libraries: the checks, the facts, both evaluators and the held-out cases, by one pattern",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "tools/lib/authority*.js",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/588-CC-plane-evaluators.md"
+  },
+  {
+   "id": "AUTH-SURF-PLANE-PROBE",
+   "title": "The probe tool",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "tools/reach-probe.js",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/592-CC-reach-rows.md"
+  },
+  {
+   "id": "AUTH-SURF-PLANE-PROBES",
+   "title": "The probe list and its expected outcomes",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "tools/reach-probes.json",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/592-CC-reach-rows.md"
+  },
+  {
+   "id": "AUTH-SURF-PLANE-TOOL",
+   "title": "The authority tool",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "tools/authority.js",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/570-CC-219-piece1-built.md"
+  },
+  {
+   "id": "AUTH-SURF-CHARTER-OWNER",
+   "title": "The owner's charter",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "spec/charter-owner.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-SURF-CHARTER-CC",
+   "title": "CC's charter",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "spec/charter-cc.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-SURF-CHARTER-DT",
+   "title": "DT's charter",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "spec/charter-dt.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-SURF-CHARTER-DTOG",
+   "title": "DTOG's charter",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "spec/charter-dtog.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-SURF-CHARTER-TEMPLATE",
+   "title": "The charter template",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "spec/charter-template.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-SURF-RULES",
+   "title": "The Rules",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "corpus/rules.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-SURF-CONTRACTS",
+   "title": "The architecture contracts",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "corpus/architecture_contracts.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-SURF-ROLES",
+   "title": "The roles register",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "corpus/roles.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-SURF-BUNDLE-SPEC",
+   "title": "The bundle spec",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "spec/ea-okf-bundle-spec.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-SURF-HOOKS",
+   "title": "The corpus repository's hooks",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "tools/hooks/",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-SURF-SITE-GATE",
+   "title": "The site's Work Item deploy gate",
+   "relation": "Surface",
+   "cites": "A13",
+   "path": "scripts/work-item-gate.js",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-SURF-SITE-RELEASE-GATE",
+   "title": "The site's release gate, the recorder, in the plane class",
+   "relation": "Surface",
+   "cites": "A13",
+   "path": "gate/",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/635-CC-site-install-prepared.md"
+  },
+  {
+   "id": "AUTH-SURF-SITE-CODE-GATE",
+   "title": "The site's secrets gate, run in its build, in the plane class",
+   "relation": "Surface",
+   "cites": "A13",
+   "path": "scripts/code-gate.js",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/638-CC-site-gate-rows.md"
+  },
+  {
+   "id": "AUTH-SURF-SITE-HOOK",
+   "title": "The site's copy of the commit hook, in the plane class",
+   "relation": "Surface",
+   "cites": "A13",
+   "path": "tools/hooks/",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/638-CC-site-gate-rows.md"
+  },
+  {
+   "id": "AUTH-SURF-SITE-SURFACES",
+   "title": "The surfaces file the site's commit hook reads, in the plane class",
+   "relation": "Surface",
+   "cites": "A13",
+   "path": ".work-item-surfaces",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/638-CC-site-gate-rows.md"
+  },
+  {
+   "id": "AUTH-SURF-SITE-SETTINGS",
+   "title": "The site's project settings file, in the settings class by its path",
+   "relation": "Surface",
+   "cites": "A13",
+   "path": ".claude/settings.json",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/635-CC-site-install-prepared.md"
+  },
+  {
+   "id": "AUTH-SURF-SITE-SETTINGS-LOCAL",
+   "title": "The site's local settings file, in the settings class by its path",
+   "relation": "Surface",
+   "cites": "A13",
+   "path": ".claude/settings.local.json",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/636-CC-settings-local-rows.md"
+  },
+  {
+   "id": "AUTH-SURF-CLEARANCE-LIB",
+   "title": "The clearance library the gate and the filing check call",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "tools/lib/clearance.js",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/587-CC-probe-rows.md"
+  },
+  {
+   "id": "AUTH-SURF-PROBE",
+   "title": "The standing probe target, okf-probe-inside",
+   "relation": "Surface",
+   "cites": "A23",
+   "party": "practice",
+   "source": "A23"
+  },
+  {
+   "id": "AUTH-SURF-PROBE-OUTSIDE",
+   "title": "The throwaway target outside every grant, okf-probe-outside",
+   "relation": "Surface",
+   "cites": "A25",
+   "party": "practice",
+   "source": "A25"
+  },
+  {
+   "id": "AUTH-SURF-PROBE-SETTINGS",
+   "title": "The probe's stand-in for the settings class",
+   "relation": "Surface",
+   "cites": "A23",
+   "path": ".claude/settings.json",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/587-CC-probe-rows.md"
+  },
+  {
+   "id": "AUTH-SURF-PROBE-SETTINGS-LOCAL",
+   "title": "The probe's local settings file, in the settings class by its path",
+   "relation": "Surface",
+   "cites": "A23",
+   "path": ".claude/settings.local.json",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/636-CC-settings-local-rows.md"
+  },
+  {
+   "id": "AUTH-SURF-PROBE-GATE",
+   "title": "The probe's deploy gate, its stand-in for the plane class",
+   "relation": "Surface",
+   "cites": "A23",
+   "path": "gate/",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/587-CC-probe-rows.md"
+  },
+  {
+   "id": "AUTH-SURF-PROBE-SPEC",
+   "title": "The probe's stand-in for the ratified instruments",
+   "relation": "Surface",
+   "cites": "A23",
+   "path": "spec/",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/587-CC-probe-rows.md"
+  },
+  {
+   "id": "AUTH-SURF-SPEC",
+   "title": "The spec folder, every file under it",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "spec/",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/579-CC-219-piece4-decided.md"
+  },
+  {
+   "id": "AUTH-SURF-STANDARDS",
+   "title": "The standards register",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "corpus/standards.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/579-CC-219-piece4-decided.md"
+  },
+  {
+   "id": "AUTH-SURF-PRINCIPLES",
+   "title": "The principles",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "corpus/principles.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/579-CC-219-piece4-decided.md"
+  },
+  {
+   "id": "AUTH-SURF-CONSTRAINTS",
+   "title": "The constraints",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "corpus/constraints.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/579-CC-219-piece4-decided.md"
+  },
+  {
+   "id": "AUTH-SURF-INTENTS",
+   "title": "The intent register",
+   "relation": "Surface",
+   "cites": "A21",
+   "path": "corpus/intent_register.md",
+   "party": "practice",
+   "source": "briefs/2026-10-01-svm-tranche-3/579-CC-219-piece4-decided.md"
+  },
+  {
+   "id": "AUTH-CLASS-RATIFIED",
+   "title": "The owner's ratified instruments beyond the plane: every file under spec/, and the standards, principles, constraints and intent register",
+   "relation": "Class",
+   "members": [
+    "spec/",
+    "corpus/standards.md",
+    "corpus/principles.md",
+    "corpus/constraints.md",
+    "corpus/intent_register.md"
+   ],
+   "source": "briefs/2026-10-01-svm-tranche-3/579-CC-219-piece4-decided.md"
+  },
+  {
+   "id": "AUTH-CLASS-SETTINGS",
+   "title": "Security and permission settings",
+   "relation": "Class",
+   "members": [
+    ".claude/settings.json",
+    ".claude/settings.local.json",
+    "~/.claude/settings.json"
+   ],
+   "source": "briefs/2026-10-01-svm-tranche-3/52-CC-settings-and-containment.md"
+  },
+  {
+   "id": "AUTH-CLASS-PLANE",
+   "title": "The authority plane: its own files, the instruments its rows cite, and every gate and hook",
+   "relation": "Class",
+   "members": [
+    "corpus/authority.md",
+    "tools/generated/authority.dl",
+    "tools/lib/authority*.js",
+    "tools/authority.js",
+    "spec/charter-*.md",
+    "corpus/rules.md",
+    "corpus/architecture_contracts.md",
+    "corpus/roles.md",
+    "spec/ea-okf-bundle-spec.md",
+    "tools/hooks/",
+    "AUTH-SURF-SITE-GATE",
+    "AUTH-SURF-SITE-RELEASE-GATE",
+    "AUTH-SURF-SITE-CODE-GATE",
+    "AUTH-SURF-SITE-HOOK",
+    "AUTH-SURF-SITE-SURFACES",
+    "tools/lib/clearance.js",
+    "AUTH-SURF-PROBE-GATE",
+    "tools/reach-probe.js",
+    "tools/reach-probes.json"
+   ],
+   "source": "briefs/2026-10-01-svm-tranche-3/576-CC-219-plane-widened.md"
+  },
+  {
+   "id": "AUTH-CLASS-PRACTICE-REPOS",
+   "title": "The practice's repositories",
+   "relation": "Class",
+   "members": [
+    "AUTH-SURF-CORPUS",
+    "AUTH-SURF-SITE"
+   ],
+   "source": "briefs/2026-10-01-svm-tranche-3/570-CC-219-piece1-built.md"
+  },
+  {
+   "id": "AUTH-FORBID-SETTINGS-EXECUTOR",
+   "title": "No executor changes a security or permission setting, even on the owner's word",
+   "relation": "Forbidden",
+   "tier": "executor",
+   "action": "AUTH-ACT-CONFIGURE",
+   "class": "AUTH-CLASS-SETTINGS",
+   "source": "briefs/2026-10-01-svm-tranche-3/52-CC-settings-and-containment.md"
+  },
+  {
+   "id": "AUTH-FORBID-SETTINGS-DRAFTER",
+   "title": "No drafter changes a security or permission setting, even on the owner's word",
+   "relation": "Forbidden",
+   "tier": "drafter",
+   "action": "AUTH-ACT-CONFIGURE",
+   "class": "AUTH-CLASS-SETTINGS",
+   "source": "briefs/2026-10-01-svm-tranche-3/52-CC-settings-and-containment.md"
+  },
+  {
+   "id": "AUTH-FORBID-SETTINGS-REVIEWER",
+   "title": "No reviewer changes a security or permission setting, even on the owner's word",
+   "relation": "Forbidden",
+   "tier": "reviewer",
+   "action": "AUTH-ACT-CONFIGURE",
+   "class": "AUTH-CLASS-SETTINGS",
+   "source": "briefs/2026-10-01-svm-tranche-3/52-CC-settings-and-containment.md"
+  },
+  {
+   "id": "AUTH-FORBID-SETTINGS-PUSH-EXECUTOR",
+   "title": "No executor pushes a change to a security or permission setting, even on the owner's word",
+   "relation": "Forbidden",
+   "tier": "executor",
+   "action": "AUTH-ACT-PUSH",
+   "class": "AUTH-CLASS-SETTINGS",
+   "source": "briefs/2026-10-01-svm-tranche-3/52-CC-settings-and-containment.md"
+  },
+  {
+   "id": "AUTH-FORBID-SETTINGS-PUSH-DRAFTER",
+   "title": "No drafter pushes a change to a security or permission setting, even on the owner's word",
+   "relation": "Forbidden",
+   "tier": "drafter",
+   "action": "AUTH-ACT-PUSH",
+   "class": "AUTH-CLASS-SETTINGS",
+   "source": "briefs/2026-10-01-svm-tranche-3/52-CC-settings-and-containment.md"
+  },
+  {
+   "id": "AUTH-FORBID-SETTINGS-PUSH-REVIEWER",
+   "title": "No reviewer pushes a change to a security or permission setting, even on the owner's word",
+   "relation": "Forbidden",
+   "tier": "reviewer",
+   "action": "AUTH-ACT-PUSH",
+   "class": "AUTH-CLASS-SETTINGS",
+   "source": "briefs/2026-10-01-svm-tranche-3/52-CC-settings-and-containment.md"
+  },
+  {
+   "id": "AUTH-FORBID-SUPPLIER-EXECUTOR",
+   "title": "No executor writes to the supplier's repository",
+   "relation": "Forbidden",
+   "tier": "executor",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-SUPPLIER",
+   "source": "AC-013"
+  },
+  {
+   "id": "AUTH-FORBID-SUPPLIER-DRAFTER",
+   "title": "No drafter writes to the supplier's repository",
+   "relation": "Forbidden",
+   "tier": "drafter",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-SUPPLIER",
+   "source": "AC-013"
+  },
+  {
+   "id": "AUTH-FORBID-SUPPLIER-REVIEWER",
+   "title": "No reviewer writes to the supplier's repository",
+   "relation": "Forbidden",
+   "tier": "reviewer",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-SUPPLIER",
+   "source": "AC-013"
+  },
+  {
+   "id": "AUTH-FORBID-DT2-PUSH",
+   "title": "DT's role pushes to none of the practice's repositories",
+   "relation": "Forbidden",
+   "actor": "AUTH-ACTOR-DT2",
+   "action": "AUTH-ACT-PUSH",
+   "class": "AUTH-CLASS-PRACTICE-REPOS",
+   "source": "RULE-5"
+  },
+  {
+   "id": "AUTH-LINE-SUPPLIER-READ",
+   "title": "CC reads the supplier's current state from GitHub",
+   "relation": "Line",
+   "text": "Treat the supplier as a paid third party: CC reads its current state from GitHub when needed and records the version and date read; the check reports against AC-013's terms and never blocks; shortfalls go to the supplier as a list, not as direction on its work; a supplier that keeps falling short is replaced -- David Facer 10/19/2026",
+   "date": "2026-10-19",
+   "given_to": "AUTH-ACTOR-CC",
+   "grants": [
+    {
+     "action": "AUTH-ACT-READ",
+     "surface": "AUTH-SURF-SUPPLIER"
+    }
+   ],
+   "excludes": [],
+   "source": "briefs/2026-10-01-svm-tranche-3/537-CC-d1-d4-readings.md"
+  },
+  {
+   "id": "AUTH-LINE-STANDING",
+   "title": "The owner's standing line: routine changes ship once DT2's review clears the commit that ships",
+   "relation": "Line",
+   "text": "Routine changes ship once DT2's review clears the commit that ships; this never covers anything irreversible, security, permission or account settings, credentials, a new public claim about a person or an organization, or the authority plane itself -- David Facer 10/20/2026",
+   "date": "2026-10-20",
+   "given_to": "AUTH-ACTOR-CC",
+   "grants": [
+    {
+     "action": "AUTH-ACT-PUSH",
+     "surface": "AUTH-SURF-CORPUS"
+    },
+    {
+     "action": "AUTH-ACT-PUSH",
+     "surface": "AUTH-SURF-SITE"
+    },
+    {
+     "action": "AUTH-ACT-PUSH",
+     "surface": "AUTH-SURF-PROBE"
+    }
+   ],
+   "excludes": [
+    "AUTH-CLASS-SETTINGS",
+    "AUTH-CLASS-PLANE",
+    "AUTH-CLASS-RATIFIED"
+   ],
+   "source": "briefs/2026-10-01-svm-tranche-3/574-CC-219-standing-line.md"
+  },
+  {
+   "id": "AUTH-REQ-SITE-WORKITEM",
+   "title": "A push to the site needs a Work-Item line",
+   "relation": "Requires",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-SITE",
+   "condition": "a Work-Item line naming an open Work Item, in the commit message",
+   "source": "A13"
+  },
+  {
+   "id": "AUTH-REQ-SITE-LINE",
+   "title": "A push to the site needs the owner's line for that push",
+   "relation": "Requires",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-SITE",
+   "condition": "the owner's line for that push, in the act's record",
+   "source": "CHARTER-CC"
+  },
+  {
+   "id": "AUTH-REQ-CORPUS-LINE",
+   "title": "A push to the corpus needs the owner's line for that push, until GitHub refuses an uncleared push there",
+   "relation": "Requires",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-CORPUS",
+   "condition": "the owner's line for that push, in the act's record, until piece 7's push rule is proved on the corpus",
+   "source": "briefs/2026-10-01-svm-tranche-3/579-CC-219-piece4-decided.md"
+  },
+  {
+   "id": "AUTH-COVERS-CR023",
+   "title": "DT's read-only credential covers a push to the corpus repository",
+   "relation": "Covers",
+   "control": "RULE-5",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-CORPUS",
+   "source": "RULE-5"
+  },
+  {
+   "id": "AUTH-COVERS-RING3",
+   "title": "The Work Item deploy gate covers a push to the site",
+   "relation": "Covers",
+   "control": "TC-55",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-SITE",
+   "source": "A13"
+  },
+  {
+   "id": "AUTH-NOTMED-GATE-SELF",
+   "title": "At deploy, a change to the gate is judged by the changed gate",
+   "relation": "NotMediated",
+   "point": "the deploy gate",
+   "path": "the gate's own files, in the repository it guards",
+   "reason": "The gate lives in the repository it guards and the build runs the new gate, so a gate that dropped a check would pass its own change. The filing act rebuilds every commit touching the gate with its parent's gate and records whether that one would have refused; the commit that installs a gate has no parent gate and is recorded as ungated by construction, its clearance and Owner-Line checked after the fact. Lifts when piece 7's rule holds the gate's files.",
+   "decision": "briefs/2026-10-01-svm-tranche-3/282-DT2-gate-points.md",
+   "source": "briefs/2026-10-01-svm-tranche-3/282-DT2-gate-points.md"
+  },
+  {
+   "id": "AUTH-NOTMED-GATE-WIRING",
+   "title": "At deploy, wiring that stops the gate or ignores its refusal is past any gate",
+   "relation": "NotMediated",
+   "point": "the deploy gate",
+   "path": "the build's wiring: package.json's build scripts, vercel.json's build settings, and the hosting project's own build command",
+   "reason": "The gate refuses a change to the wiring without Owner-Line only where the changed wiring still runs the gate and honours its exit. Wiring that stops the gate, or ignores its refusal, is never judged by it; nor is the hosting project's own build command, the owner's account setting, forbidden to CC and out of the rows' reach. The filing act checks every deployed commit's wiring after the fact and records any other as gate not run. That CC is forbidden to change the hosting project's build command is itself held by conduct alone: the owner's Vercel login stays on this machine, so any session could change it (289-DT2 section 4); narrowing it would be its own piece.",
+   "decision": "briefs/2026-10-01-svm-tranche-3/283-DT2-build-wiring.md",
+   "source": "briefs/2026-10-01-svm-tranche-3/283-DT2-build-wiring.md"
+  },
+  {
+   "id": "AUTH-NOTMED-CC-OWNER-ACCOUNT",
+   "title": "On the owner's machine, CC's reach is the owner's, so nothing GitHub or the hosting enforces stands between CC and its prohibitions there",
+   "relation": "NotMediated",
+   "point": "CC's own reach",
+   "path": "every service the owner's logins on this machine reach: GitHub through git and its command-line tool, Vercel, and the browser's sessions",
+   "reason": "CC runs as the owner's Windows user, so every login the owner holds on this machine is in its reach: today that includes a push to the supplier's private repository, a change to a hosting project's settings, and anything the browser is signed in to. AUTH-FORBID-SUPPLIER-EXECUTOR and the settings prohibitions therefore rest here on CC's conduct and this machine's own guards on its commands, not on anything GitHub or the hosting enforce; how far those guards reach is not established, since reading their settings is barred to CC. Narrowing CC's credentials on this machine would stop mistakes, not reach, and its probe would show only that GitHub honours a credential's list, so it was not installed (the owner's concerns, 594-CC). A boundary that holds without conduct needs an identity that cannot reach the owner's logins, which the owner's line of 581-CC defers; a cloud agent whose only key is a GitHub app scoped to one throwaway repository is probed instead (595-CC). Lifts when CC works under an identity of its own.",
+   "decision": "briefs/2026-10-01-svm-tranche-3/594-CC-piece6-held-by-conduct.md",
+   "source": "briefs/2026-10-01-svm-tranche-3/594-CC-piece6-held-by-conduct.md"
+  },
+  {
+   "id": "AUTH-NOTMED-HISTORY",
+   "title": "At deploy, history rewritten before the cleared base is not seen",
+   "relation": "NotMediated",
+   "point": "the deploy gate",
+   "path": "the branch's history before the clearance's base",
+   "reason": "The build sees the commit it ships and that commit's history. Every file changed from the cleared base is checked, and a base not in that history is refused; what the branch held before a force-push is not in the build's copy, so a non-fast-forward is not seen there. Lifts when piece 7's rule refuses a non-fast-forward at the push.",
+   "decision": "briefs/2026-10-01-svm-tranche-3/577-CC-219-piece4-plan.md",
+   "source": "briefs/2026-10-01-svm-tranche-3/577-CC-219-piece4-plan.md"
+  },
+  {
+   "id": "AUTH-COVERS-PROBE-GATE",
+   "title": "The probe target's deploy gate covers a push to okf-probe-inside",
+   "relation": "Covers",
+   "control": "TC-89",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-PROBE",
+   "source": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md"
+  },
+  {
+   "id": "AUTH-NOTMED-DT2-OUTSIDE-CLONE",
+   "title": "A DT2 session outside DT's clone holds the machine's shared credential, so only conduct stops it pushing",
+   "relation": "NotMediated",
+   "point": "DT's read-only credential (CR-023)",
+   "path": "a DT2 session launched outside DT's clone, such as a worktree of the main checkout",
+   "reason": "CR-023 binds the clone, not the role: a session outside the clone uses the machine's shared credential manager, which holds the owner's write-capable credential, so a push from there would likely be admitted. One Windows account holds every role's keys (276-DT2 section 3.2), left as decided (DTOG-d7-identity). AUTH-FORBID-DT2-PUSH stays the rule; this row says how far it is enforced.",
+   "decision": "briefs/2026-10-01-svm-tranche-3/287-DT2-piece5-rulings.md",
+   "source": "briefs/2026-10-01-svm-tranche-3/287-DT2-piece5-rulings.md"
+  },
+  {
+   "id": "AUTH-REACH-TC-89-PROBE-ADMITTED-20261021-09BFDE8",
+   "title": "TC-89 admitted for AUTH-ACT-PUSH on AUTH-SURF-PROBE, 2026-10-21",
+   "relation": "Reach",
+   "control": "TC-89",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-PROBE",
+   "date": "2026-10-21",
+   "outcome": "admitted",
+   "probe": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md",
+   "reason": "expected: a cleared change the rows permit; shown by 09bfde81a992974afbea6f089c86a726702a5a11: allowed, cleared by 285-DT2",
+   "source": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md"
+  },
+  {
+   "id": "AUTH-REACH-TC-89-PROBE-REFUSED-20261021-9C42B92",
+   "title": "TC-89 refused for AUTH-ACT-PUSH on AUTH-SURF-PROBE, 2026-10-21",
+   "relation": "Reach",
+   "control": "TC-89",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-PROBE",
+   "date": "2026-10-21",
+   "outcome": "refused",
+   "probe": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md",
+   "reason": "shown by 9c42b922b453d60fd325423fb3281d1478b06fc5: clearance, no Cleared-By line",
+   "source": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md"
+  },
+  {
+   "id": "AUTH-REACH-TC-89-PROBE-SETTINGS-REFUSED-20261021-CBED092",
+   "title": "TC-89 refused for AUTH-ACT-PUSH on AUTH-SURF-PROBE-SETTINGS, 2026-10-21",
+   "relation": "Reach",
+   "control": "TC-89",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-PROBE-SETTINGS",
+   "date": "2026-10-21",
+   "outcome": "refused",
+   "probe": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md",
+   "reason": "shown by cbed092ea6b644eef8fc993a5996919938c4e10b: forbidden, .claude/settings.json is in AUTH-SURF-PROBE-SETTINGS, which no line overrides",
+   "source": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md"
+  },
+  {
+   "id": "AUTH-REACH-TC-89-PROBE-GATE-REFUSED-20261021-EE4EEE5",
+   "title": "TC-89 refused for AUTH-ACT-PUSH on AUTH-SURF-PROBE-GATE, 2026-10-21",
+   "relation": "Reach",
+   "control": "TC-89",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-PROBE-GATE",
+   "date": "2026-10-21",
+   "outcome": "refused",
+   "probe": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md",
+   "reason": "shown by ee4eee5566fb0bdbe85d0ee119fb08e6a03a330e: excluded, gate/config.json is in AUTH-SURF-PROBE-GATE, which the line excludes; it needs Owner-Line",
+   "source": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md"
+  },
+  {
+   "id": "AUTH-REACH-TC-89-PROBE-SPEC-REFUSED-20261021-9A75FFD",
+   "title": "TC-89 refused for AUTH-ACT-PUSH on AUTH-SURF-PROBE-SPEC, 2026-10-21",
+   "relation": "Reach",
+   "control": "TC-89",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-PROBE-SPEC",
+   "date": "2026-10-21",
+   "outcome": "refused",
+   "probe": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md",
+   "reason": "shown by 9a75ffd2a444ac9d9484736cb9e5b904a1b76437: excluded, spec/stand-in.md is in AUTH-SURF-PROBE-SPEC, which the line excludes; it needs Owner-Line",
+   "source": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md"
+  },
+  {
+   "id": "AUTH-REACH-TC-89-PROBE-ADMITTED-20261021-25C053E",
+   "title": "TC-89 admitted for AUTH-ACT-PUSH on AUTH-SURF-PROBE, 2026-10-21",
+   "relation": "Reach",
+   "control": "TC-89",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-PROBE",
+   "date": "2026-10-21",
+   "outcome": "admitted",
+   "probe": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md",
+   "reason": "expected: a cleared change the rows permit; shown by 25c053e6649f76969b19e954e2064183a18d5025: allowed, cleared by 285-DT2, with the owner's line in 590-CC",
+   "source": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md"
+  },
+  {
+   "id": "AUTH-REACH-TC-89-PROBE-GATE-ADMITTED-20261021-25C053E",
+   "title": "TC-89 admitted for AUTH-ACT-PUSH on AUTH-SURF-PROBE-GATE, 2026-10-21",
+   "relation": "Reach",
+   "control": "TC-89",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-PROBE-GATE",
+   "date": "2026-10-21",
+   "outcome": "admitted",
+   "probe": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md",
+   "reason": "expected: a cleared change the rows permit; shown by 25c053e6649f76969b19e954e2064183a18d5025: allowed, cleared by 285-DT2, with the owner's line in 590-CC",
+   "source": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md"
+  },
+  {
+   "id": "AUTH-REACH-TC-89-PROBE-ADMITTED-20261021-9E1ED3A",
+   "title": "TC-89 admitted for AUTH-ACT-PUSH on AUTH-SURF-PROBE, 2026-10-21",
+   "relation": "Reach",
+   "control": "TC-89",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-PROBE",
+   "date": "2026-10-21",
+   "outcome": "admitted",
+   "probe": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md",
+   "reason": "declared, not a fault: AUTH-NOTMED-GATE-WIRING; shown by 9e1ed3a7a00b21201939e2f67baad00a9b62989d: the build did not run the gate; the gate before it would have refused",
+   "source": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md"
+  },
+  {
+   "id": "AUTH-REACH-TC-89-PROBE-ADMITTED-20261021-038AA5F",
+   "title": "TC-89 admitted for AUTH-ACT-PUSH on AUTH-SURF-PROBE, 2026-10-21",
+   "relation": "Reach",
+   "control": "TC-89",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-PROBE",
+   "date": "2026-10-21",
+   "outcome": "admitted",
+   "probe": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md",
+   "reason": "expected: a cleared change the rows permit; shown by 038aa5f82a1b13e3bb04e8fd0b4a0cda32b4b801: allowed, cleared by 285-DT2, with the owner's line in 590-CC",
+   "source": "briefs/2026-10-01-svm-tranche-3/591-CC-gate-proved.md"
+  },
+  {
+   "id": "AUTH-REACH-RULE-5-CORPUS-REFUSED-20260812",
+   "title": "RULE-5 refused for AUTH-ACT-PUSH on AUTH-SURF-CORPUS, 2026-08-12",
+   "relation": "Reach",
+   "control": "RULE-5",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-CORPUS",
+   "date": "2026-08-12",
+   "outcome": "refused",
+   "probe": "briefs/2026-08-12-dt-substrate/04-CC-provisioning-record.md",
+   "reason": "the EARLIER credential's refusal, which expired in September 2026 (briefs/2026-09-11-cr023-expiry/04-CC); not re-attempted. The reissued credential RULE-5 binds now is declared and not shown, on the owner's line of 2026-10-22, in AUTH-REACH-RULE-5-CORPUS-NOT-PROBED-20261022 (629-CC). Shown by git push --no-verify <real-url> from DT's clone: remote: Write access to repository not granted, 403",
+   "source": "briefs/2026-08-12-dt-substrate/04-CC-provisioning-record.md"
+  },
+  {
+   "id": "AUTH-REACH-RULE-5-CORPUS-NOT-PROBED-20261022",
+   "title": "RULE-5 not probed for AUTH-ACT-PUSH on AUTH-SURF-CORPUS, 2026-10-22: DT's current read-only credential, declared and not shown",
+   "relation": "Reach",
+   "control": "RULE-5",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-CORPUS",
+   "date": "2026-10-22",
+   "outcome": "not-probed",
+   "probe": "briefs/2026-10-01-svm-tranche-3/629-CC-credential-declared.md",
+   "reason": "declared, not shown, on the owner's line to CC directly, \"Settle item 219's last unshown boundary, DT's current read-only credential, which serves my intent to guarantee the governance plane, by declaring it: the August refusal is recorded as the earlier credential's, and this one as declared but not shown, as DT2's 287 brief ruled -- David Facer 10/22/2026\" (628-CC section 5): the credential reissued after September 2026's expiry is the one RULE-5 binds now, and its refusal has not been shown by attempt; the owner chose to declare it rather than widen its reach to a probe target. The August refusal is the earlier credential's (AUTH-REACH-RULE-5-CORPUS-REFUSED-20260812). An attempt, if one is wanted later, belongs to a session launched in DT's clone once the owner adds a probe target to this credential's scope (287-DT2); look again by 2026-12-10, its expiry, as briefs/2026-09-11-cr023-expiry/04-CC records it",
+   "source": "briefs/2026-10-01-svm-tranche-3/629-CC-credential-declared.md"
+  },
+  {
+   "id": "AUTH-REACH-TC-89-PROBE-REFUSED-20261021-5D83774",
+   "title": "TC-89 refused for AUTH-ACT-PUSH on AUTH-SURF-PROBE, 2026-10-21",
+   "relation": "Reach",
+   "control": "TC-89",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-PROBE",
+   "date": "2026-10-21",
+   "outcome": "refused",
+   "probe": "briefs/2026-10-01-svm-tranche-3/595-CC-cloud-probe-plan.md",
+   "reason": "by attempt, from an actor outside the practice whose rules do not bind it; it shows the gate refused this push, not that no other route exists (290-DT2); shown by 5d83774b on branch codex-probe-b, pushed by the Codex app at 18:44 UTC; the okf-probe preview build's gate: clearance, no Cleared-By line",
+   "source": "briefs/2026-10-01-svm-tranche-3/595-CC-cloud-probe-plan.md"
+  },
+  {
+   "id": "AUTH-REACH-TC-55-SITE-NOT-PROBED-20261021",
+   "title": "TC-55 not probed for AUTH-ACT-PUSH on AUTH-SURF-SITE, 2026-10-21",
+   "relation": "Reach",
+   "control": "TC-55",
+   "action": "AUTH-ACT-PUSH",
+   "surface": "AUTH-SURF-SITE",
+   "date": "2026-10-21",
+   "outcome": "not-probed",
+   "probe": "briefs/2026-10-01-svm-tranche-3/592-CC-reach-rows.md",
+   "reason": "live: the probe never pushes to a live site (568-CC piece 5); the site is probed by attempt when its own authority gate is live there, against a throwaway path (287-DT2)",
+   "source": "briefs/2026-10-01-svm-tranche-3/592-CC-reach-rows.md"
+  },
+  {
+   "id": "AUTH-RULE-UNDER-SELF",
+   "title": "A surface is under itself",
+   "relation": "Rule",
+   "head": "Under(s,s)",
+   "body": [
+    "Surface(s)"
+   ],
+   "stratum": 1,
+   "source": "briefs/2026-10-01-svm-tranche-3/573-CC-219-within-built.md"
+  },
+  {
+   "id": "AUTH-RULE-UNDER-WITHIN",
+   "title": "A file is under the repository it is within",
+   "relation": "Rule",
+   "head": "Under(s,r)",
+   "body": [
+    "Within(s,r)"
+   ],
+   "stratum": 1,
+   "source": "briefs/2026-10-01-svm-tranche-3/573-CC-219-within-built.md"
+  },
+  {
+   "id": "AUTH-RULE-INCLASS",
+   "title": "A surface is in a class if it is under one of the class's members",
+   "relation": "Rule",
+   "head": "InClass(s,c)",
+   "body": [
+    "Member(m,c)",
+    "Under(s,m)"
+   ],
+   "stratum": 1,
+   "source": "briefs/2026-10-01-svm-tranche-3/573-CC-219-within-built.md"
+  },
+  {
+   "id": "AUTH-RULE-BARRED-TIER",
+   "title": "An actor is barred from what its tier is forbidden on a surface, and on every file under it",
+   "relation": "Rule",
+   "head": "Barred(a,k,s)",
+   "body": [
+    "Tier(a,t)",
+    "Forbidden(t,k,r)",
+    "Under(s,r)"
+   ],
+   "stratum": 1,
+   "source": "briefs/2026-10-01-svm-tranche-3/573-CC-219-within-built.md"
+  },
+  {
+   "id": "AUTH-RULE-BARRED-ACTOR",
+   "title": "An actor is barred from what it is itself forbidden on a surface, and on every file under it",
+   "relation": "Rule",
+   "head": "Barred(a,k,s)",
+   "body": [
+    "Forbidden(a,k,r)",
+    "Under(s,r)"
+   ],
+   "stratum": 1,
+   "source": "briefs/2026-10-01-svm-tranche-3/573-CC-219-within-built.md"
+  },
+  {
+   "id": "AUTH-RULE-BARRED-TIER-CLASS",
+   "title": "An actor is barred from what its tier is forbidden on a class",
+   "relation": "Rule",
+   "head": "Barred(a,k,s)",
+   "body": [
+    "Tier(a,t)",
+    "ForbiddenClass(t,k,c)",
+    "InClass(s,c)"
+   ],
+   "stratum": 1,
+   "source": "briefs/2026-10-01-svm-tranche-3/570-CC-219-piece1-built.md"
+  },
+  {
+   "id": "AUTH-RULE-BARRED-ACTOR-CLASS",
+   "title": "An actor is barred from what it is itself forbidden on a class",
+   "relation": "Rule",
+   "head": "Barred(a,k,s)",
+   "body": [
+    "ForbiddenClass(a,k,c)",
+    "InClass(s,c)"
+   ],
+   "stratum": 1,
+   "source": "briefs/2026-10-01-svm-tranche-3/570-CC-219-piece1-built.md"
+  },
+  {
+   "id": "AUTH-RULE-EXCLUDED",
+   "title": "A standing line never covers a surface in a class it excludes",
+   "relation": "Rule",
+   "head": "Excluded(l,s)",
+   "body": [
+    "Excludes(l,c)",
+    "InClass(s,c)"
+   ],
+   "stratum": 1,
+   "source": "briefs/2026-10-01-svm-tranche-3/570-CC-219-piece1-built.md"
+  },
+  {
+   "id": "AUTH-RULE-AUTHORIZED-MAY",
+   "title": "An actor may take an act its tier has a standing right to, on a surface and every file under it",
+   "relation": "Rule",
+   "head": "Authorized(a,k,s)",
+   "body": [
+    "Tier(a,t)",
+    "May(t,k,r)",
+    "Under(s,r)"
+   ],
+   "stratum": 2,
+   "source": "briefs/2026-10-01-svm-tranche-3/573-CC-219-within-built.md"
+  },
+  {
+   "id": "AUTH-RULE-AUTHORIZED-LINE",
+   "title": "An actor may take an act a standing line grants it, on a surface and every file under it, outside what the line excludes",
+   "relation": "Rule",
+   "head": "Authorized(a,k,s)",
+   "body": [
+    "Line(l,a,k,r)",
+    "Under(s,r)",
+    "not Excluded(l,s)"
+   ],
+   "stratum": 2,
+   "source": "briefs/2026-10-01-svm-tranche-3/573-CC-219-within-built.md"
+  },
+  {
+   "id": "AUTH-RULE-PERMITTED",
+   "title": "An act is permitted when authorized and not barred, whatever line is given",
+   "relation": "Rule",
+   "head": "Permitted(a,k,s)",
+   "body": [
+    "Authorized(a,k,s)",
+    "not Barred(a,k,s)"
+   ],
+   "stratum": 3,
+   "source": "briefs/2026-10-01-svm-tranche-3/263-DT2-d7-plan-trace.md"
+  }
+ ]
+}
