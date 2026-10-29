@@ -163,17 +163,26 @@
 #   before today, has no typed header, or is no issue, with the record's age.
 #   No checkout, or no node: NOT CHECKED, said, and the commit passes.
 #
-#   REPORTED, NEVER REFUSED, ON EVERY SURFACE, ENFORCED OR NOT, until the
-#   owner's line turns the refusal on after two clear weeks (179-DT2 section
-#   3); that will be a change here, signed, never a field that flips by
-#   itself. A record ABOUT a closed item is not work under it: it carries the
-#   mark and names the item in its subject, so no Work-Item line names it and
-#   nothing is reported (179-DT2 section 4).
+#   REFUSED WHERE THE SURFACE REFUSES, REPORTED ELSEWHERE, since the owner's
+#   line after the two clear weeks (179-DT2 section 3; the weeks read in
+#   766-CC, ruled in 389-DT2; the change in 769-CC). On a surface whose
+#   projection sets work_item_enforced, the hook passes --refusing and a case
+#   found refuses the commit, saying so with the record's age; on any other
+#   it is reported, as before. A failing report is NOT CHECKED, said, and
+#   passes: only the report's own refusal, exit 3, refuses. A record ABOUT a
+#   closed item is not work under it: it carries the mark and names the item
+#   in its subject, so no Work-Item line names it and nothing is reported
+#   (179-DT2 section 4). Each case is written to the warn log, reason
+#   "admission", as WARNED or REFUSED.
 #
 #   HOW THE ADMISSION REPORT CAN BE CROSSED (RULE-10):
 #     a. The record is as current as its last work-item-titles.js --write; an
 #        item opened, typed or closed since reads as it was. The write belongs
 #        in the same act (179-DT2 section 1), and the report prints the age.
+#        ON A REFUSING SURFACE THIS CAN NOW REFUSE WRONGLY: an item opened
+#        since the last write reads "no issue" and its first commit is
+#        refused until the record is written. The remedy is the write, not
+#        --no-verify; the refusal names the record and its age to say so.
 #     b. A governed checkout under any other folder name is not found: NOT
 #        CHECKED. So is a machine with no checkout -- the build server's case.
 #     c. Crossings 1 to 3 above apply unchanged: --no-verify, commits that
@@ -298,7 +307,25 @@ dm_in=""; printf '%s\n' "$firstcut" | grep -Eq "$DM_RE" && dm_in="yes"
 #   late     -- the line or the mark lies past the first $CUT bytes
 #   tooling  -- the mark, on a commit touching this surface's tooling
 #   unknown  -- the mark, and the projection cannot say what tooling is
-# THE ADMISSION REPORT (header, ADMISSION). Reports; never changes the exit.
+# THE WARN LOG'S PLACE (header, THE WARN LOG; 389-DT2 section 4). The
+# repository's shared git folder, so a commit made from a worktree, where
+# .git is a file and not a folder, still leaves its line. Falls back to
+# $repo_root/.git where git cannot say.
+git_common=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null | head -n 1)
+[ -n "$git_common" ] && [ -d "$git_common" ] || git_common="$repo_root/.git"
+LOG="$git_common/work-item-warnings.log"
+write_log() {
+  log_when=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
+  log_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null | head -n 1)
+  [ -n "$log_branch" ] || log_branch="?"
+  log_files=$(printf '%s' "$staged" | tr '\n' ',')
+  printf '%s\t%s\t%s\t%s\t%s\n' "$log_when" "$log_branch" "$log_files" "$1" "$2" >> "$LOG" 2>/dev/null || true
+}
+
+# THE ADMISSION CHECK (header, ADMISSION). Where this surface refuses, a case
+# found refuses the commit: the report exits 3 and this returns 3. Anywhere
+# else it reports. Any other exit from the report is NOT CHECKED, said, and
+# the commit passes: a broken report never refuses.
 admission_report() {
   ids=$(printf '%s\n' "$firstcut" | sed -n 's/^Work-Item:[[:space:]]*\([A-Za-z0-9_.-]*#[0-9]*\)[[:space:]]*$/\1/p')
   [ -n "$ids" ] || return 0
@@ -321,8 +348,26 @@ admission_report() {
     echo "" >&2
     return 0
   fi
-  # $ids is left unquoted on purpose: one id per word, and an id holds no space.
-  node "$gov/tools/work-item-admission.js" --hook --date "$(date -u +%Y-%m-%d)" $ids >&2 2>/dev/null || true
+  refusing=""
+  [ -n "$enforce" ] && refusing="--refusing"
+  # $ids and $refusing are left unquoted on purpose: one word each, no space.
+  adm_out=$(node "$gov/tools/work-item-admission.js" --hook $refusing --date "$(date -u +%Y-%m-%d)" $ids 2>/dev/null)
+  adm_rc=$?
+  if [ "$adm_rc" -ne 0 ] && [ "$adm_rc" -ne 3 ]; then
+    echo "" >&2
+    echo "WORK ITEM ADMISSION -- NOT CHECKED: the admission report in $gov failed (exit $adm_rc)." >&2
+    echo "  Nothing refused." >&2
+    echo "" >&2
+    return 0
+  fi
+  [ -n "$adm_out" ] && printf '%s\n' "$adm_out" >&2
+  if [ "$adm_rc" -eq 3 ]; then
+    write_log "REFUSED" "admission"
+    return 3
+  fi
+  if printf '%s\n' "$adm_out" | grep -Eq '^  [A-Za-z0-9_.-]+#[0-9]+ '; then
+    write_log "WARNED" "admission"
+  fi
   return 0
 }
 
@@ -330,6 +375,7 @@ reason=""
 if [ -n "$has_wi" ]; then
   if [ -n "$wi_in" ]; then
     admission_report
+    [ $? -eq 3 ] && exit 1
     exit 0
   fi
   reason="late"
@@ -449,7 +495,9 @@ echo "" >&2
 #      SWALLOWED. A logging failure must never break a commit, and a
 #      warn-mode hook that shouted about its own logging would train
 #      people to ignore it before stage 4 ever refuses.
-LOG="$repo_root/.git/work-item-warnings.log"
+# THE LOG'S PLACE MOVED 2026-10-28 (389-DT2 section 4, OKF-TOGAF#197): from
+# $repo_root/.git, which in a worktree is a file and silently took nothing,
+# to the shared git folder; write_log, above the admission check, writes it.
 # Each field is built and bounded to ONE LINE before printf, because the
 # obvious form -- $(git rev-parse --abbrev-ref HEAD || echo '?') -- emits
 # BOTH the command's output and the fallback when the command prints
@@ -457,14 +505,11 @@ LOG="$repo_root/.git/work-item-warnings.log"
 # repository with no commits yet: "HEAD" on stdout, non-zero exit. That
 # wrote two log lines per warning and was caught by the harness counting
 # lines rather than by reading the code.
-log_when=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
-log_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null | head -n 1)
-[ -n "$log_branch" ] || log_branch="?"
-log_files=$(printf '%s' "$staged" | tr '\n' ',')
 if [ -n "$enforce" ]; then log_mode="REFUSED"; else log_mode="WARNED"; fi
-# A FIFTH FIELD, 2026-10-02: the reason -- none, late, tooling or unknown.
+# A FIFTH FIELD, 2026-10-02: the reason -- none, late, tooling or unknown;
+# since 2026-10-28 also admission, written by the admission check.
 # Appended, as the fourth was; nothing parses this file positionally.
-printf '%s\t%s\t%s\t%s\t%s\n' "$log_when" "$log_branch" "$log_files" "$log_mode" "$reason" >> "$LOG" 2>/dev/null || true
+write_log "$log_mode" "$reason"
 
 # STAGE 3 WARNS; STAGE 4 REFUSES. WHICH ONE IS NOT DECIDED HERE -- it came
 # from work_item_enforced in the projection, for the surface this commit
