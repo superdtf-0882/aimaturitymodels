@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Layout from "../components/Layout";
 const {
-  VERSION, DOMAIN_WORK, FAMILIES, TESTS, EXAMPLES, SORTING, ROWS,
-  familyName, decideFor, dimensionHref,
+  VERSION, QUESTION, DOMAIN_WORK, FAMILIES, ANSWERS, GUIDANCE, TESTS, FACT_LINES, EXAMPLES, MODELS, SORTING, ROWS,
+  assessmentHref, familyName, decideFor, intakeComplete, cardMarkdown, dimensionHref,
 } = require("../lib/taxonomy");
 
 // The AI Architecture Taxonomy -- OKF-TOGAF#189, rebuilt 19 October 2026
@@ -11,6 +11,18 @@ const {
 // that assessment at that dimension. What each arrangement asks you to decide
 // sits one click under its row; the hard cases under a disclosure; the worked
 // examples below. The content lives in lib/taxonomy.js (scripts/taxonomy-self-test.js).
+//
+// 13 November 2026, on the owner's word "I want the name your system tiles
+// brought back": the "Name your system" card returns, after the table and the
+// hard cases and before the worked examples, as it stood before 19 October.
+// Everything typed on it stays in the browser: it is copied or downloaded
+// from this page, and the one count a completed card sends is its event alone.
+
+const BLANK_STEP = () => ({ text: "", ai: false, waits: "" });
+const BLANK = () => ({
+  name: "", purpose: "", steps: [BLANK_STEP(), BLANK_STEP(), BLANK_STEP()],
+  facts: {}, answer: "", reason: "", parts: [{ name: "", family: "" }, { name: "", family: "" }],
+});
 
 // The examples' card text is light Markdown: **[AI]** and **[waits: who]**
 // marks, *italic* source sections, **bold**, and bare links.
@@ -39,6 +51,50 @@ function Decide({ k }) {
 }
 
 export default function Taxonomy() {
+  const [card, setCard] = useState(BLANK);
+  const [copied, setCopied] = useState(false);
+  const set = (patch) => setCard((c) => ({ ...c, ...patch }));
+  const complete = intakeComplete(card);
+
+  // A completed card is counted once per visit: one anonymous count to the
+  // site's own store, with nothing but its event. No cookie, nothing kept in
+  // the browser, and a failed count changes nothing.
+  const counted = useRef(false);
+  useEffect(() => {
+    if (!complete || counted.current) return;
+    counted.current = true;
+    try {
+      fetch("/api/count/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event: "taxonomy-intake-completed" }),
+        keepalive: true,
+      }).catch(() => {});
+    } catch (e) { /* counting never blocks the card */ }
+  }, [complete]);
+
+  const md = useMemo(() => cardMarkdown(card), [card]);
+  function setStep(i, patch) {
+    set({ steps: card.steps.map((s, j) => (j === i ? { ...s, ...patch } : s)) });
+  }
+  function setPart(i, patch) {
+    set({ parts: card.parts.map((p, j) => (j === i ? { ...p, ...patch } : p)) });
+  }
+  function copyCard() {
+    try {
+      navigator.clipboard.writeText(md).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }, () => {});
+    } catch (e) { /* the download still works */ }
+  }
+  function downloadCard() {
+    const name = (card.name.trim() || "system").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase() || "system";
+    const a = Object.assign(document.createElement("a"), {
+      href: URL.createObjectURL(new Blob([md], { type: "text/markdown" })),
+      download: name + "-architecture-card.md",
+    });
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
   const [filter, setFilter] = useState("all");
   const byFamily = useMemo(() => {
     const n = {};
@@ -125,6 +181,127 @@ export default function Taxonomy() {
         ))}
       </details>
       <p className="tx-version">{VERSION}</p>
+
+      <h2>Name your system</h2>
+      <p>
+        Describe one system on a card, the way the worked examples below are described. A card is one system: a
+        product with an advisor and a separate part that changes accounts is two parts of a composite. Nothing you
+        type leaves this page; keep the card when you're done.
+      </p>
+
+      <div className="tx-card">
+        <label className="tx-field">
+          <span>System name</span>
+          <input type="text" value={card.name} onChange={(e) => set({ name: e.target.value })} placeholder="Claims triage" />
+        </label>
+        <label className="tx-field">
+          <span>What it's for</span>
+          <input type="text" value={card.purpose} onChange={(e) => set({ purpose: e.target.value })} placeholder="Routes incoming insurance claims to the right adjuster" />
+        </label>
+
+        <div className="tx-label">How it runs, step by step</div>
+        <ol className="tx-steps">
+          {card.steps.map((s, i) => (
+            <li key={i} className="tx-step">
+              <input type="text" aria-label={`Step ${i + 1}`} value={s.text} onChange={(e) => setStep(i, { text: e.target.value })} placeholder={i === 0 ? "A claim arrives by email" : ""} />
+              <div className="tx-step-marks">
+                <label><input type="checkbox" checked={s.ai} onChange={(e) => setStep(i, { ai: e.target.checked, waits: e.target.checked ? "" : s.waits })} /> AI does this</label>
+                {!s.ai && (
+                  <input type="text" className="tx-waits" aria-label={`Step ${i + 1} waits for`} value={s.waits} onChange={(e) => setStep(i, { waits: e.target.value })} placeholder="waits for… (who)" />
+                )}
+                {card.steps.length > 1 && (
+                  <button type="button" className="tx-link" onClick={() => set({ steps: card.steps.filter((_, j) => j !== i) })}>Remove</button>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+        <button type="button" className="tx-btn" onClick={() => set({ steps: [...card.steps, BLANK_STEP()] })}>Add a step</button>
+
+        <details className="tx-facts">
+          <summary>The facts, if you know them</summary>
+          {FACT_LINES.map((f) => (
+            <label key={f.line} className="tx-field">
+              <span>{f.line}</span>
+              <input type="text" value={card.facts[f.line] || ""} placeholder={f.hint}
+                onChange={(e) => set({ facts: { ...card.facts, [f.line]: e.target.value } })} />
+            </label>
+          ))}
+        </details>
+
+        <div className="tx-label tx-ask">{QUESTION}</div>
+        <div className="tx-answers" role="group" aria-label="The one question">
+          {ANSWERS.map((a) => (
+            <button key={a.key} type="button" aria-pressed={card.answer === a.key} onClick={() => set({ answer: card.answer === a.key ? "" : a.key })}>
+              {a.name}
+            </button>
+          ))}
+        </div>
+
+        {card.answer === "composite" && (
+          <div className="tx-parts">
+            <div className="tx-label">Its parts, each classified</div>
+            {card.parts.map((p, i) => (
+              <div key={i} className="tx-part">
+                <input type="text" aria-label={`Part ${i + 1}`} value={p.name} onChange={(e) => setPart(i, { name: e.target.value })} placeholder={`Part ${i + 1}`} />
+                <select aria-label={`Part ${i + 1}'s family`} value={p.family} onChange={(e) => setPart(i, { family: e.target.value })}>
+                  <option value="">Family…</option>
+                  {FAMILIES.filter((f) => f.decide).map((f) => <option key={f.key} value={f.key}>{f.name}</option>)}
+                </select>
+              </div>
+            ))}
+            <button type="button" className="tx-btn" onClick={() => set({ parts: [...card.parts, { name: "", family: "" }] })}>Add a part</button>
+          </div>
+        )}
+
+        <label className="tx-field">
+          <span>{card.answer === "none-of-these" ? "Why none of these fits, in a sentence" : "Why, in a sentence (optional)"}</span>
+          <input type="text" value={card.reason} onChange={(e) => set({ reason: e.target.value })} />
+        </label>
+      </div>
+
+      {complete && (
+        <section className="tx-result" aria-live="polite">
+          <div className="tx-result-head">{card.name.trim()}</div>
+          <div className="tx-result-family">{familyName(card.answer)}</div>
+          {card.answer === "composite" ? (
+            <>
+              {card.parts.filter((p) => p.name.trim()).map((p, i) => (
+                <div key={i} className="tx-result-part">
+                  <div className="tx-result-partname">{p.name.trim()}: {familyName(p.family)}</div>
+                  <Decide k={p.family} />
+                </div>
+              ))}
+              <p className="tx-result-means">{GUIDANCE.composite}</p>
+            </>
+          ) : card.answer === "none-of-these" || card.answer === "unknown" ? (
+            <p className="tx-result-means">{GUIDANCE[card.answer]}</p>
+          ) : (
+            <>
+              <p className="tx-result-means">{(FAMILIES.find((f) => f.key === card.answer) || {}).means}</p>
+              <div className="tx-label">What it asks you to decide</div>
+              <Decide k={card.answer} />
+            </>
+          )}
+
+          <div className="tx-keep">
+            <button type="button" className="tx-btn" onClick={copyCard}>{copied ? "Copied" : "Copy the card"}</button>
+            <button type="button" className="tx-btn" onClick={downloadCard}>Download it (.md)</button>
+          </div>
+
+          <h3 className="tx-next">Now assess the practices that build and run it</h3>
+          <div className="model-list">
+            {MODELS.map((m) => (
+              <a key={m.slug} href={assessmentHref(m.slug)} className="model-row">
+                <div>
+                  <div className="model-name">{m.name}</div>
+                  <div className="model-desc">For {m.for}.</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
 
       <h2>Worked examples</h2>
       <p>

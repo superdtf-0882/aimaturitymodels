@@ -157,7 +157,15 @@ ok(/not (yet )?(been )?checked/i.test(page), "the page says the examples' famili
 ok(/ROWS\.map\(/.test(page) && page.indexOf("ROWS.map(") < page.indexOf("<h2>Worked examples</h2>"), "the table comes first, before the examples");
 ok(/How you would answer it/.test(page) && /decideFor\(/.test(page), "under each row, how you would answer it: the decision and its evidence");
 ok(/When a case is hard/.test(page) && /TESTS\.map\(/.test(page), "the hard-case tests sit under a disclosure below the table");
-ok(!/Name your system/.test(page) && !/intakeComplete\(/.test(page) && !/"taxonomy-intake-completed"/.test(page), "the card intake is gone, and its count with it");
+// 13 November 2026, on the owner's word: the "Name your system" card is back,
+// after the table and the hard cases and before the worked examples.
+const nameYourSystemAt = page.indexOf("<h2>Name your system</h2>");
+ok(nameYourSystemAt > page.indexOf("When a case is hard") && nameYourSystemAt > page.indexOf("ROWS.map(") && nameYourSystemAt < page.indexOf("<h2>Worked examples</h2>"),
+  "the card sits after the table and the hard cases, before the examples");
+ok(/intakeComplete\(card\)/.test(page) && /cardMarkdown\(card\)/.test(page), "a complete card is shown and can be kept, as the cases above define them");
+ok(/Nothing you\s+type leaves this page/.test(page), "the card says nothing typed on it leaves the page");
+ok(/body: JSON\.stringify\(\{ event: "taxonomy-intake-completed" \}\)/.test(page) && (page.match(/fetch\(/g) || []).length === 2,
+  "a completed card is counted by its event alone, and the page sends nothing else but the row count");
 ok(/dimensionHref\(/.test(page) && /\/api\/count\//.test(page), "each cell links to its dimension, and following it is counted at the count route");
 ok(/event: "taxonomy-row-followed", row: /.test(page) && /keepalive: true/.test(page), "the count carries the event and the row, and nothing else");
 ok(!/localStorage|sessionStorage|document\.cookie/.test(page), "the page keeps nothing in the browser");
