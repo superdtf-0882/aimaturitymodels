@@ -1,0 +1,2123 @@
+{
+  "source": "corpus/function_models.md",
+  "standard": {
+    "id": "STD-FUNCTION-MODEL",
+    "schema_version": "0.4.0"
+  },
+  "captions": {
+    "input_bundles": "What we work from",
+    "activities": "What we repeatedly do",
+    "capabilities": "What we must be good at",
+    "substrates": "What the function runs on",
+    "outputs": "What we send, and to whom"
+  },
+  "items": [
+    {
+      "id": "FM-MODEL-PM",
+      "title": "Product Management function model",
+      "kind": "model",
+      "status": "Active",
+      "function": {
+        "id": "product-management",
+        "name": "Product Management",
+        "prefix": "PM",
+        "label": "Product Management Function",
+        "essence": "Product Management governs what the product is and why, from market, user, and business inputs.",
+        "dek": "A governed system of activities, capabilities, and tools — this is a function model, not a process nor a lifecycle — inputs to outputs."
+      },
+      "input_bundles": [
+        {
+          "id": "PM-I1",
+          "title": "Organizational strategy",
+          "members": [
+            "PM-X01"
+          ]
+        },
+        {
+          "id": "PM-I2",
+          "title": "Market targets",
+          "members": [
+            "PM-X02"
+          ]
+        },
+        {
+          "id": "PM-I3",
+          "title": "Revenue requirements",
+          "members": [
+            "PM-X03"
+          ]
+        },
+        {
+          "id": "PM-I4",
+          "title": "Market intelligence",
+          "members": [
+            "PM-X04",
+            "PM-X05",
+            "PM-X06",
+            "PM-X07",
+            "PMM-O19"
+          ]
+        },
+        {
+          "id": "PM-I5",
+          "title": "Market & Field Feedback",
+          "members": [
+            "PMM-O12",
+            "PMM-O13",
+            "PMM-O14",
+            "PMM-O15"
+          ]
+        },
+        {
+          "id": "PM-I6",
+          "title": "Engineering Input",
+          "members": [
+            "SE-O01",
+            "SE-O02",
+            "SE-O03",
+            "SE-O04"
+          ]
+        }
+      ],
+      "provisional_inputs": [
+        {
+          "id": "PM-X01",
+          "title": "Organizational strategy",
+          "producer": "leadership",
+          "basis": "proposed"
+        },
+        {
+          "id": "PM-X02",
+          "title": "Market targets",
+          "producer": "leadership",
+          "basis": "proposed"
+        },
+        {
+          "id": "PM-X03",
+          "title": "Revenue requirements",
+          "producer": "leadership",
+          "basis": "proposed"
+        },
+        {
+          "id": "PM-X04",
+          "title": "Competitor data",
+          "producer": "market",
+          "basis": "proposed"
+        },
+        {
+          "id": "PM-X05",
+          "title": "Buyer intelligence",
+          "producer": "market",
+          "basis": "proposed"
+        },
+        {
+          "id": "PM-X06",
+          "title": "Customer/user insights",
+          "producer": "market",
+          "basis": "proposed"
+        },
+        {
+          "id": "PM-X07",
+          "title": "Analyst insights",
+          "producer": "market",
+          "basis": "proposed"
+        }
+      ],
+      "activities": [
+        {
+          "id": "PM-A1",
+          "title": "Define Markets",
+          "needs": [
+            "PM-C1",
+            "PM-C3",
+            "PM-C2"
+          ],
+          "consumes": [
+            "PM-I2",
+            "PM-I4"
+          ],
+          "produces": [
+            "PM-O07",
+            "PM-O24",
+            "PM-O25"
+          ]
+        },
+        {
+          "id": "PM-A2",
+          "title": "Define Requirements",
+          "needs": [
+            "PM-C4"
+          ],
+          "consumes": [
+            "PM-I4"
+          ],
+          "produces": [
+            "PM-O12",
+            "PM-O13",
+            "PM-O14",
+            "PM-O15",
+            "PM-O16",
+            "PM-O23"
+          ]
+        },
+        {
+          "id": "PM-A3",
+          "title": "Prioritize & Weigh Tradeoffs",
+          "needs": [
+            "PM-C3",
+            "PM-C5"
+          ],
+          "consumes": [
+            "PM-I1",
+            "PM-I3",
+            "PM-I6"
+          ],
+          "produces": [
+            "PM-O17",
+            "PM-O03",
+            "PM-O18"
+          ]
+        },
+        {
+          "id": "PM-A4",
+          "title": "Coordinate with Engineering",
+          "needs": [
+            "PM-C4"
+          ],
+          "consumes": [
+            "PM-I6"
+          ],
+          "produces": []
+        },
+        {
+          "id": "PM-A5",
+          "title": "Align with Executives",
+          "needs": [
+            "PM-C5"
+          ],
+          "consumes": [],
+          "produces": [
+            "PM-O11"
+          ]
+        },
+        {
+          "id": "PM-A6",
+          "title": "Evangelize Product Strategy",
+          "needs": [
+            "PM-C5",
+            "PM-C7"
+          ],
+          "consumes": [
+            "PM-I1"
+          ],
+          "produces": []
+        },
+        {
+          "id": "PM-A7",
+          "title": "Align the Product Portfolio",
+          "needs": [
+            "PM-C5",
+            "PM-C3"
+          ],
+          "consumes": [
+            "PM-I1",
+            "PM-I3"
+          ],
+          "produces": [
+            "PM-O10"
+          ]
+        },
+        {
+          "id": "PM-A8",
+          "title": "Coordinate Go-to-Market",
+          "needs": [
+            "PM-C7",
+            "PM-C6"
+          ],
+          "consumes": [],
+          "produces": [
+            "PM-O19",
+            "PM-O20",
+            "PM-O06",
+            "PM-O08"
+          ]
+        },
+        {
+          "id": "PM-A9",
+          "title": "Validate Product Hypotheses",
+          "needs": [
+            "PM-C1"
+          ],
+          "consumes": [
+            "PM-I4"
+          ],
+          "produces": []
+        },
+        {
+          "id": "PM-A10",
+          "title": "Gather and Assess Market Feedback",
+          "needs": [
+            "PM-C1"
+          ],
+          "consumes": [
+            "PM-I4",
+            "PM-I5"
+          ],
+          "produces": [
+            "PM-O09"
+          ]
+        }
+      ],
+      "capabilities": [
+        {
+          "id": "PM-C1",
+          "title": "Market intimacy",
+          "items": [
+            "Customer/Buyer Engagement",
+            "User Intimacy",
+            "Market/Analyst Engagement"
+          ],
+          "note": "Deep knowledge of markets, customers, users & analysts"
+        },
+        {
+          "id": "PM-C2",
+          "title": "Persona generation",
+          "items": [
+            "User",
+            "Delivery & Support"
+          ],
+          "note": "Structured archetypes for effective product work and key stakeholder groups"
+        },
+        {
+          "id": "PM-C3",
+          "title": "Strategic Analysis",
+          "note": "Analyzing competitors, markets and tradeoffs to find where the product wins: cheaper, faster, higher quality."
+        },
+        {
+          "id": "PM-C4",
+          "title": "Requirements Articulation"
+        },
+        {
+          "id": "PM-C5",
+          "title": "Executive Engagement",
+          "note": "Where authority over portfolio, prioritization, roadmap, pricing & scope is maintained"
+        },
+        {
+          "id": "PM-C6",
+          "title": "Pricing"
+        },
+        {
+          "id": "PM-C7",
+          "title": "Market positioning"
+        }
+      ],
+      "substrates": [
+        {
+          "id": "PM-S1",
+          "kind": "tools-data",
+          "title": "Tools",
+          "items": [
+            "RMS / ALM / Engineering Collaboration Tools",
+            "Document & Presentation Tools",
+            "Design & UI Tools",
+            "GTM & MarCom Tools",
+            "Analytics & Outcomes & Market Measurement Tools"
+          ]
+        },
+        {
+          "id": "PM-S2",
+          "kind": "governance",
+          "title": "Governance",
+          "items": [
+            "Investment reviews",
+            "OKR cadence",
+            "Compliance & risk review"
+          ]
+        },
+        {
+          "id": "PM-S3",
+          "kind": "people-resources",
+          "title": "Resources",
+          "items": [
+            "PMs",
+            "Designers",
+            "Data analysts"
+          ],
+          "note": "Resources execute the function, but do not define it"
+        },
+        {
+          "id": "PM-S4",
+          "kind": "standards-definitions",
+          "title": "Standards",
+          "items": [
+            "Agile at scale / dual-track discovery",
+            "Data privacy",
+            "Accessibility"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "id": "PM-O12",
+          "title": "Epics",
+          "to": [
+            "software-engineering"
+          ]
+        },
+        {
+          "id": "PM-O13",
+          "title": "Features",
+          "to": [
+            "software-engineering"
+          ]
+        },
+        {
+          "id": "PM-O14",
+          "title": "Stories",
+          "to": [
+            "software-engineering"
+          ]
+        },
+        {
+          "id": "PM-O15",
+          "title": "Acceptance criteria",
+          "to": [
+            "software-engineering"
+          ]
+        },
+        {
+          "id": "PM-O16",
+          "title": "Non-functional requirements",
+          "to": [
+            "software-engineering"
+          ]
+        },
+        {
+          "id": "PM-O17",
+          "title": "Priorities",
+          "to": [
+            "software-engineering"
+          ]
+        },
+        {
+          "id": "PM-O03",
+          "title": "Release goals",
+          "to": [
+            "software-engineering",
+            "product-marketing"
+          ]
+        },
+        {
+          "id": "PM-O19",
+          "title": "Positioning",
+          "to": [
+            "product-marketing"
+          ]
+        },
+        {
+          "id": "PM-O20",
+          "title": "Pricing & packaging guidance",
+          "to": [
+            "product-marketing"
+          ]
+        },
+        {
+          "id": "PM-O06",
+          "title": "Provisioning & Billing Plans",
+          "to": [
+            "operations-support"
+          ]
+        },
+        {
+          "id": "PM-O07",
+          "title": "User personas",
+          "to": [
+            "product-marketing",
+            "software-engineering"
+          ]
+        },
+        {
+          "id": "PM-O08",
+          "title": "Support materials & training",
+          "to": [
+            "operations-support"
+          ]
+        },
+        {
+          "id": "PM-O09",
+          "title": "User feedback channels",
+          "to": [
+            "operations-support"
+          ]
+        },
+        {
+          "id": "PM-O10",
+          "title": "Product strategy",
+          "to": [
+            "leadership",
+            "product-marketing"
+          ]
+        },
+        {
+          "id": "PM-O11",
+          "title": "Executive product updates",
+          "to": [
+            "leadership"
+          ]
+        },
+        {
+          "id": "PM-O18",
+          "title": "Product roadmap",
+          "to": [
+            "software-engineering",
+            "product-marketing"
+          ]
+        },
+        {
+          "id": "PM-O23",
+          "title": "Requirements context",
+          "to": [
+            "product-marketing"
+          ]
+        },
+        {
+          "id": "PM-O24",
+          "title": "Target segments",
+          "to": [
+            "product-marketing"
+          ]
+        },
+        {
+          "id": "PM-O25",
+          "title": "Use cases",
+          "to": [
+            "product-marketing"
+          ]
+        }
+      ],
+      "output_headings": {
+        "software-engineering": {
+          "caption": "What engineering needs to know what to build"
+        },
+        "operations-support": {
+          "caption": "What operations needs to keep customers happy and paying"
+        },
+        "leadership": {
+          "caption": "What leadership needs for cadence, fiduciary duty & alignment"
+        }
+      },
+      "explainer": {
+        "linkLabel": "What's a Function Model, really?",
+        "title": "Function, Process, and Lifecycle",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Most experienced product executives can feel when product management is working and when it's fragmented. It can be difficult to articulate why. The usual answers reach for process maturity or tooling — which is an overcomplication."
+          },
+          {
+            "type": "p",
+            "text": "PMs are taught sprints, ceremonies, and cadences without knowing the layer beneath. They get the verbs without the nouns."
+          },
+          {
+            "type": "p",
+            "text": "The product management function can be represented at three levels, and each answers a different question:"
+          },
+          {
+            "type": "list",
+            "items": [
+              {
+                "term": "Function model",
+                "text": "flat and structural. What must exist: inputs, activities, capabilities, outputs. No sequence, no arrows. A trigger presumes a time axis, and this layer has none."
+              },
+              {
+                "term": "Process",
+                "text": "a linear path through part of the function. The function model is the dictionary; a process is a sentence built from it."
+              },
+              {
+                "term": "Lifecycle",
+                "text": "the function projected onto time, derived from the processes that form the flywheel of a practice."
+              }
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Most organizations struggle to adopt lifecycles before they understand the function."
+          },
+          {
+            "type": "p",
+            "text": "In short:"
+          },
+          {
+            "type": "list",
+            "items": [
+              {
+                "term": "The function model",
+                "text": "is a flat, ontological form; what the function is and what it does."
+              },
+              {
+                "term": "Processes",
+                "text": "are linear renderings of portions of the function."
+              },
+              {
+                "term": "A lifecycle",
+                "text": "is an approximate rendering of the function in motion. That's what it looks like when it's running."
+              }
+            ]
+          },
+          {
+            "type": "p",
+            "text": "This page represents the first layer only. Nothing here is missing an arrow. Arrows belong to a different diagram, answering a different question."
+          }
+        ]
+      }
+    },
+    {
+      "id": "FM-MODEL-PMM",
+      "title": "Product Marketing function model",
+      "kind": "model",
+      "status": "Active",
+      "function": {
+        "id": "product-marketing",
+        "name": "Product Marketing",
+        "prefix": "PMM",
+        "label": "Product Marketing Function",
+        "essence": "Product Marketing governs product meaning at the enterprise boundary.",
+        "dek": "A bounded corollary to the Product Management function — focused on market translation, launch communication, and field enablement."
+      },
+      "input_bundles": [
+        {
+          "id": "PMM-I1",
+          "title": "Product Management Direction",
+          "description": "Product strategy, roadmap, release goals, requirements context, positioning, pricing & packaging guidance.",
+          "members": [
+            "PM-O10",
+            "PM-O18",
+            "PM-O03",
+            "PM-O23",
+            "PM-O19",
+            "PM-O20"
+          ]
+        },
+        {
+          "id": "PMM-I2",
+          "title": "Market & Buyer Context",
+          "description": "Target segments, user personas, use cases, market context.",
+          "members": [
+            "PM-O24",
+            "PM-O07",
+            "PM-O25",
+            "PMM-X10"
+          ]
+        },
+        {
+          "id": "PMM-I3",
+          "title": "Competitive & Commercial Evidence",
+          "description": "Objections, win/loss patterns, competitor moves, sales feedback, market reactions.",
+          "members": [
+            "PMM-X11",
+            "PMM-X12",
+            "PMM-X13",
+            "PMM-X14",
+            "PMM-X15"
+          ]
+        },
+        {
+          "id": "PMM-I4",
+          "title": "Customer Evidence",
+          "description": "Adoption themes, support issues, customer questions, expansion signals.",
+          "members": [
+            "PMM-X16",
+            "PMM-X17",
+            "PMM-X18",
+            "PMM-X19"
+          ]
+        },
+        {
+          "id": "PMM-I5",
+          "title": "Governance & Constraints",
+          "description": "Brand, legal, claims, messaging standards.",
+          "members": [
+            "PMM-X20",
+            "PMM-X21",
+            "PMM-X22",
+            "PMM-X23"
+          ]
+        },
+        {
+          "id": "PMM-I6",
+          "title": "Engineering Materials",
+          "members": [
+            "SE-O05",
+            "SE-O07",
+            "SE-O08"
+          ]
+        }
+      ],
+      "provisional_inputs": [
+        {
+          "id": "PMM-X10",
+          "title": "Market context",
+          "producer": "market",
+          "basis": "proposed"
+        },
+        {
+          "id": "PMM-X11",
+          "title": "Objections",
+          "producer": "sales",
+          "basis": "proposed"
+        },
+        {
+          "id": "PMM-X12",
+          "title": "Win/loss patterns",
+          "producer": "sales",
+          "basis": "proposed"
+        },
+        {
+          "id": "PMM-X13",
+          "title": "Competitor moves",
+          "producer": "market",
+          "basis": "proposed"
+        },
+        {
+          "id": "PMM-X14",
+          "title": "Sales feedback",
+          "producer": "sales",
+          "basis": "source"
+        },
+        {
+          "id": "PMM-X15",
+          "title": "Market reactions",
+          "producer": "market",
+          "basis": "proposed"
+        },
+        {
+          "id": "PMM-X16",
+          "title": "Adoption themes",
+          "producer": "customer-success",
+          "basis": "proposed"
+        },
+        {
+          "id": "PMM-X17",
+          "title": "Support issues",
+          "producer": "operations-support",
+          "basis": "owner"
+        },
+        {
+          "id": "PMM-X18",
+          "title": "Customer questions",
+          "producer": "customer-success",
+          "basis": "proposed"
+        },
+        {
+          "id": "PMM-X19",
+          "title": "Expansion signals",
+          "producer": "customer-success",
+          "basis": "proposed"
+        },
+        {
+          "id": "PMM-X20",
+          "title": "Brand standards",
+          "producer": "brand",
+          "basis": "proposed"
+        },
+        {
+          "id": "PMM-X21",
+          "title": "Legal constraints",
+          "producer": "legal",
+          "basis": "proposed"
+        },
+        {
+          "id": "PMM-X22",
+          "title": "Claims standards",
+          "producer": "legal",
+          "basis": "proposed"
+        },
+        {
+          "id": "PMM-X23",
+          "title": "Messaging standards",
+          "producer": "brand",
+          "basis": "proposed"
+        }
+      ],
+      "activities": [
+        {
+          "id": "PMM-A1",
+          "title": "Interpret Product for the Market",
+          "needs": [
+            "PMM-C1",
+            "PMM-C6"
+          ],
+          "consumes": [
+            "PMM-I1",
+            "PMM-I2",
+            "PMM-I3"
+          ],
+          "produces": [
+            "PMM-O18",
+            "PMM-O19"
+          ]
+        },
+        {
+          "id": "PMM-A2",
+          "title": "Translate Positioning into Messaging",
+          "needs": [
+            "PMM-C1"
+          ],
+          "consumes": [
+            "PMM-I1",
+            "PMM-I2",
+            "PMM-I5"
+          ],
+          "produces": [
+            "PMM-O03"
+          ]
+        },
+        {
+          "id": "PMM-A3",
+          "title": "Create Product Narratives, Proof & Launch Assets",
+          "needs": [
+            "PMM-C4",
+            "PMM-C3",
+            "PMM-C5"
+          ],
+          "consumes": [
+            "PMM-I1",
+            "PMM-I5",
+            "PMM-I6"
+          ],
+          "produces": [
+            "PMM-O01",
+            "PMM-O04",
+            "PMM-O07",
+            "PMM-O09"
+          ]
+        },
+        {
+          "id": "PMM-A4",
+          "title": "Equip Sales, Partners & Customer Success",
+          "needs": [
+            "PMM-C2",
+            "PMM-C5"
+          ],
+          "consumes": [
+            "PMM-I3",
+            "PMM-I4"
+          ],
+          "produces": [
+            "PMM-O05",
+            "PMM-O06",
+            "PMM-O08",
+            "PMM-O10",
+            "PMM-O11"
+          ]
+        },
+        {
+          "id": "PMM-A5",
+          "title": "Coordinate Market Introduction & Launch Readiness",
+          "needs": [
+            "PMM-C3"
+          ],
+          "consumes": [
+            "PMM-I1"
+          ],
+          "produces": [
+            "PMM-O02",
+            "PMM-O16"
+          ]
+        },
+        {
+          "id": "PMM-A6",
+          "title": "Monitor Market Response & Feed Back to Product Management",
+          "needs": [
+            "PMM-C6"
+          ],
+          "consumes": [
+            "PMM-I3",
+            "PMM-I4"
+          ],
+          "produces": [
+            "PMM-O12",
+            "PMM-O13",
+            "PMM-O14",
+            "PMM-O15",
+            "PMM-O17"
+          ]
+        }
+      ],
+      "capabilities": [
+        {
+          "id": "PMM-C1",
+          "title": "Messaging Architecture"
+        },
+        {
+          "id": "PMM-C2",
+          "title": "Sales & Partner Enablement"
+        },
+        {
+          "id": "PMM-C3",
+          "title": "Launch Communication"
+        },
+        {
+          "id": "PMM-C4",
+          "title": "Product Content & Proof Strategy"
+        },
+        {
+          "id": "PMM-C5",
+          "title": "Customer Adoption Communication"
+        },
+        {
+          "id": "PMM-C6",
+          "title": "Market-Response Learning"
+        }
+      ],
+      "substrates": [
+        {
+          "id": "PMM-S1",
+          "kind": "people-resources",
+          "title": "People & Resources",
+          "items": [
+            "Skilled product marketers",
+            "Cross-functional partners",
+            "Advisory network",
+            "Adequate capacity"
+          ]
+        },
+        {
+          "id": "PMM-S2",
+          "kind": "tools-data",
+          "title": "Tools & Data",
+          "items": [
+            "Market intelligence",
+            "Content & asset tools",
+            "Analytics & listening",
+            "CRM & usage data"
+          ]
+        },
+        {
+          "id": "PMM-S3",
+          "kind": "governance",
+          "title": "Governance",
+          "items": [
+            "Decision rights",
+            "Review & approval",
+            "Feedback loops",
+            "Compliance guardrails"
+          ]
+        },
+        {
+          "id": "PMM-S4",
+          "kind": "standards-definitions",
+          "title": "Standards & Definitions",
+          "items": [
+            "Messaging framework",
+            "Asset taxonomy",
+            "Launch-readiness criteria",
+            "Success metrics"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "id": "PMM-O01",
+          "title": "Campaign inputs",
+          "to": [
+            "demand-generation"
+          ]
+        },
+        {
+          "id": "PMM-O02",
+          "title": "Launch themes",
+          "to": [
+            "demand-generation"
+          ]
+        },
+        {
+          "id": "PMM-O03",
+          "title": "Messaging assets",
+          "to": [
+            "demand-generation"
+          ]
+        },
+        {
+          "id": "PMM-O04",
+          "title": "Product proof",
+          "to": [
+            "demand-generation"
+          ]
+        },
+        {
+          "id": "PMM-O05",
+          "title": "Battlecards",
+          "to": [
+            "sales",
+            "partners"
+          ]
+        },
+        {
+          "id": "PMM-O06",
+          "title": "Objection handling",
+          "to": [
+            "sales",
+            "partners"
+          ]
+        },
+        {
+          "id": "PMM-O07",
+          "title": "Product decks",
+          "to": [
+            "sales",
+            "partners"
+          ]
+        },
+        {
+          "id": "PMM-O08",
+          "title": "Enablement materials",
+          "to": [
+            "sales",
+            "partners"
+          ]
+        },
+        {
+          "id": "PMM-O09",
+          "title": "Release communications",
+          "to": [
+            "customer-success"
+          ]
+        },
+        {
+          "id": "PMM-O10",
+          "title": "Adoption assets",
+          "to": [
+            "customer-success"
+          ]
+        },
+        {
+          "id": "PMM-O11",
+          "title": "Customer education materials",
+          "to": [
+            "customer-success"
+          ]
+        },
+        {
+          "id": "PMM-O12",
+          "title": "Message resonance",
+          "to": [
+            "product-management"
+          ]
+        },
+        {
+          "id": "PMM-O13",
+          "title": "Objection patterns",
+          "to": [
+            "product-management"
+          ]
+        },
+        {
+          "id": "PMM-O14",
+          "title": "Adoption barriers",
+          "to": [
+            "product-management"
+          ]
+        },
+        {
+          "id": "PMM-O15",
+          "title": "Unmet needs",
+          "to": [
+            "product-management"
+          ]
+        },
+        {
+          "id": "PMM-O16",
+          "title": "Launch readiness",
+          "to": [
+            "leadership"
+          ]
+        },
+        {
+          "id": "PMM-O17",
+          "title": "Market pulse",
+          "to": [
+            "leadership"
+          ]
+        },
+        {
+          "id": "PMM-O18",
+          "title": "Product-market narrative",
+          "to": [
+            "leadership"
+          ]
+        },
+        {
+          "id": "PMM-O19",
+          "title": "Buyer personas",
+          "to": [
+            "product-management"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FM-MODEL-SE",
+      "title": "Software Engineering function model",
+      "kind": "model",
+      "status": "Active",
+      "function": {
+        "id": "software-engineering",
+        "name": "Software Engineering",
+        "prefix": "SE",
+        "label": "Software Engineering Function",
+        "essence": "Software Engineering governs how the product is built: reliable, secure, maintainable software that meets requirements and can evolve.",
+        "dek": "Transforms approved requirements into reliable, secure, maintainable software that delivers value in production."
+      },
+      "input_bundles": [
+        {
+          "id": "SE-I1",
+          "title": "Approved Requirements",
+          "description": "Epics, features, stories, acceptance criteria, non-functional requirements.",
+          "members": [
+            "PM-O12",
+            "PM-O13",
+            "PM-O14",
+            "PM-O15",
+            "PM-O16"
+          ]
+        },
+        {
+          "id": "SE-I2",
+          "title": "Architecture & Design",
+          "description": "Solution architecture, design standards, interface contracts, technical constraints.",
+          "members": [
+            "SE-X06",
+            "SE-X07",
+            "SE-X08",
+            "SE-X09"
+          ]
+        },
+        {
+          "id": "SE-I3",
+          "title": "Product & Technical Context",
+          "description": "Product roadmap, priorities, release goals, user personas, market context, usage data, operational context.",
+          "members": [
+            "PM-O18",
+            "PM-O17",
+            "SE-X12",
+            "SE-X13",
+            "SE-X14",
+            "PM-O07",
+            "PM-O03"
+          ]
+        },
+        {
+          "id": "SE-I4",
+          "title": "Quality & Security Requirements",
+          "description": "Quality goals, test strategy, security & compliance requirements, risk appetite.",
+          "members": [
+            "SE-X15",
+            "SE-X16",
+            "SE-X17",
+            "SE-X18"
+          ]
+        },
+        {
+          "id": "SE-I5",
+          "title": "Data & Integration Contracts",
+          "description": "Data models, schemas, API contracts, event models, integration requirements.",
+          "members": [
+            "SE-X19",
+            "SE-X20",
+            "SE-X21",
+            "SE-X22",
+            "SE-X23"
+          ]
+        },
+        {
+          "id": "SE-I6",
+          "title": "Platform Services",
+          "description": "Platform capabilities, environments, cloud services, network & infrastructure standards.",
+          "members": [
+            "SE-X24",
+            "SE-X25",
+            "SE-X26",
+            "SE-X27"
+          ]
+        },
+        {
+          "id": "SE-I7",
+          "title": "Operational & Support Input",
+          "description": "Monitoring data, incident reports, support tickets, postmortems, capacity data.",
+          "members": [
+            "SE-X28",
+            "SE-X29",
+            "SE-X30",
+            "SE-X31",
+            "SE-X32"
+          ]
+        },
+        {
+          "id": "SE-I8",
+          "title": "Governance & Compliance",
+          "description": "Policies, regulatory requirements, audit obligations, legal constraints.",
+          "members": [
+            "SE-X33",
+            "SE-X34",
+            "SE-X35",
+            "SE-X36"
+          ]
+        }
+      ],
+      "provisional_inputs": [
+        {
+          "id": "SE-X06",
+          "title": "Solution architecture",
+          "producer": "enterprise-architecture",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X07",
+          "title": "Design standards",
+          "producer": "enterprise-architecture",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X08",
+          "title": "Interface contracts",
+          "producer": "enterprise-architecture",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X09",
+          "title": "Technical constraints",
+          "producer": "enterprise-architecture",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X12",
+          "title": "Market context",
+          "producer": "market",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X13",
+          "title": "Usage data",
+          "producer": "operations-support",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X14",
+          "title": "Operational context",
+          "producer": "operations-support",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X15",
+          "title": "Quality goals",
+          "producer": "security-compliance",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X16",
+          "title": "Test strategy",
+          "producer": "security-compliance",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X17",
+          "title": "Security & compliance requirements",
+          "producer": "security-compliance",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X18",
+          "title": "Risk appetite",
+          "producer": "security-compliance",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X19",
+          "title": "Data models",
+          "producer": "data-platform",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X20",
+          "title": "Schemas",
+          "producer": "data-platform",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X21",
+          "title": "API contracts",
+          "producer": "data-platform",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X22",
+          "title": "Event models",
+          "producer": "data-platform",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X23",
+          "title": "Integration requirements",
+          "producer": "data-platform",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X24",
+          "title": "Platform capabilities",
+          "producer": "data-platform",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X25",
+          "title": "Environments",
+          "producer": "data-platform",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X26",
+          "title": "Cloud services",
+          "producer": "data-platform",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X27",
+          "title": "Network & infrastructure standards",
+          "producer": "data-platform",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X28",
+          "title": "Monitoring data",
+          "producer": "operations-support",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X29",
+          "title": "Incident reports",
+          "producer": "operations-support",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X30",
+          "title": "Support tickets",
+          "producer": "operations-support",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X31",
+          "title": "Postmortems",
+          "producer": "operations-support",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X32",
+          "title": "Capacity data",
+          "producer": "operations-support",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X33",
+          "title": "Policies",
+          "producer": "security-compliance",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X34",
+          "title": "Regulatory requirements",
+          "producer": "security-compliance",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X35",
+          "title": "Audit obligations",
+          "producer": "security-compliance",
+          "basis": "proposed"
+        },
+        {
+          "id": "SE-X36",
+          "title": "Legal constraints",
+          "producer": "security-compliance",
+          "basis": "proposed"
+        }
+      ],
+      "activities": [
+        {
+          "id": "SE-A1",
+          "title": "Plan & Decompose Work",
+          "description": "Break down work; estimate; plan increments; manage dependencies and commitments.",
+          "needs": [
+            "SE-C11",
+            "SE-C12"
+          ],
+          "consumes": [
+            "SE-I1",
+            "SE-I3"
+          ],
+          "produces": [
+            "SE-O02",
+            "SE-O13",
+            "SE-O14",
+            "SE-O16"
+          ]
+        },
+        {
+          "id": "SE-A2",
+          "title": "Design Solutions",
+          "description": "Create technical designs; define components, APIs, data models, and interfaces.",
+          "needs": [
+            "SE-C1",
+            "SE-C5",
+            "SE-C7",
+            "SE-C2"
+          ],
+          "consumes": [
+            "SE-I1",
+            "SE-I2",
+            "SE-I5",
+            "SE-I4"
+          ],
+          "produces": [
+            "SE-O03",
+            "SE-O04",
+            "SE-O21",
+            "SE-O22"
+          ]
+        },
+        {
+          "id": "SE-A3",
+          "title": "Develop Code",
+          "description": "Write clean, efficient, secure code; follow standards and coding conventions.",
+          "needs": [
+            "SE-C3",
+            "SE-C2",
+            "SE-C7"
+          ],
+          "consumes": [
+            "SE-I1",
+            "SE-I2",
+            "SE-I8"
+          ],
+          "produces": [
+            "SE-O01",
+            "SE-O17"
+          ]
+        },
+        {
+          "id": "SE-A4",
+          "title": "Validate Builds",
+          "description": "Compile, lint, unit test; static analysis; quality gates in CI.",
+          "needs": [
+            "SE-C6",
+            "SE-C4",
+            "SE-C2"
+          ],
+          "consumes": [
+            "SE-I4"
+          ],
+          "produces": [
+            "SE-O19"
+          ]
+        },
+        {
+          "id": "SE-A5",
+          "title": "Assess Quality",
+          "description": "Automated tests, integration tests, performance tests, security tests.",
+          "needs": [
+            "SE-C4",
+            "SE-C9",
+            "SE-C2"
+          ],
+          "consumes": [
+            "SE-I4",
+            "SE-I8"
+          ],
+          "produces": [
+            "SE-O18",
+            "SE-O20"
+          ]
+        },
+        {
+          "id": "SE-A6",
+          "title": "Maintain the Mainline",
+          "description": "Code reviews; integrate changes; resolve conflicts; maintain mainline health.",
+          "needs": [
+            "SE-C5",
+            "SE-C11"
+          ],
+          "consumes": [
+            "SE-I5"
+          ],
+          "produces": [
+            "SE-O23",
+            "SE-O07"
+          ]
+        },
+        {
+          "id": "SE-A7",
+          "title": "Coordinate Releases",
+          "description": "Deploy to environments; blue/green, canary, or feature flags; release to production.",
+          "needs": [
+            "SE-C6",
+            "SE-C10"
+          ],
+          "consumes": [
+            "SE-I6",
+            "SE-I8"
+          ],
+          "produces": [
+            "SE-O09",
+            "SE-O08",
+            "SE-O05",
+            "SE-O06"
+          ]
+        },
+        {
+          "id": "SE-A8",
+          "title": "Sustain Production Software",
+          "description": "Support Operations & Support in production: respond to incidents, analyze root causes, improve performance and reliability.",
+          "needs": [
+            "SE-C8",
+            "SE-C10",
+            "SE-C9"
+          ],
+          "consumes": [
+            "SE-I7",
+            "SE-I6"
+          ],
+          "produces": [
+            "SE-O10",
+            "SE-O11",
+            "SE-O12",
+            "SE-O24",
+            "SE-O15"
+          ]
+        },
+        {
+          "id": "SE-A9",
+          "title": "Refactor & Evolve",
+          "description": "Improve code quality; reduce technical debt; modernize; continuous improvement.",
+          "needs": [
+            "SE-C1",
+            "SE-C3",
+            "SE-C12"
+          ],
+          "consumes": [
+            "SE-I7"
+          ],
+          "produces": []
+        }
+      ],
+      "capabilities": [
+        {
+          "id": "SE-C1",
+          "title": "Software Design",
+          "note": "Craft modular, scalable, maintainable, and extensible solutions."
+        },
+        {
+          "id": "SE-C2",
+          "title": "Security Engineering",
+          "note": "Build secure by design; threat modeling; secure coding; vulnerability management."
+        },
+        {
+          "id": "SE-C3",
+          "title": "Coding Excellence",
+          "note": "Write high-quality code; standards; readability; simplicity; reusability."
+        },
+        {
+          "id": "SE-C4",
+          "title": "Test Engineering",
+          "note": "Test strategy; automation; test data; coverage; quality engineering."
+        },
+        {
+          "id": "SE-C5",
+          "title": "Integration Engineering",
+          "note": "APIs, events, services; dependencies; contract management."
+        },
+        {
+          "id": "SE-C6",
+          "title": "DevOps Engineering",
+          "note": "CI/CD; environments; infrastructure as code; automation."
+        },
+        {
+          "id": "SE-C7",
+          "title": "Data Engineering",
+          "note": "Data modeling; migrations; data quality; performance; data access."
+        },
+        {
+          "id": "SE-C8",
+          "title": "Observability Engineering",
+          "note": "Logging, metrics, tracing, dashboards, alerts."
+        },
+        {
+          "id": "SE-C9",
+          "title": "Performance Engineering",
+          "note": "Performance testing; profiling; tuning; capacity planning."
+        },
+        {
+          "id": "SE-C10",
+          "title": "Reliability Engineering",
+          "note": "SLOs; resilience; chaos testing; capacity; error budgets."
+        },
+        {
+          "id": "SE-C11",
+          "title": "Collaborative Engineering",
+          "note": "Cross-functional teamwork; pairing; code reviews; knowledge sharing."
+        },
+        {
+          "id": "SE-C12",
+          "title": "Engineering Practices",
+          "note": "Documentation; continuous learning; applying standards and architecture guidance."
+        }
+      ],
+      "substrates": [
+        {
+          "id": "SE-S1",
+          "kind": "people-resources",
+          "title": "People & Resources",
+          "items": [
+            "Software engineers",
+            "Tech leads & architects",
+            "QA engineers",
+            "Security engineers",
+            "DevOps / SRE engineers",
+            "Data & integration engineers"
+          ]
+        },
+        {
+          "id": "SE-S2",
+          "kind": "tools-data",
+          "title": "Tools & Technology",
+          "items": [
+            "IDEs & coding tools",
+            "Build, test & analysis tools",
+            "CI/CD & deployment tools",
+            "Artifact repositories",
+            "Observability & monitoring tools",
+            "Collaboration tools"
+          ]
+        },
+        {
+          "id": "SE-S3",
+          "kind": "platforms",
+          "title": "Platforms & Infrastructure",
+          "items": [
+            "Cloud environments",
+            "Runtimes & middleware",
+            "Databases & storage",
+            "Network & security services",
+            "Kubernetes / containers",
+            "Developer platforms"
+          ]
+        },
+        {
+          "id": "SE-S4",
+          "kind": "standards-definitions",
+          "title": "Standards & Definitions",
+          "items": [
+            "Coding standards",
+            "Architecture patterns",
+            "API & data standards",
+            "Environment standards",
+            "CI/CD pipeline standards",
+            "Naming & branching standards"
+          ]
+        },
+        {
+          "id": "SE-S5",
+          "kind": "governance",
+          "title": "Governance",
+          "items": [
+            "Architecture review",
+            "Change & release approval",
+            "Security & compliance review"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "id": "SE-O01",
+          "title": "Working software increments",
+          "to": [
+            "product-management"
+          ]
+        },
+        {
+          "id": "SE-O02",
+          "title": "Technical feasibility & estimates",
+          "to": [
+            "product-management"
+          ]
+        },
+        {
+          "id": "SE-O03",
+          "title": "Risks, constraints & trade-offs",
+          "to": [
+            "product-management"
+          ]
+        },
+        {
+          "id": "SE-O04",
+          "title": "Technical insights & options",
+          "to": [
+            "product-management"
+          ]
+        },
+        {
+          "id": "SE-O05",
+          "title": "Product capabilities",
+          "to": [
+            "product-marketing"
+          ]
+        },
+        {
+          "id": "SE-O06",
+          "title": "Demos & sandbox access",
+          "to": [
+            "sales"
+          ]
+        },
+        {
+          "id": "SE-O07",
+          "title": "Integration samples & docs",
+          "to": [
+            "product-marketing",
+            "operations-support"
+          ]
+        },
+        {
+          "id": "SE-O08",
+          "title": "Release notes & materials",
+          "to": [
+            "product-marketing",
+            "operations-support"
+          ]
+        },
+        {
+          "id": "SE-O09",
+          "title": "Deployed, monitored systems",
+          "to": [
+            "operations-support"
+          ]
+        },
+        {
+          "id": "SE-O10",
+          "title": "Runbooks & operational docs",
+          "to": [
+            "operations-support"
+          ]
+        },
+        {
+          "id": "SE-O11",
+          "title": "Incident response support",
+          "to": [
+            "operations-support"
+          ]
+        },
+        {
+          "id": "SE-O12",
+          "title": "RCA & remediation",
+          "to": [
+            "operations-support"
+          ]
+        },
+        {
+          "id": "SE-O13",
+          "title": "Delivery commitments",
+          "to": [
+            "leadership"
+          ]
+        },
+        {
+          "id": "SE-O14",
+          "title": "Progress & metrics",
+          "to": [
+            "leadership"
+          ]
+        },
+        {
+          "id": "SE-O15",
+          "title": "Risk & issue reports",
+          "to": [
+            "leadership"
+          ]
+        },
+        {
+          "id": "SE-O16",
+          "title": "Investment needs",
+          "to": [
+            "leadership"
+          ]
+        },
+        {
+          "id": "SE-O17",
+          "title": "Secure software",
+          "to": [
+            "security-compliance"
+          ]
+        },
+        {
+          "id": "SE-O18",
+          "title": "Compliance evidence",
+          "to": [
+            "security-compliance"
+          ]
+        },
+        {
+          "id": "SE-O19",
+          "title": "Vulnerability reports",
+          "to": [
+            "security-compliance"
+          ]
+        },
+        {
+          "id": "SE-O20",
+          "title": "Audit artifacts",
+          "to": [
+            "security-compliance"
+          ]
+        },
+        {
+          "id": "SE-O21",
+          "title": "Data schemas & migrations",
+          "to": [
+            "data-platform"
+          ]
+        },
+        {
+          "id": "SE-O22",
+          "title": "APIs & service contracts",
+          "to": [
+            "data-platform"
+          ]
+        },
+        {
+          "id": "SE-O23",
+          "title": "Integration components",
+          "to": [
+            "data-platform"
+          ]
+        },
+        {
+          "id": "SE-O24",
+          "title": "Platform feedback",
+          "to": [
+            "data-platform"
+          ]
+        }
+      ],
+      "captions": {
+        "activities": "What we repeatedly do",
+        "capabilities": "What we must be good at"
+      },
+      "output_headings": {
+        "product-management": {
+          "heading": "To Product Management"
+        },
+        "operations-support": {
+          "heading": "To Operations & Support"
+        },
+        "leadership": {
+          "heading": "To Leadership"
+        },
+        "security-compliance": {
+          "heading": "To Security & Compliance"
+        },
+        "data-platform": {
+          "heading": "To Data & Platform Teams"
+        }
+      }
+    },
+    {
+      "id": "FM-PARTY-PRODUCT-MANAGEMENT",
+      "title": "Product Management",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "product-management",
+      "name": "Product Management",
+      "party_kind": "function"
+    },
+    {
+      "id": "FM-PARTY-PRODUCT-MARKETING",
+      "title": "Product Marketing",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "product-marketing",
+      "name": "Product Marketing",
+      "party_kind": "function"
+    },
+    {
+      "id": "FM-PARTY-SOFTWARE-ENGINEERING",
+      "title": "Software Engineering",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "software-engineering",
+      "name": "Software Engineering",
+      "party_kind": "function",
+      "aliases": [
+        "Engineering & delivery"
+      ]
+    },
+    {
+      "id": "FM-PARTY-ENTERPRISE-ARCHITECTURE",
+      "title": "Enterprise Architecture",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "enterprise-architecture",
+      "name": "Enterprise Architecture",
+      "party_kind": "function"
+    },
+    {
+      "id": "FM-PARTY-DEMAND-GENERATION",
+      "title": "Demand Generation",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "demand-generation",
+      "name": "Demand Generation",
+      "party_kind": "function"
+    },
+    {
+      "id": "FM-PARTY-SALES",
+      "title": "Sales",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "sales",
+      "name": "Sales",
+      "party_kind": "function"
+    },
+    {
+      "id": "FM-PARTY-PARTNERS",
+      "title": "Partners",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "partners",
+      "name": "Partners",
+      "party_kind": "function"
+    },
+    {
+      "id": "FM-PARTY-CUSTOMER-SUCCESS",
+      "title": "Customer Success",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "customer-success",
+      "name": "Customer Success",
+      "party_kind": "function"
+    },
+    {
+      "id": "FM-PARTY-OPERATIONS-SUPPORT",
+      "title": "Operations & Support",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "operations-support",
+      "name": "Operations & Support",
+      "party_kind": "function",
+      "aliases": [
+        "Operations"
+      ]
+    },
+    {
+      "id": "FM-PARTY-LEADERSHIP",
+      "title": "Leadership",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "leadership",
+      "name": "Leadership",
+      "party_kind": "function",
+      "aliases": [
+        "Leadership & governance"
+      ]
+    },
+    {
+      "id": "FM-PARTY-SECURITY-COMPLIANCE",
+      "title": "Security & Compliance",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "security-compliance",
+      "name": "Security & Compliance",
+      "party_kind": "function"
+    },
+    {
+      "id": "FM-PARTY-DATA-PLATFORM",
+      "title": "Data & Platform Teams",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "data-platform",
+      "name": "Data & Platform Teams",
+      "party_kind": "function"
+    },
+    {
+      "id": "FM-PARTY-LEGAL",
+      "title": "Legal",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "legal",
+      "name": "Legal",
+      "party_kind": "function"
+    },
+    {
+      "id": "FM-PARTY-BRAND",
+      "title": "Brand",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "brand",
+      "name": "Brand",
+      "party_kind": "function"
+    },
+    {
+      "id": "FM-PARTY-MARKET",
+      "title": "Market",
+      "kind": "party",
+      "status": "Draft",
+      "slug": "market",
+      "name": "Market",
+      "party_kind": "external",
+      "note": "Buyers, users, competitors and analysts, outside the enterprise."
+    },
+    {
+      "id": "FM-DR-01",
+      "title": "Product Management retains positioning, pricing, packaging, and release-goal authority.",
+      "kind": "decision_right",
+      "status": "Active",
+      "text": "Product Management retains positioning, pricing, packaging, and release-goal authority.",
+      "grants": [
+        {
+          "holder": "product-management",
+          "holds": [
+            "positioning",
+            "pricing",
+            "packaging",
+            "release goals"
+          ]
+        }
+      ],
+      "bounds": [
+        "product-marketing"
+      ],
+      "source": "Product Marketing boundary note"
+    },
+    {
+      "id": "FM-DR-02",
+      "title": "Product Marketing translates and operationalizes that guidance for the market and the field, and holds messaging and battlecards.",
+      "kind": "decision_right",
+      "status": "Active",
+      "text": "Product Marketing translates and operationalizes that guidance for the market and the field, and holds messaging and battlecards.",
+      "grants": [
+        {
+          "holder": "product-marketing",
+          "holds": [
+            "market translation",
+            "field enablement",
+            "messaging",
+            "battlecards"
+          ]
+        }
+      ],
+      "bounds": [
+        "product-marketing"
+      ],
+      "source": "Product Marketing boundary note; the rights named from its dek"
+    },
+    {
+      "id": "FM-DR-03",
+      "title": "Sales owns commercial commitment.",
+      "kind": "decision_right",
+      "status": "Active",
+      "text": "Sales owns commercial commitment.",
+      "grants": [
+        {
+          "holder": "sales",
+          "holds": [
+            "commercial commitment"
+          ]
+        }
+      ],
+      "bounds": [
+        "product-marketing"
+      ],
+      "source": "Product Marketing boundary note"
+    },
+    {
+      "id": "FM-DR-04",
+      "title": "Customer Success owns realized customer outcomes.",
+      "kind": "decision_right",
+      "status": "Active",
+      "text": "Customer Success owns realized customer outcomes.",
+      "grants": [
+        {
+          "holder": "customer-success",
+          "holds": [
+            "realized customer outcomes"
+          ]
+        }
+      ],
+      "bounds": [
+        "product-marketing"
+      ],
+      "source": "Product Marketing boundary note"
+    },
+    {
+      "id": "FM-DR-05",
+      "title": "Product Management defines WHAT and WHY. Software Engineering owns HOW.",
+      "kind": "decision_right",
+      "status": "Active",
+      "text": "Product Management defines WHAT and WHY. Software Engineering owns HOW.",
+      "grants": [
+        {
+          "holder": "product-management",
+          "holds": [
+            "what to build",
+            "why"
+          ]
+        },
+        {
+          "holder": "software-engineering",
+          "holds": [
+            "how"
+          ]
+        }
+      ],
+      "bounds": [
+        "software-engineering"
+      ],
+      "source": "Software Engineering key boundaries"
+    },
+    {
+      "id": "FM-DR-06",
+      "title": "Engineering builds within approved requirements, architecture, standards, and constraints.",
+      "kind": "decision_right",
+      "status": "Active",
+      "text": "Engineering builds within approved requirements, architecture, standards, and constraints.",
+      "grants": [],
+      "bounds": [
+        "software-engineering"
+      ],
+      "source": "Software Engineering key boundaries"
+    },
+    {
+      "id": "FM-DR-07",
+      "title": "We do not choose features, set priorities, or make market commitments.",
+      "kind": "decision_right",
+      "status": "Active",
+      "text": "We do not choose features, set priorities, or make market commitments.",
+      "grants": [],
+      "bounds": [
+        "software-engineering"
+      ],
+      "source": "Software Engineering key boundaries",
+      "note": "First person. In the decision-rights rows \"we\" names no one; it reads right only on Software Engineering's own page."
+    },
+    {
+      "id": "FM-DR-08",
+      "title": "We partner across functions; we do not own their outcomes.",
+      "kind": "decision_right",
+      "status": "Active",
+      "text": "We partner across functions; we do not own their outcomes.",
+      "grants": [],
+      "bounds": [
+        "software-engineering"
+      ],
+      "source": "Software Engineering key boundaries",
+      "note": "First person, as FM-DR-07."
+    }
+  ]
+}
