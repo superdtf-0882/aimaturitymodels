@@ -50,13 +50,13 @@ export default function Layout({ title, crumb, wide, children }) {
                 separate abstract "Foundation" heading. */}
             <Link href="/models">AI-Native Maturity Models</Link>
             <Link href="/assessments">Maturity Model Assessments</Link>
-            {/* OKF-TOGAF#189: the taxonomy is the assessments' intake -- name
-                the system, then assess the practices around it. */}
-            <Link href="/taxonomy">AI Architecture Taxonomy</Link>
             <Link href="/functionmodels">Function Models</Link>
             <Link href="/strata">Strata</Link>
             <Link href="/eaokf" className="nav-secondary">Enterprise Architecture OKF</Link>
             <Link href="/vellum" className="nav-secondary">Vellum &amp; Seminum</Link>
+            {/* OKF-TOGAF#189: the taxonomy sits last, as a minor item beneath
+                Vellum & Seminum, on the owner's word of 2026-11-13. */}
+            <Link href="/taxonomy" className="nav-secondary">AI Architecture Taxonomy</Link>
           </nav>
         </aside>
         <main className={`stage${wide ? " stage--wide" : ""}`}>
