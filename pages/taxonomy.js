@@ -171,6 +171,19 @@ export default function Taxonomy() {
       <p className="tx-under"><strong>None of these.</strong> Say in a sentence why; that sentence is a finding, not a mistake.</p>
       <p className="tx-under">Each question leads to the assessment that measures your answer: follow the dimension beside it.</p>
 
+      {/* 13 November 2026, on the owner's word "Bring back the six family tiles
+          too": the six families as they headed the page before 19 October,
+          here under the table, before the hard cases and the card. */}
+      <div className="tx-families">
+        {FAMILIES.map((f) => (
+          <div key={f.key} className="tx-family">
+            <div className="tx-family-name">{f.name}</div>
+            <div className="tx-family-answer">{f.answer}</div>
+            <div className="tx-family-means">{f.means}</div>
+          </div>
+        ))}
+      </div>
+
       <details className="tx-tests">
         <summary>When a case is hard</summary>
         {TESTS.map((t, i) => (

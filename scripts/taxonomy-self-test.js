@@ -162,6 +162,12 @@ ok(/When a case is hard/.test(page) && /TESTS\.map\(/.test(page), "the hard-case
 const nameYourSystemAt = page.indexOf("<h2>Name your system</h2>");
 ok(nameYourSystemAt > page.indexOf("When a case is hard") && nameYourSystemAt > page.indexOf("ROWS.map(") && nameYourSystemAt < page.indexOf("<h2>Worked examples</h2>"),
   "the card sits after the table and the hard cases, before the examples");
+// 13 November 2026, on the owner's word: the six family tiles are back, under
+// the table and before the hard cases, each with its name, answer and meaning.
+const familyTilesAt = page.indexOf('className="tx-families"');
+ok(familyTilesAt > page.indexOf("ROWS.map(") && familyTilesAt < page.indexOf("When a case is hard") && /FAMILIES\.map\(\(f\) => \(\s*<div key=\{f\.key\} className="tx-family">/.test(page),
+  "the six family tiles sit under the table, before the hard cases, one per family");
+ok(/\{f\.name\}[\s\S]{0,120}\{f\.answer\}[\s\S]{0,120}\{f\.means\}/.test(page.slice(familyTilesAt)), "each tile shows the family's name, its answer and what it means");
 ok(/intakeComplete\(card\)/.test(page) && /cardMarkdown\(card\)/.test(page), "a complete card is shown and can be kept, as the cases above define them");
 ok(/Nothing you\s+type leaves this page/.test(page), "the card says nothing typed on it leaves the page");
 ok(/body: JSON\.stringify\(\{ event: "taxonomy-intake-completed" \}\)/.test(page) && (page.match(/fetch\(/g) || []).length === 2,
