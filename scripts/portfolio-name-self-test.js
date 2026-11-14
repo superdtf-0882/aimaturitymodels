@@ -103,7 +103,7 @@ console.log("--- the sibling models ---");
 const gitIn = (dir, args) => { try { return execSync("git " + args, { cwd: path.join(root, "..", dir), encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).replace(/\r\n/g, "\n"); } catch { return ""; } };
 const pdlcPin = (read("lib/pins.js").match(/const PDLC_PINNED_COMMIT = "([0-9a-f]{40})"/) || [])[1];
 const pdlcTag = gitIn("ai-native-pdlc-maturity-model", "describe --tags --abbrev=0 " + pdlcPin).trim();
-say(!!pdlcPin && /^v1\.2\.([1-9]\d*)$/.test(pdlcTag), "the PDLC pin is v1.2.1 or a later v1.2 patch", (pdlcPin || "").slice(0, 7) + " / " + pdlcTag);
+say(!!pdlcPin && /^v1\.(2\.[1-9]\d*|[3-9]\.\d+)$/.test(pdlcTag), "the PDLC pin is v1.2.1 or a later version", (pdlcPin || "").slice(0, 7) + " / " + pdlcTag);
 for (const f of ["ai_native_pdlc_maturity_model.md", "deep_dives/d5.md", "deep_dives/d11.md"]) {
   const s = gitIn("ai-native-pdlc-maturity-model", `show ${pdlcPin}:${f}`);
   // From PDLC's v1.2.4 (OKF-TOGAF#207, STD-MODEL-PARTS v1.1 section 3.7) the matrix cites the model

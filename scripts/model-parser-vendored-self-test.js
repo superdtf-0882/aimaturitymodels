@@ -106,7 +106,7 @@ const sha = (s) => crypto.createHash("sha256").update(String(s).replace(/\r\n/g,
   // calls the site's table reader or its old dimension reader.
   const pdlc = body("getPdlcFullModel");
   say(/readModelDimensions\(sharedMd, pdlcMd\)/.test(pdlc), "#205: PDLC's whole model is read through the family parser, D1-D3 from the layer");
-  say(/const PDLC_PINNED_COMMIT = "21a6d877538133ee530204b4eaab746fd2917ec7";/.test(fs.readFileSync(path.join(__dirname, "..", "lib", "pins.js"), "utf8")), "#205: PDLC is pinned at v1.2.5 (21a6d87)");
+  say(/const PDLC_PINNED_COMMIT = "f694e6d71d19d0bdd55e4ffec2000ab7f95405d2";/.test(fs.readFileSync(path.join(__dirname, "..", "lib", "pins.js"), "utf8")), "#205, #221: PDLC is pinned at v1.3.0 (f694e6d), read as from v1.2.5");
   const oldCalls = (models.match(/(?<!function )\b(parseTableModel|parseDimensionLevels|normalizeSharedDimension)\(\w/g) || []);
   say(oldCalls.length === 0, "no page reads through the table reader or the old dimension reader", oldCalls.join(", ") || "none");
 
