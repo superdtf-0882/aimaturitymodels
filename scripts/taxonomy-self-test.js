@@ -80,12 +80,20 @@ if (T) {
   ok(R.map((r) => (r.examples || []).join("+")).join(",") === "W-14+W-03,W-05+W-21,W-15+W-04,W-17+W-27", "two examples per row, as drafted");
   ok(R.every((r) => (r.examples || []).every((id) => (EXAMPLES.find((e) => e.id === id) || {}).family === r.key)), "each row's examples belong to its family");
   const dimsOf = (r) => (r.dims || []).map((d) => d.model + ":" + d.dim).join("+");
-  ok(R.map(dimsOf).join(",") === "sdlc:d7+sdlc:d8+sdlc:d11,sdlc:d12,ea:d10+ea:d6+pdlc:d10+sdlc:d8,ea:d7+sdlc:d11+sdlc:d12", "the dimensions that measure each answer: row 3 as DTOG's v0.2 with SDLC D8 kept, EA D7 on row 4");
+  ok(R.map(dimsOf).join(",") === "sdlc:d7+sdlc:d8+sdlc:d11,sdlc:d12+pdlc:d4+pdlc:d11,ea:d10+ea:d6+pdlc:d10+sdlc:d8+pdlc:d4+pdlc:d11,ea:d7+sdlc:d11+sdlc:d12", "the dimensions that measure each answer: row 3 as DTOG's v0.2 with SDLC D8 kept, EA D7 on row 4, PDLC D4 and D11 on rows 2 and 3");
   // OKF-TOGAF#189, on "Change the taxonomy's third row to EA D10 and EA D6, with
   // PDLC D10 for validating with users, as DTOG's v0.2 has it, under #189 --
   // David Facer 10/19/2026" (DTOG-taxonomy-table-v0.2 section 2; 261-DT2).
   const r3 = (R[2] || {}).dims || [];
-  ok(r3.map((d) => d.label).join(",") === "EA D10,EA D6,PDLC D10,SDLC D8", "row 3 links EA D10, EA D6, PDLC D10, then SDLC D8");
+  ok(r3.map((d) => d.label).join(",") === "EA D10,EA D6,PDLC D10,SDLC D8,PDLC D4,PDLC D11", "row 3 links EA D10, EA D6, PDLC D10, SDLC D8, then PDLC D4 and D11");
+  // OKF-TOGAF#221 (999-CC): rows 2 and 3 link to PDLC D4 and D11, which carry the clauses for a
+  // product that contains AI from PDLC v1.3.0; row 2 says what no model measures.
+  const r2 = (R[1] || {}).dims || [];
+  ok(r2.map((d) => d.label).join(",") === "SDLC D12,PDLC D4,PDLC D11" && !(r2[0] || {}).when, "row 2 links SDLC D12 as before, then PDLC D4 and D11");
+  ok((r2[1] || {}).when === "where it is part of a product: what a wrong output looks like" && (r2[2] || {}).when === "how often its outputs are wrong in use", "row 2's PDLC links: what a wrong output looks like, and how often one occurs");
+  ok((R[1] || {}).note === "The PDLC links measure knowing and counting a wrong output, not how the workflow handles one: falling back, refusing or retrying is a design decision none of these dimensions measures yet.", "row 2 says the models do not measure how the workflow handles a wrong output");
+  ok((r3[4] || {}).when === "where the AI is part of a product: how its users can check an output" && (r3[5] || {}).when === "how often they check, correct or discard one", "row 3's PDLC D4 and D11: how users check an output, and how often");
+  ok(T.dimensionHref("pdlc", "d4") === "/models/pdlc/assessment/?from=taxonomy#dim=d4", "the PDLC D4 link opens the PDLC assessment at D4, marked from the taxonomy");
   ok(/for validating with the users themselves/.test((r3[2] || {}).when || "") && !(r3[1] || {}).when, "row 3's PDLC D10 is for validating with the users themselves; EA D6 carries no condition");
   // OKF-TOGAF#189, on "Add to the taxonomy's third row SDLC D8 where the
   // contribution is code, and "for the organization's shared language" beside
