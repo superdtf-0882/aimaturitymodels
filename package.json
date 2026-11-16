@@ -5,7 +5,7 @@
   "description": "aimaturitymodels.com -- AI-Native Maturity Model family site. Content-only: fetches each model's canonical content at build time from that model's own public repo; never duplicates it. Governed by ADR-008 (OKF TOGAF corpus, private) and built under AC-008.",
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/work-item-gate.js && node scripts/code-gate.js && node gate/gate.js && node scripts/svm-conformance.js && node scripts/counts-self-test.js && node scripts/ask-self-test.js && node scripts/readout-entry-self-test.js && node scripts/taxonomy-self-test.js && node scripts/function-models-self-test.js && node scripts/code-gate-self-test.js",
+    "prebuild": "node scripts/work-item-gate.js && node scripts/code-gate.js && node gate/gate.js && node scripts/svm-conformance.js && node scripts/counts-self-test.js && node scripts/ask-self-test.js && node scripts/readout-entry-self-test.js && node scripts/taxonomy-self-test.js && node scripts/function-models-self-test.js && node scripts/code-gate-self-test.js && node scripts/packages-self-test.js",
     "build": "next build",
     "postbuild": "node scripts/generate-llms-txt.js && node scripts/generate-sitemap.js",
     "build:local": "node scripts/svm-conformance.js && next build && node scripts/generate-llms-txt.js && node scripts/generate-sitemap.js",
@@ -15,7 +15,7 @@
     "chart.js": "^4.4.0",
     "js-yaml": "^4.1.0",
     "marked": "^12.0.2",
-    "next": "14.2.35",
+    "next": "15.5.29",
     "openai": "^4.68.0",
     "react": "^18.3.0",
     "react-chartjs-2": "^5.2.0",
@@ -28,6 +28,9 @@
   },
   "devDependencies": {
     "eslint": "^8.57.1",
-    "eslint-config-next": "^14.2.35"
+    "eslint-config-next": "^15.5.29"
+  },
+  "overrides": {
+    "postcss": "^8.5.23"
   }
 }
