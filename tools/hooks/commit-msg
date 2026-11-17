@@ -371,6 +371,43 @@ admission_report() {
   return 0
 }
 
+# THE ROLE LINES (OKF-TOGAF#147 step 1; 113-DT2 section 1.2, ratified 10/7;
+# ruled in 581-DT2). tools/hooks/prepare-commit-msg (TC-64) writes Agent and
+# Agent-Session on a commit from a Claude Code shell. This WARNS when either
+# is missing on such a commit, on every declared surface, and logs it: WARNED,
+# reason role. IT REFUSES NOTHING, enforced or not; refusing a missing Agent
+# line on the enforced surfaces is step 2, on its own owner's line.
+# It reads ONE environment variable, CLAUDECODE, by name -- under the owner's
+# grant "I grant permission for the hooks for #147 in 129-CC" -- and never
+# lists the environment.
+#   HOW THE ROLE WARNING CAN BE CROSSED (RULE-10):
+#   1. A COMMIT FROM ANY OTHER SHELL IS NOT LOOKED AT (113-DT2's first
+#      crossing): a commit made by hand carries no mark, and that is declared.
+#   2. --no-verify skips this hook, and so the warning; the role hook still
+#      runs (TC-64's crossing 5), so the lines are still written.
+#   3. A commit that never touches a local git client -- an Action, the API,
+#      the web editor -- runs neither hook.
+#   4. The lines are matched by form, not checked: an Agent line naming the
+#      wrong role passes.
+#   5. A commit touching no declared surface leaves this hook above, before
+#      this check is reached.
+if [ "$CLAUDECODE" = "1" ]; then
+  role_missing=""
+  grep -Eq '^Agent:[[:space:]]*[^[:space:]]+' "$MSG_FILE" || role_missing="Agent"
+  if ! grep -Eq '^Agent-Session:[[:space:]]*[^[:space:]]+' "$MSG_FILE"; then
+    if [ -n "$role_missing" ]; then role_missing="Agent and Agent-Session"; else role_missing="Agent-Session"; fi
+  fi
+  if [ -n "$role_missing" ]; then
+    echo "" >&2
+    echo "ROLE LINES -- WARNING: a commit from a Claude Code shell without its $role_missing line." >&2
+    echo "  MODE: WARNING on every surface. Nothing is refused (OKF-TOGAF#147, step 1)." >&2
+    echo "  tools/hooks/prepare-commit-msg writes both lines: check that this repository's" >&2
+    echo "  tools/hooks holds it, and that git config okf.role names this checkout's role." >&2
+    echo "" >&2
+    write_log "WARNED" "role"
+  fi
+fi
+
 reason=""
 if [ -n "$has_wi" ]; then
   if [ -n "$wi_in" ]; then

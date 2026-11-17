@@ -1,0 +1,108 @@
+#!/bin/sh
+# prepare-commit-msg -- the Agent and Agent-Session lines (OKF-TOGAF#147).
+# SOURCE OF RECORD: OKF TOGAF tools/hooks/prepare-commit-msg. Copies go,
+# byte-identical, to each declared repository's tools/hooks/prepare-commit-msg,
+# as the ring 2 hook's do (TC-42); deployed-copies.js compares them.
+#
+# Ratified "I ratify 113-DT2, with the CHARTER-CC line as drafted -- David
+# Facer 10/7/2026" (briefs/2026-10-01-svm-tranche-3/113-DT2, on the owner's
+# answers to 103-DT2). Session source ruled in 116-DT2, option (a).
+#
+# WHAT IT DOES. On a commit made from a Claude Code shell it adds, at the end
+# of the message:
+#     Agent: <the checkout's okf.role>
+#     Agent-Session: <first eight characters of the session id>
+# From any other shell it adds nothing. It never invents a role or a session:
+# a missing one is left out and named in a warning.
+#
+# WHAT IT MAY READ -- the owner's permissions, word for word, and nothing more:
+#   "I grant permission for the hooks for #147 in 129-CC" -- CLAUDECODE and
+#     Claude Code's documented session-id variables, by name, and no other;
+#     never list the environment; only the session id's first eight
+#     characters into the commit;
+#   "#147's hook may also read HOME, to find the session folder -- David
+#     Facer 10/7/2026".
+# Its self-test (prepare-commit-msg-self-test.js) fails if any other
+# upper-case variable appears in this file outside a comment.
+#
+# WHERE THE SESSION ID COMES FROM (116-DT2 (a)): the documented variable when
+# set (CLAUDE_CODE_BRIDGE_SESSION_ID with Remote Control, CLAUDE_CODE_REMOTE_
+# SESSION_ID in the cloud); else the newest transcript's FILE NAME in this
+# checkout's session folder, $HOME/.claude/projects/<the checkout's path with
+# every character that is not a letter or digit turned into ->. That name is
+# the session id, and the trace export names its folders the same way
+# (traces/<checkout>/<first eight>/), so a commit leads to its trace.
+#
+# WHAT "Agent" MEANS (116-DT2 section 3): `Agent` names the agent that made the
+# commit, not the author of every file in it. A commit that files another
+# role's brief names that brief and its author in its message; `Agent: CC`
+# there means CC filed it.
+#
+# WHERE THE LINES GO: after the message's last line, so the Work-Item line
+# stays where it is, inside the 1,024 bytes Vercel reads. If the message ends
+# in a trailer block (Co-Authored-By and the like) the lines join it; if not,
+# a blank line comes first.
+#
+# HOW THIS CAN BE CROSSED (RULE-10)
+#   1. An agent committing from outside Claude Code (another tool, a bot) is
+#      not marked, and reads as the owner.
+#   2. If Claude Code renames its marker, this hook marks nothing; if it renames
+#      its session variables or session files, it finds no session and warns.
+#   3. The role is a checkout setting (git config okf.role) anyone can copy.
+#      The checkout is the role's substrate (RULE-5C); declared, not solved.
+#   4. core.hooksPath unset in a clone means no hook runs at all (the ring 2
+#      hook's crossing 3).
+#   5. --no-verify does NOT skip this hook: git runs prepare-commit-msg even
+#      then (measured by the self-test). It skips only the checks.
+#   6. Two Claude Code sessions in one checkout at once could swap ids: the
+#      fallback takes the newest transcript.
+#   7. It reads file NAMES in the owner's home folder, never their content.
+
+msg="$1"
+[ -n "$msg" ] && [ -f "$msg" ] || exit 0
+
+# Only a Claude Code shell is marked.
+[ "$CLAUDECODE" = "1" ] || exit 0
+
+# An amend, or a message that already carries the lines, is left alone.
+grep -q '^Agent-Session:' "$msg" && exit 0
+
+role=$(git config --get okf.role 2>/dev/null)
+
+session=""
+if [ -n "$CLAUDE_CODE_BRIDGE_SESSION_ID" ]; then
+  session="$CLAUDE_CODE_BRIDGE_SESSION_ID"
+elif [ -n "$CLAUDE_CODE_REMOTE_SESSION_ID" ]; then
+  session="$CLAUDE_CODE_REMOTE_SESSION_ID"
+fi
+session=$(printf '%s' "$session" | sed 's/^session_//' | cut -c1-8)
+
+if [ -z "$session" ] && [ -n "$HOME" ]; then
+  top=$(git rev-parse --show-toplevel 2>/dev/null)
+  enc=$(printf '%s' "$top" | sed 's/[^A-Za-z0-9]/-/g')
+  newest=$(ls -t "$HOME/.claude/projects/$enc/"*.jsonl 2>/dev/null | head -n 1)
+  if [ -n "$newest" ]; then
+    session=$(basename "$newest" .jsonl | cut -c1-8)
+  fi
+fi
+
+[ -n "$role" ] || echo "prepare-commit-msg: okf.role is not set in this checkout, so the Agent line is left out (set it: git config --worktree okf.role <ROLE>)." >&2
+[ -n "$session" ] || echo "prepare-commit-msg: no Claude Code session id found (no documented variable set, no transcript in this checkout's session folder), so the Agent-Session line is left out." >&2
+
+add=""
+[ -n "$role" ] && add="Agent: $role"
+if [ -n "$session" ]; then
+  if [ -n "$add" ]; then add="$add
+Agent-Session: $session"; else add="Agent-Session: $session"; fi
+fi
+[ -n "$add" ] || exit 0
+
+# Rewrite the message without its trailing blank lines, then append.
+body=$(cat "$msg")
+last=$(printf '%s\n' "$body" | grep -v '^#' | sed '/^[[:space:]]*$/d' | tail -n 1)
+if printf '%s\n' "$last" | grep -Eq '^[A-Za-z][A-Za-z0-9-]*: '; then
+  printf '%s\n%s\n' "$body" "$add" > "$msg"
+else
+  printf '%s\n\n%s\n' "$body" "$add" > "$msg"
+fi
+exit 0
