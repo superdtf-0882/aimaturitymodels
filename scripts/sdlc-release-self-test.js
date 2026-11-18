@@ -36,7 +36,7 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const { SDLC_PINNED_COMMIT, SDLC_SHORT_FORM_PINNED_COMMIT, PDLC_D1_D3_SOURCE_COMMIT } = require("../lib/pins");
+const { SDLC_PINNED_COMMIT, SDLC_SHORT_FORM_PINNED_COMMIT, PDLC_D1_D3_SOURCE_COMMIT, PRODUCT_MARKETING_PINNED_COMMIT, PRODUCT_MARKETING_D1_D3_SOURCE_COMMIT } = require("../lib/pins");
 const { readSdlcDimensions } = require("../lib/model-reader");
 const { parseFamilyLevels } = require("../lib/familyLevels");
 
@@ -130,6 +130,27 @@ async function get(commit, file) {
   // PDLC's D1-D3 cells are SDLC's short form at the commit PDLC's tag cites, v1.4.3, until PDLC's release.
   say(!!pdoc && !!doc && pdoc.source_matrix_version === "1.5.0" && ["D1", "D2", "D3"].every((id) => JSON.stringify(pdoc.dimensions[id]) === JSON.stringify(doc.dimensions[id])),
     "#213: PDLC v1.4.0 cites the layer at SDLC v1.5.0, so its D1-D3 cells are SDLC's at v1.5.0");
+
+  console.log("--- Product Marketing's D1-D3 at its pin " + PRODUCT_MARKETING_PINNED_COMMIT.slice(0, 7) + " and PRODUCT_MARKETING_D1_D3_SOURCE_COMMIT " + PRODUCT_MARKETING_D1_D3_SOURCE_COMMIT.slice(0, 7) + " ---");
+  // #213 step 3 (1116-CC): Product Marketing v1.1.0 renders D1-D3 from the layer at v1.3, in SDLC v1.5.0. Every
+  // line of the layer's D1-D3 sections at the SDLC pin, headings and rules aside, is a line of its matrix.
+  const pmRes = await fetch("https://raw.githubusercontent.com/superdtf-0882/ai-native-product-marketing-maturity-model/" + PRODUCT_MARKETING_PINNED_COMMIT + "/ai_native_product_marketing_maturity_model.md");
+  const pm = pmRes.ok ? (await pmRes.text()).replace(/\r\n/g, "\n") : "";
+  const lay = shared.text.replace(/\r\n/g, "\n").split("\n");
+  const ls = lay.findIndex((l) => /^## D1\b/.test(l));
+  let le = lay.findIndex((l, i) => i > ls && /^## /.test(l) && !/^## D[123]\b/.test(l));
+  if (le < 0) le = lay.length;
+  const pmLines = new Set(pm.split("\n"));
+  const want = ls < 0 ? [] : lay.slice(ls, le).filter((l) => l.trim() && l !== "---" && !/^## /.test(l));
+  const have = want.filter((l) => pmLines.has(l)).length;
+  say(want.length > 0 && have === want.length, "#213: Product Marketing's matrix renders the layer's D1-D3 at SDLC v1.5.0, line for line", have + " of " + want.length);
+  say((pm.match(/^\*\*Basis:\*\* STD-SHARED-INTELLIGENCE v1\.3 · 2026-10-18 \(SDLC release v1\.5\.0\)/gm) || []).length === 3 && !/STD-SHARED-INTELLIGENCE v1\.2/.test(pm),
+    "#213: its three D1-D3 basis lines cite the layer at v1.3, and none at v1.2");
+  const pmsf = await get(PRODUCT_MARKETING_D1_D3_SOURCE_COMMIT, "short_form.yml");
+  let pmdoc = null;
+  try { pmdoc = yaml.load(pmsf.text); } catch { /* reported below */ }
+  say(!!pmdoc && !!doc && pmdoc.source_matrix_version === "1.5.0" && ["D1", "D2", "D3"].every((id) => JSON.stringify(pmdoc.dimensions[id]) === JSON.stringify(doc.dimensions[id])),
+    "#213: its D1-D3 cells are SDLC's at v1.5.0, the release its tag cites");
 
   console.log("--- this site's own words ---");
   const core = fs.readFileSync(path.join(__dirname, "..", "lib", "aiDigestCore.js"), "utf8");

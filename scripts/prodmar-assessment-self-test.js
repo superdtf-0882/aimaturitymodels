@@ -41,7 +41,7 @@ console.log("--- the loader ---");
   // OKF-TOGAF#205, v1.0.3: the matrix in the common form in full, read through the family parser.
   const full = fnBody(models, "getProductMarketingFullModel");
   say(/readModelDimensions\(md\)/.test(full) && !/parseDimensionLevels\(/.test(full), "#205: the whole model is read through the family parser (lib/model-reader.js)");
-  say(/const PRODUCT_MARKETING_PINNED_COMMIT = "c475da9585a876d5fc441f04a57779384a0f25a6";/.test(read("lib/pins.js")), "#205: Product Marketing is pinned at v1.0.3 (c475da9)");
+  say(/const PRODUCT_MARKETING_PINNED_COMMIT = "b92fb6ac15fa914f41f9d3a3e2f3a628901b349e";/.test(read("lib/pins.js")), "#213: Product Marketing is pinned at v1.1.0 (b92fb6a)");
   const pins = read("lib/pins.js");
   say(/const PRODUCT_MARKETING_D10_SOURCE_COMMIT = "2688129234b59c0f9a864512fbe68eadad41aabe";/.test(pins), "that commit is EA v1.1.2 (2688129)");
 }

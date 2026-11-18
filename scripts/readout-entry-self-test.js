@@ -38,9 +38,9 @@ let P = {};
 try { P = require(path.join(root, "lib/pins.js")); } catch { P = {}; }
 
 // 1. The version beside each model's own pin, moved in the same commit.
-const WANT_VERSIONS = { sdlc: "v1.5.0", pdlc: "v1.4.0", prioritization: "v1.4.3", ea: "v1.1.4", prodmar: "v1.0.3" };
+const WANT_VERSIONS = { sdlc: "v1.5.0", pdlc: "v1.4.0", prioritization: "v1.4.3", ea: "v1.1.4", prodmar: "v1.1.0" };
 const MV = P.MODEL_VERSIONS || {};
-check(Object.keys(WANT_VERSIONS).every((k) => MV[k] === WANT_VERSIONS[k]), "each model's version sits beside its pin: SDLC v1.5.0, PDLC v1.4.0, Prioritization v1.4.3, EA v1.1.4, Product Marketing v1.0.3");
+check(Object.keys(WANT_VERSIONS).every((k) => MV[k] === WANT_VERSIONS[k]), "each model's version sits beside its pin: SDLC v1.5.0, PDLC v1.4.0, Prioritization v1.4.3, EA v1.1.4, Product Marketing v1.1.0");
 // The pair, not the value: each pin's commit is the tag its version names, by
 // GitHub's tags (559-CC, 266-DT2). A pin moved without its version, or a
 // version moved without its pin, fails here until this table is written too.
@@ -49,19 +49,19 @@ const TAG_AT = {
   "fa8afe8ec70b5637bf360efe936059329dfa3b27": "v1.4.0", // PDLC (OKF-TOGAF#213)
   "893feeb8588584ae940aa802e31a3a322199343c": "v1.4.3", // Portfolio Prioritization
   "22a7b2b9fe4892f4ee1373312f2c3aa297354be4": "v1.1.4", // EA
-  "c475da9585a876d5fc441f04a57779384a0f25a6": "v1.0.3", // Product Marketing
+  "b92fb6ac15fa914f41f9d3a3e2f3a628901b349e": "v1.1.0", // Product Marketing (OKF-TOGAF#213)
 };
 for (const [key, pinName, label] of [["sdlc", "SDLC_PINNED_COMMIT", "SDLC"], ["pdlc", "PDLC_PINNED_COMMIT", "PDLC"], ["prioritization", "PRIORITIZATION_PINNED_COMMIT", "Portfolio Prioritization"], ["ea", "EA_PINNED_COMMIT", "EA"], ["prodmar", "PRODUCT_MARKETING_PINNED_COMMIT", "Product Marketing"]]) {
   const pin = P[pinName];
   check(Object.prototype.hasOwnProperty.call(TAG_AT, pin) && TAG_AT[pin] === MV[key], label + "'s pin and its version are a known pair: the commit is the tag the version names");
 }
 const pins = read("lib/pins.js");
-for (const [name, v] of [["SDLC", "v1.5.0"], ["PDLC", "v1.4.0"], ["PRIORITIZATION", "v1.4.3"], ["EA", "v1.1.4"], ["PRODUCT_MARKETING", "v1.0.3"]]) {
+for (const [name, v] of [["SDLC", "v1.5.0"], ["PDLC", "v1.4.0"], ["PRIORITIZATION", "v1.4.3"], ["EA", "v1.1.4"], ["PRODUCT_MARKETING", "v1.1.0"]]) {
   const pinAt = pins.indexOf("const " + name + "_PINNED_COMMIT =");
   const verAt = pins.indexOf("const " + name + "_VERSION = \"" + v + "\"");
   check(pinAt > -1 && verAt > pinAt && verAt - pinAt < 400, name + "_VERSION is written on the lines after " + name + "_PINNED_COMMIT");
 }
-check(attempt(() => E.versionFor("sdlc")) === "v1.5.0" && attempt(() => E.versionFor("prodmar")) === "v1.0.3" && attempt(() => E.versionFor("nope")) === null, "the version for a model is read from the pins, and an unknown model has none");
+check(attempt(() => E.versionFor("sdlc")) === "v1.5.0" && attempt(() => E.versionFor("prodmar")) === "v1.1.0" && attempt(() => E.versionFor("nope")) === null, "the version for a model is read from the pins, and an unknown model has none");
 
 // 2. The scores, read from the assessment the visitor sent.
 const MD = [
