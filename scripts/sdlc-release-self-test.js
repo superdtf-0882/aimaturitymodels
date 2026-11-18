@@ -61,19 +61,19 @@ async function get(commit, file) {
   for (const d of dims) for (const t of Object.values(d.transitions || {})) if (t.verification) v++;
   say(dims.length === 3 && v === 12, "#143: all twelve D1-D3 transitions carry a verification", v + " of 12");
 
-  // #200: STD-SHARED-INTELLIGENCE v1.2 at the pin.
-  say(/STD-SHARED-INTELLIGENCE · v1\.2 ·/.test(shared.text) && shared.text.includes("**Reading from a chair.**"), "#200: the layer is v1.2, with its reading-from-a-chair paragraph");
+  // #213 (598-DT2): STD-SHARED-INTELLIGENCE v1.3 at the pin, SDLC v1.5.0.
+  say(/STD-SHARED-INTELLIGENCE · v1\.3 ·/.test(shared.text) && shared.text.includes("**Reading from a chair.**"), "#213: the layer is v1.3, with its reading-from-a-chair paragraph");
   say(shared.text.includes("rather than commissioning separate research or maintaining a version of their own")
-    && shared.text.includes("rather than commissioning separate research or maintaining a feed of their own"),
+    && shared.text.includes("rather than commissioning separate research or maintaining a record of their own"),
     "#200: D1 and D3 at D require that no function keeps its own version");
 
   const d11 = byId.get("D11");
   say(!!d11 && /attributable/.test(d11.desc) && !/Deferred/i.test(d11.desc) && !d11.desc.includes("*"),
     "#156: D11's definition is the rewrite, plain text, not deferred");
   say(/Version 1\.3\.0/.test(matrix.text), "#156: the matrix declares v1.3.0");
-  say(/^\*\*Version 1\.4\.3/m.test(matrix.text) && matrix.text.includes("(`STD-SHARED-INTELLIGENCE` v1.2)"), "#205: the matrix leads with v1.4.3 and cites the layer at v1.2");
-  say(!/STD-SHARED-INTELLIGENCE v1\.1 as of/.test(matrix.text) && matrix.text.includes("(STD-SHARED-INTELLIGENCE v1.2 as of 2026-10-16)"),
-    "#200 (v1.4.1): the closing status line cites the layer at v1.2, not v1.1");
+  say(/^\*\*Version 1\.5\.0/m.test(matrix.text) && matrix.text.includes("(`STD-SHARED-INTELLIGENCE` v1.3)"), "#213: the matrix leads with v1.5.0 and cites the layer at v1.3");
+  say(!/STD-SHARED-INTELLIGENCE v1\.1 as of/.test(matrix.text) && matrix.text.includes("(STD-SHARED-INTELLIGENCE v1.3 as of 2026-10-18)"),
+    "#213 (v1.5.0): the closing status line cites the layer at v1.3, not v1.1");
 
   // #204: the level names' one home, and the matrix's names section in M3's fixed form.
   const fam = await get(SDLC_PINNED_COMMIT, "family_maturity_levels.md");
@@ -102,7 +102,7 @@ async function get(commit, file) {
   say(!/^\*\*Level [A-E]/m.test(matrix.text + shared.text) && (matrix.text.match(/^### [A-E] — /gm) || []).length === 50 && (shared.text.match(/^### [A-E] — /gm) || []).length === 15,
     "#205: the matrix and the layer write their levels in the common form");
   say(dims.every((d) => / From D\d's vantage/.test(d.levels.E || "")), "#205: each layer vantage still reads after its level E");
-  say(/^\*\*Basis:\*\* STD-SHARED-INTELLIGENCE v1\.2, github\.com\/superdtf-0882\/ai-native-sdlc-maturity-model\/shared_intelligence_layer\.md, in this repository; referenced\.$/m.test(matrix.text),
+  say(/^\*\*Basis:\*\* STD-SHARED-INTELLIGENCE v1\.3, github\.com\/superdtf-0882\/ai-native-sdlc-maturity-model\/shared_intelligence_layer\.md, in this repository; referenced\.$/m.test(matrix.text),
     "#205: the matrix's D1-D3 section names the layer's home");
 
   const rule = await get(SDLC_PINNED_COMMIT, "guardrail_rule.md");
@@ -114,8 +114,8 @@ async function get(commit, file) {
   let doc = null;
   try { doc = yaml.load(sf.text); } catch { /* reported below */ }
   const cells = doc ? doc.dimensions.D11.levels : {};
-  say(!!doc && !doc.dimensions.D11.flag && doc.source_matrix_version === "1.4.3" && /agent/i.test(cells.A || "") && /telemetry/.test(cells.E || ""),
-    "#156: D11's five cells re-compressed, its flag gone; the short form names v1.4.3", doc ? doc.source_matrix_version : "unparsed");
+  say(!!doc && !doc.dimensions.D11.flag && doc.source_matrix_version === "1.5.0" && /agent/i.test(cells.A || "") && /telemetry/.test(cells.E || ""),
+    "#156: D11's five cells re-compressed, its flag gone; the short form names v1.5.0", doc ? doc.source_matrix_version : "unparsed");
 
   console.log("--- PDLC's D1-D3 at PDLC_D1_D3_SOURCE_COMMIT " + PDLC_D1_D3_SOURCE_COMMIT.slice(0, 7) + " ---");
   const pl = await get(PDLC_D1_D3_SOURCE_COMMIT, "shared_intelligence_layer.md");
@@ -126,14 +126,16 @@ async function get(commit, file) {
   const psf = await get(PDLC_D1_D3_SOURCE_COMMIT, "short_form.yml");
   let pdoc = null;
   try { pdoc = yaml.load(psf.text); } catch { /* reported below */ }
-  say(!!pdoc && !!doc && ["D1", "D2", "D3"].every((id) => JSON.stringify(pdoc.dimensions[id]) === JSON.stringify(doc.dimensions[id])),
-    "#205: PDLC's D1-D3 cells at their pin are SDLC's at the pin");
+  // #213 (598-DT2 section 1): between releases each model page serves the layer its own tag cites, so
+  // PDLC's D1-D3 cells are SDLC's short form at the commit PDLC's tag cites, v1.4.3, until PDLC's release.
+  say(!!pdoc && pdoc.source_matrix_version === "1.4.3" && ["D1", "D2", "D3"].every((id) => !!pdoc.dimensions[id]),
+    "#213: PDLC's D1-D3 cells are read at the v1.4.3 its tag cites, until its own release");
 
   console.log("--- this site's own words ---");
   const core = fs.readFileSync(path.join(__dirname, "..", "lib", "aiDigestCore.js"), "utf8");
   say(!/without verification statements in that same per-transition form yet/.test(core) && !/D1–D3 in both SDLC and PDLC, inherited by reference from the Shared Intelligence Layer and owned by neither model — say so/.test(core),
     "the AI digest no longer says D1-D3 lack verification");
-  say(/STD-SHARED-INTELLIGENCE v1\.2/.test(core) && !/STD-SHARED-INTELLIGENCE v1\.1/.test(core), "#200: the AI digest names the layer at v1.2");
+  say(/STD-SHARED-INTELLIGENCE v1\.3/.test(core) && !/STD-SHARED-INTELLIGENCE v1\.[12]\b/.test(core), "#213: the AI digest names the layer at v1.3, as SDLC v1.5.0 carries it");
 
   process.exitCode = bad;
 })();
