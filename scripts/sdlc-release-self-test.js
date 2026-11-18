@@ -122,20 +122,21 @@ async function get(commit, file) {
   const pdims = [...readSdlcDimensions(pl.text, "").values()];
   let pv = 0;
   for (const d of pdims) for (const x of Object.values(d.transitions || {})) if (x.verification) pv++;
-  say(pdims.length === 3 && pv === 12 && /STD-SHARED-INTELLIGENCE · v1\.2 ·/.test(pl.text), "#205: PDLC's page reads the v1.2 layer at its D1-D3 pin through the family parser", pv + " of 12");
+  say(pdims.length === 3 && pv === 12 && /STD-SHARED-INTELLIGENCE · v1\.3 ·/.test(pl.text), "#213: PDLC's page reads the v1.3 layer at its D1-D3 pin through the family parser", pv + " of 12");
   const psf = await get(PDLC_D1_D3_SOURCE_COMMIT, "short_form.yml");
   let pdoc = null;
   try { pdoc = yaml.load(psf.text); } catch { /* reported below */ }
   // #213 (598-DT2 section 1): between releases each model page serves the layer its own tag cites, so
   // PDLC's D1-D3 cells are SDLC's short form at the commit PDLC's tag cites, v1.4.3, until PDLC's release.
-  say(!!pdoc && pdoc.source_matrix_version === "1.4.3" && ["D1", "D2", "D3"].every((id) => !!pdoc.dimensions[id]),
-    "#213: PDLC's D1-D3 cells are read at the v1.4.3 its tag cites, until its own release");
+  say(!!pdoc && !!doc && pdoc.source_matrix_version === "1.5.0" && ["D1", "D2", "D3"].every((id) => JSON.stringify(pdoc.dimensions[id]) === JSON.stringify(doc.dimensions[id])),
+    "#213: PDLC v1.4.0 cites the layer at SDLC v1.5.0, so its D1-D3 cells are SDLC's at v1.5.0");
 
   console.log("--- this site's own words ---");
   const core = fs.readFileSync(path.join(__dirname, "..", "lib", "aiDigestCore.js"), "utf8");
   say(!/without verification statements in that same per-transition form yet/.test(core) && !/D1–D3 in both SDLC and PDLC, inherited by reference from the Shared Intelligence Layer and owned by neither model — say so/.test(core),
     "the AI digest no longer says D1-D3 lack verification");
   say(/STD-SHARED-INTELLIGENCE v1\.3/.test(core) && !/STD-SHARED-INTELLIGENCE v1\.[12]\b/.test(core), "#213: the AI digest names the layer at v1.3, as SDLC v1.5.0 carries it");
+  say(core.includes("each model reading it at the version its own tag cites"), "#213 (599-DT2): the digest says each model reads the layer at the version its own tag cites");
 
   process.exitCode = bad;
 })();
