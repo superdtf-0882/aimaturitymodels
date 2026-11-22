@@ -37,6 +37,10 @@ const say = (ok, name, shown) => {
 };
 const root = path.join(__dirname, "..");
 const read = (p) => { try { return fs.readFileSync(path.join(root, p), "utf8"); } catch { return null; } };
+// [OKF-TOGAF#276: the rule's own file landed with D11's release (OKF-TOGAF#156), so "one rule" links to it, on GitHub
+// at the SDLC pin, and moves with the pin. It linked to /ai/ until then.]
+const { SDLC_PINNED_COMMIT } = require("../lib/pins");
+const RULE_HREF = `https://github.com/superdtf-0882/ai-native-sdlc-maturity-model/blob/${SDLC_PINNED_COMMIT}/guardrail_rule.md`;
 
 // The practice introduction as the digest carries it.
 const PRACTICE_MD = EXPECTED.practice.replace(/^\*\*(AI-Native Enterprise Operating Architecture)\*\*$/m, "## $1");
@@ -65,8 +69,8 @@ console.log("--- source ---");
   const NAMES = { A: "Nascent", B: "Modeled", C: "Continuous", D: "Integral", E: "Telemetric" };
   say(!!howto && typeof howto.statesFor === "function" && howto.statesFor(NAMES) === EXPECTED.howto[0], "lib/intros.js carries the five states paragraph exactly, the names read in");
   say(!!howto && typeof howto.statesFor === "function" && howto.statesFor({ ...NAMES, C: "Steady" }).includes("C — Steady,"), "the paragraph takes its names from the family file, not a copy (OKF-TOGAF#204)");
-  say(!!howto && howto.rule.before + howto.rule.link + howto.rule.after === EXPECTED.howto[1] && howto.rule.href === "/ai/",
-    "the guardrail rule is exact, with its link to /ai/", howto ? JSON.stringify(howto.rule.href) : "");
+  say(!!howto && howto.rule.before + howto.rule.link + howto.rule.after === EXPECTED.howto[1] && howto.rule.href === RULE_HREF,
+    "the guardrail rule is exact, with its link to the rule's own file at the SDLC pin", howto ? JSON.stringify(howto.rule.href) : "");
 
   const core = read("lib/aiDigestCore.js") || "";
   const t = core.indexOf("# AI-Native Maturity Models — AI-Readable Digest");
@@ -92,7 +96,7 @@ if (process.argv.includes("--built")) {
   const iLead = m.indexOf(seen(EXPECTED.lead)), iList = m.indexOf("AI-Native SDLC Maturity Model"), iStates = m.indexOf(seen(EXPECTED.howto[0])), iRule = m.indexOf(seen(EXPECTED.howto[1]));
   say(iLead >= 0 && iList > iLead, "/models/: the owner's paragraph, above the list", JSON.stringify({ iLead, iList }));
   say(iStates > iList && iRule > iStates, "/models/: the five states and the rule, below the list", JSON.stringify({ iStates, iRule }));
-  say(!!models && /<a href="\/ai\/?">one rule<\/a>/.test(models), "/models/: the rule links to the practice introduction");
+  say(!!models && models.includes('<a href="' + RULE_HREF + '">one rule</a>'), "/models/: the rule links to the rule's own file at the SDLC pin");
 }
 
 process.exitCode = bad;
