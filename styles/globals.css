@@ -761,7 +761,25 @@ html:has(.longview-sort) { scroll-behavior: smooth; }
   .ai-feed-badge-text { display: none; }
   .ai-feed-badge::after { content: "Feed AI"; }
   .rail-title { padding-right: 84px; }
+  .ai-logo { display: none; }
+  .ai-logo-room { display: none; }
 }
+
+/* OKF-TOGAF#275: the owner's logo, on the home page only (components/Layout.js), directly below the badge, half
+   again its 169 px width, its right edge the badge's. The file is a mask over the badge's own colour, --orange, so
+   the two stay matched if the colour changes ("Those two colors should probably match", the owner to DT2). Hidden
+   on narrow screens with the badge's compact form, above. */
+.ai-logo {
+  position: absolute; top: 56px; right: 16px; z-index: 50;
+  width: 254px; aspect-ratio: 1286 / 421;
+  background: var(--orange);
+  -webkit-mask: url("/ai-enterprise-architect.png") no-repeat center / contain;
+  mask: url("/ai-enterprise-architect.png") no-repeat center / contain;
+}
+/* The home page's room for it: a spacer the heading flows around, at the widths where the reading column reaches
+   under the logo. Above 1360 px the column ends left of it. */
+.ai-logo-room { float: right; width: 236px; height: 112px; margin: 0 0 8px 16px; }
+@media (min-width: 1360px) { .ai-logo-room { display: none; } }
 
 /* Issue #15: the AI-readable digest page. Raw markdown in a scrollable
    monospace pane -- deliberately not re-rendered as HTML, since the

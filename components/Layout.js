@@ -60,6 +60,8 @@ export default function Layout({ title, crumb, wide, children }) {
           </nav>
         </aside>
         <main className={`stage${wide ? " stage--wide" : ""}`}>
+          {/* OKF-TOGAF#275: on the home page, room for the logo at the top, so the heading flows around it. */}
+          {route === "/" && <span className="ai-logo-room" aria-hidden="true" />}
           {crumb && <p className="crumb">{crumb}</p>}
           {children}
           {/* OKF-TOGAF#158: the footer line 100-DT2 section 4 asks for.
@@ -87,6 +89,9 @@ export default function Layout({ title, crumb, wide, children }) {
       <Link href="/ai" className="ai-feed-badge" aria-label="Feed This to Your AI">
         <span className="ai-feed-badge-text">Feed This to Your AI</span>
       </Link>
+      {/* OKF-TOGAF#275: the owner's logo, directly below the badge, half again its width and in its colour, on
+          the home page only, hidden on narrow screens, announced by name (OKF TOGAF 706-DT2, 1252-CC). */}
+      {route === "/" && <span className="ai-logo" role="img" aria-label="AI Enterprise Architect" />}
     </>
   );
 }
